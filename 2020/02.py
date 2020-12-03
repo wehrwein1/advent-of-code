@@ -3,7 +3,7 @@ from typing import List
 # https://adventofcode.com/2020/day/2
 lines = [line for line in map(str.rstrip, open('input/02_INPUT.txt'))]
 # lines = ['1-3 a: abcde', '1-3 b: cdefg', '2-9 c: ccccccccc']
-print('input (len={}):'.format(lines, len(lines)))
+print('input (len={}): {}'.format(len(lines), lines))
 
 def is_valid_password_part1(password : str, policy_range : List[int], policy_char : str):
   char_count = sum([1 for ch in password if ch == policy_char])
