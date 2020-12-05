@@ -5,44 +5,23 @@ lines = [line for line in map(str.rstrip, open('input/05_INPUT.txt'))]
 print('input (len={})'.format(len(lines)))
 
 def compute_row(row_spec : str) -> int:
-  min_row = 0
-  max_row = 127
-  inc = 128
-  for spec in row_spec:
-    if (spec == 'F'): 
-      max_row -= inc/2
-    elif (spec == 'B'):
-      min_row += inc/2
-    else: raise SystemError('invalid row_spec', row_spec)
-    inc /= 2
-  return int(min_row)
+  return int(''.join(list(map(lambda char : '1' if char =='B' else '0', list(row_spec)))), 2)
 
 def compute_col(col_spec : int) -> int:
-  min_col = 0
-  max_col = 7
-  inc = 8
-  for spec in col_spec:
-    if (spec == 'R'): 
-      min_col += inc/2
-    elif (spec == 'L'):
-      max_col -= inc/2
-    else: raise SystemError('invalid col_spec', col_spec)
-    inc /= 2
-  return int(min_col)
+  return int(''.join(list(map(lambda char : '1' if char =='R' else '0', list(col_spec)))), 2)
 
-seat_ids = []
-for line in lines:
-  # print(line)
-  row = compute_row(line[:7])
-  col = compute_col(line[7:])
+def compute_seat_id(seat_spec):
+  row = compute_row(seat_spec[:7])
+  col = compute_col(seat_spec[7:])
   seat_id = row*8 + col
-  print(" spec={}, row={}, col={}, seat_id={}".format(line, row, col, seat_id))
-  seat_ids.append(seat_id)
+  print(" spec={}, row={}, col={}, seat_id={}".format(seat_spec, row, col, seat_id))
+  return seat_id
 
-min_seat = min(seat_ids)
-max_seat = max(seat_ids)
-print("min seat_id:", min_seat)
-print("max seat_id:", max_seat)
+assert compute_seat_id('BFFFBBFRRR') == 567; assert compute_row('BFFFBBF') == 70;  assert compute_col('RRR') == 7
+assert compute_seat_id('FFFBBBFRRR') == 119; assert compute_row('FFFBBBF') == 14;  assert compute_col('RRR') == 7
+assert compute_seat_id('BBFFBBFRLL') == 820; assert compute_row('BBFFBBF') == 102; assert compute_col('RLL') == 4
 
+seat_ids = [compute_seat_id(line) for line in lines]
+min_seat, max_seat = min(seat_ids), max(seat_ids)
 empty_seats = [seat_id for seat_id in range(min_seat, max_seat) if not seat_id in seat_ids]
-print("empty_seats:", empty_seats)
+print("min_seat={}, max_seat={}, empty_seats={}".format(min_seat, max_seat, empty_seats))
