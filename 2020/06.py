@@ -2,23 +2,11 @@
 import string
 from typing import List
 
-lines = [line for line in map(str.rstrip, open('input/06_INPUT.txt'))]
-# lines = [line for line in map(str.rstrip, open('input/06_TEST.txt'))]
-print('input (len={}): {}'.format(len(lines), lines))
+def lines_grouped(filename) -> List[List[str]]: 
+  return list(map(lambda group : group.split('\n'), open(filename).read().split('\n\n'))) # empty line indicates new group
 
-def separate_by_empty_lines(lines : List[str]) -> List[List[str]]:
-  i : int = 0
-  groups = []
-  while i < len(lines):  
-    line = lines[i]
-    current_group = []
-    while not len(line) == 0:
-      current_group.append(line)
-      i += 1
-      line = lines[i] if i < len(lines) else '' # advance inner loop
-    groups.append(current_group)
-    i += 1
-  return groups
+def assert_equals(actual, expected): 
+  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
 
 def encode_customs_form(line : str):
   person_questions = set(list(line))
@@ -55,7 +43,11 @@ assert count_group_same_question_yeses(['ab','ac'])       == 1
 assert count_group_same_question_yeses(['a','a','a','a']) == 1
 assert count_group_same_question_yeses(['b'])             == 1
 
-groups = separate_by_empty_lines(lines)
+# lines = [line for line in map(str.rstrip, open('input/06_INPUT.txt'))]
+# lines = [line for line in map(str.rstrip, open('input/06_TEST.txt'))]
+# print('\ninput (len={}): {}'.format(len(lines), lines))
+
+groups = lines_grouped('input/06_INPUT.txt')
 question_counts = [count_group_same_question_yeses(group) for group in groups]
-# print("sum 'yes' counts:", sum(count_group_yeses(group) for group in groups))
+print("sum 'yes' counts:", sum(count_group_yeses(group) for group in groups))
 print("sum 'all same question' yes counts:", sum(question_counts))
