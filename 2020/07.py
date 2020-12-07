@@ -1,14 +1,12 @@
 # https://adventofcode.com/2020/day/7
-import string
-from typing import List
+from typing import Dict, List, Tuple
 import numpy as np
-from scipy import sparse
 
 def assert_equals(actual, expected): 
   assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
 
 # functions
-def parse_rule(luggage_rule: str):
+def parse_rule(luggage_rule: str) -> Tuple[str, Dict[str,str]]:
   def remove_bags(text : str) -> str: return text.split('bag')[0].strip()
   def parse_dependency(text : str): 
     if 'no other' in text: return dict()
@@ -20,14 +18,14 @@ def parse_rule(luggage_rule: str):
 assert_equals(parse_rule('light red bags contain 1 bright white bag, 2 muted yellow bags.'), ('light red', dict({'bright white' : '1', 'muted yellow': '2'})))
 assert_equals(parse_rule('faded blue bags contain no other bags.'), ('faded blue', dict()))
 
-def find_unique_bag_colors(rules : dict) -> List[str]:
+def find_unique_bag_colors(rules : Dict[str,Dict[str,str]]) -> List[str]:
   bags_set = set()
   for (source, targets) in rules.items():
     bags_set.add(source)
     for bag in targets: bags_set.add(bag)
   return sorted(list(bags_set))
   
-def compute_reachability_matrix(bags : List[str], rules : dict):
+def compute_reachability_matrix(bags : List[str], rules : Dict[str,Dict[str,str]]):
   dim = len(bags)
   matrix = np.array([[0 for i in range(dim)] for j in range(dim)])
   # print('matrix:\n', matrix)
@@ -44,7 +42,7 @@ def compute_reachability_matrix(bags : List[str], rules : dict):
   np.fill_diagonal(matrix, 1)
   return np.linalg.matrix_power(matrix, dim)
 
-def count_colors_reachable(bags : List[str], rules : dict) -> int:
+def count_colors_reachable(bags : List[str], rules : Dict[str,Dict[str,str]]) -> int:
   reachability_matrix = compute_reachability_matrix(bags, rules)
   # print('reachability:\n', reachability_matrix)
   i = bags.index('shiny gold')
