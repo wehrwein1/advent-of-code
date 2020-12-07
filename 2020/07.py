@@ -39,8 +39,8 @@ def compute_reachability_matrix(bags : List[str], rules : dict):
       weight = int(target_pairs[target_bag])
       matrix[source_index][target_index] = weight
   # print('matrix:\n', matrix)
-  for i, bag in enumerate(bags):
-    print(" {}: {}".format(i, bag))
+  # for i, bag in enumerate(bags):
+  #   print(" {}: {}".format(i, bag))
   np.fill_diagonal(matrix, 1)
   return np.linalg.matrix_power(matrix, dim)
 
@@ -51,14 +51,13 @@ def count_colors_reachable(bags : List[str], rules : dict) -> int:
   print('shiny gold index=', i)
   row = reachability_matrix[i,:]
   col = reachability_matrix[:,i]
-  print('row {}: {}, count={}'.format(i, row if len(row) < 10 else 'row', sum([1 for item in row if item > 0])))
-  print('col {}: {}, count={}'.format(i, col if len(col) < 10 else 'col', sum([1 for item in col if item > 0])))
-  # decode row for sanity check
+  # print('row {}: {}, count={}'.format(i, row if len(row) < 10 else 'row', sum([1 for item in row if item > 0])))
+  # print('col {}: {}, count={}'.format(i, col if len(col) < 10 else 'col', sum([1 for item in col if item > 0])))
   colors_count = 0
   for i, item in enumerate(list(str(col).replace('[','').replace(']','').split())):
     if i == bags.index('shiny gold'): continue
     if not item == '0':
-      print('\"{}\" can contain shiny gold bags (index {})'.format(bags[i], i))
+      # print('\"{}\" can contain shiny gold bags (index {})'.format(bags[i], i))
       colors_count += 1  
   return colors_count
 
@@ -74,47 +73,16 @@ for rule in rules: print(" rule: '{}', {}".format(rule, rules[rule]))
 
 # part 1
 bags = find_unique_bag_colors(rules)
-print('Found bag colors ({}): {}'.format(len(bags), bags))
+# print('Found bag colors ({})'.format(len(bags), bags))
 print('part 1 colors count:', count_colors_reachable(bags, rules))
 
 # part 2
-
-
-
-# for i, item in enumerate(list(str(row).replace('[','').replace(']','').split())):
-#   if i == bags.index('shiny gold'): continue
-#   if not item == '0':
-#     print('shiny gold bags contain {} {} (index {})'.format(bags[i], item, i))
-#     # colors_count += 1  
-# print("colors_count:", colors_count)
-
-# part 2
-bags_count = 0
-processed = []
-unprocsssed = []
-current = 'shiny gold'
-bags_count_expr =''
-for source, target_pairs in rules.items():
-  source_index = bags.index(source)
-  for target_bag in target_pairs:
-    target_index = bags.index(target_bag)
-    weight = int(target_pairs[target_bag])
-
-def count_bags_inside(bag_color : str) -> int:
-  source_index = bags.index(source)
-  targets = rules[bag_color]
-  print('targets={}'.format(targets))
-  if not targets: return 0
-  return 
-  return sum([count_bags_inside(bag) for bag in targets])
-  # for target_bag in rules[bag_color]target_pairs:
-    # weight = int(target_pairs[target_bag])
-    # matrix[source_index][target_index] = weight
-  # pass
-
-assert_equals(count_bags_inside('dotted black'), 0)
-assert_equals(count_bags_inside('faded blue'), 0)
-assert_equals(count_bags_inside('vibrant plum'), 11)
-
-print('bags_count_expr:', bags_count_expr)
-print('bags_count:', bags_count)
+def count_bags_inside(num : int, bag_color : str) -> int: # count is inclusive of itself
+  contained_bag_counts : dict = rules[bag_color] # bag -> count
+  if not contained_bag_counts: return num
+  return num + sum([num * count_bags_inside(int(contained_bag_counts[bag]), bag) for bag in contained_bag_counts])
+# assert_equals(count_bags_inside(1, 'dotted black'), 1)
+# assert_equals(count_bags_inside(1, 'faded blue'), 1)
+# assert_equals(count_bags_inside(1, 'vibrant plum'), 1 + (5+6))
+# assert_equals(count_bags_inside(2, 'vibrant plum'), 2 + 2* (5+6))
+print('part 2 bags count:', count_bags_inside(1, 'shiny gold') - 1) # -1 to exclude the gold bag
