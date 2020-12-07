@@ -20,85 +20,101 @@ def parse_rule(luggage_rule: str):
 assert_equals(parse_rule('light red bags contain 1 bright white bag, 2 muted yellow bags.'), ('light red', dict({'bright white' : '1', 'muted yellow': '2'})))
 assert_equals(parse_rule('faded blue bags contain no other bags.'), ('faded blue', dict()))
 
+def find_unique_bag_colors(rules : dict) -> List[str]:
+  bags_set = set()
+  for (source, targets) in rules.items():
+    bags_set.add(source)
+    for bag in targets: bags_set.add(bag)
+  return sorted(list(bags_set))
+  
+def compute_reachability_matrix(bags : List[str], rules : dict):
+  dim = len(bags)
+  matrix = np.array([[0 for i in range(dim)] for j in range(dim)])
+  # print('matrix:\n', matrix)
+  # populate matrix
+  for source, target_pairs in rules.items():
+    source_index = bags.index(source)
+    for target_bag in target_pairs:
+      target_index = bags.index(target_bag)
+      weight = int(target_pairs[target_bag])
+      matrix[source_index][target_index] = weight
+  # print('matrix:\n', matrix)
+  for i, bag in enumerate(bags):
+    print(" {}: {}".format(i, bag))
+  np.fill_diagonal(matrix, 1)
+  return np.linalg.matrix_power(matrix, dim)
+
+def count_colors_reachable(bags : List[str], rules : dict) -> int:
+  reachability_matrix = compute_reachability_matrix(bags, rules)
+  # print('reachability:\n', reachability_matrix)
+  i = bags.index('shiny gold')
+  print('shiny gold index=', i)
+  row = reachability_matrix[i,:]
+  col = reachability_matrix[:,i]
+  print('row {}: {}, count={}'.format(i, row if len(row) < 10 else 'row', sum([1 for item in row if item > 0])))
+  print('col {}: {}, count={}'.format(i, col if len(col) < 10 else 'col', sum([1 for item in col if item > 0])))
+  # decode row for sanity check
+  colors_count = 0
+  for i, item in enumerate(list(str(col).replace('[','').replace(']','').split())):
+    if i == bags.index('shiny gold'): continue
+    if not item == '0':
+      print('\"{}\" can contain shiny gold bags (index {})'.format(bags[i], i))
+      colors_count += 1  
+  return colors_count
+
 lines = [line for line in map(str.rstrip, open('input/07_INPUT.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/07_TEST.txt'))]
+# lines = [line for line in map(str.rstrip, open('input/07_TEST2.txt'))]
 print('\ninput (len={}): {}'.format(len(lines), lines))
 
 # parse rules
-rules = [parse_rule(rule) for rule in lines]
-print('Found rules ({})'.format(len(rules)))
-for rule in rules: print("rule={}".format(rule))
+rules = dict( parse_rule(rule) for rule in lines)
+print('Found rules ({}):'.format(len(rules)))
+for rule in rules: print(" rule: '{}', {}".format(rule, rules[rule]))
 
-# build empty matrix
-bags_set = set()
-for (source, targets) in rules:
-  bags_set.add(source)
-  for bag in targets: bags_set.add(bag)
-bags = sorted(list(bags_set))
-print('Found colors ({}): {}'.format(len(bags), bags))
-dim = len(bags)
-matrix = np.array([[0 for i in range(dim)] for j in range(dim)])
-# print('matrix:\n', matrix)
+# part 1
+bags = find_unique_bag_colors(rules)
+print('Found bag colors ({}): {}'.format(len(bags), bags))
+print('part 1 colors count:', count_colors_reachable(bags, rules))
 
-# populate matrix
-# np.fill_diagonal(matrix, 1)
-for source, target_pairs in rules:
+# part 2
+
+
+
+# for i, item in enumerate(list(str(row).replace('[','').replace(']','').split())):
+#   if i == bags.index('shiny gold'): continue
+#   if not item == '0':
+#     print('shiny gold bags contain {} {} (index {})'.format(bags[i], item, i))
+#     # colors_count += 1  
+# print("colors_count:", colors_count)
+
+# part 2
+bags_count = 0
+processed = []
+unprocsssed = []
+current = 'shiny gold'
+bags_count_expr =''
+for source, target_pairs in rules.items():
   source_index = bags.index(source)
-  # print('target_pairs', target_pairs)
   for target_bag in target_pairs:
     target_index = bags.index(target_bag)
     weight = int(target_pairs[target_bag])
-    matrix[source_index][target_index] = weight
-print('matrix:\n', matrix)
 
-# count
-# import networkx as nx
-# G = nx.DiGraph(matrix)       # directed because A need not be symmetric
-# paths = nx.all_pairs_shortest_path_length(G)
-# indices = []
-# indptr = [0]
-# for row in paths:
-#   reachable = [v for v in row[1] if row[1][v] > 0]
-#   indices.extend(reachable)
-#   indptr.append(len(indices))
-# data = np.ones((len(indices),), dtype=np.uint8)
-# A_trans = matrix + sparse.csr_matrix((data, indices, indptr), shape=matrix.shape)
-# print(matrix, "\n\n", A_trans)
+def count_bags_inside(bag_color : str) -> int:
+  source_index = bags.index(source)
+  targets = rules[bag_color]
+  print('targets={}'.format(targets))
+  if not targets: return 0
+  return 
+  return sum([count_bags_inside(bag) for bag in targets])
+  # for target_bag in rules[bag_color]target_pairs:
+    # weight = int(target_pairs[target_bag])
+    # matrix[source_index][target_index] = weight
+  # pass
 
+assert_equals(count_bags_inside('dotted black'), 0)
+assert_equals(count_bags_inside('faded blue'), 0)
+assert_equals(count_bags_inside('vibrant plum'), 11)
 
-
-# G=nx.DiGraph(matrix)
-# A=nx.minimum_spanning_arborescence(G)
-# for node in A.nodes():
-#   s = list(nx.descendants(A, node))
-#   matrix[s, node] = 1
-
-# print("reachability:\n", matrix)
-# exit()
-
-np.fill_diagonal(matrix, 1)
-print('diag set:\n', matrix)
-# print("matrix power:\n", matrix ** dim)
-
-for i, bag in enumerate(bags):
-  print(" {}: {}".format(i, bag))
-i = bags.index('shiny gold')
-print('index=', i)
-
-reachability_matrix = np.linalg.matrix_power(matrix, dim)
-print('reachability:\n', reachability_matrix)
-row = reachability_matrix[i,:]
-col = reachability_matrix[:,i]
-print('row {}: {}, count={}'.format(i, row if len(row) < 10 else 'row', sum([1 for item in row if item > 0])))
-print('col {}: {}, count={}'.format(i, col if len(col) < 10 else 'col', sum([1 for item in col if item > 0])))
-# decode row for sanity check
-print()
-count = 0
-for i, item in enumerate(list(str(col).replace('[','').replace(']','').split())):
-  if i == bags.index('shiny gold'): print('skip diag'); continue
-  if not item == '0':
-    print('\"{}\" can contain shiny gold bags (index {})'.format(bags[i], i))
-    count += 1
-  
-print("count:", count)
-# print("matrix:\n", matrix)
+print('bags_count_expr:', bags_count_expr)
+print('bags_count:', bags_count)
