@@ -5,7 +5,7 @@ def assert_equals(actual, expected):
   assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
 
 # functions
-def execute_program(instructions : List[str]):
+def execute_program(instructions : List[str]) -> Tuple[int, bool, bool]:
   visited = set()
   accumulator = 0
   current_address : int = 0
