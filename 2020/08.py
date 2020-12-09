@@ -1,8 +1,22 @@
 # https://adventofcode.com/2020/day/8
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Callable
+from enum import Enum, auto
 
 def assert_equals(actual, expected): 
   assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+
+# instruction set
+instruction_set : Dict[str, Callable[[int,int,str],List[int]]] = dict( { # returns accumulator, next_address
+  'acc' : lambda accumulator, current_address, op_arg : (accumulator + int(op_arg), current_address + 1),
+  'jmp' : lambda accumulator, current_address, op_arg : (accumulator              , current_address + int(op_arg)),
+  'nop' : lambda accumulator, current_address, _      : (accumulator              , current_address + 1)
+})
+assert_equals(instruction_set['acc'](5,0,'77'), (82,1)) # acc: accumulator += op_arg, address +=1
+assert_equals(instruction_set['acc'](3,1,'5'),  (8,2))  # acc: accumulator += op_arg, address +=1
+assert_equals(instruction_set['jmp'](5,0,'77'), (5,77)) # jmp: address += op_arg
+assert_equals(instruction_set['jmp'](3,1,'5'),  (3,6))  # jmp: address += op_arg
+assert_equals(instruction_set['nop'](5,0,'77'), (5,1))  # nop: address +=1
+assert_equals(instruction_set['nop'](3,1,'5'),  (3,2))  # nop: address +=1
 
 # functions
 def execute_program(instructions : List[str]) -> Tuple[int, bool, bool]:
@@ -17,14 +31,15 @@ def execute_program(instructions : List[str]) -> Tuple[int, bool, bool]:
     instruction = instructions[current_address]
     # print("i={}, instruction='{}'".format(current_address, instruction))
     # execute current instruction
-    op_code, argument = instruction.split(' ', 1) 
-    if op_code == 'acc': 
-      accumulator += int(argument)
-      next_address = current_address + 1
-    elif op_code == 'jmp':
-      next_address += int(argument)
-    elif op_code == 'nop':
-      next_address = current_address + 1
+    op_code, op_arg = instruction.split(' ', 1)
+    accumulator, next_address = instruction_set[op_code](accumulator, current_address, op_arg)
+    # if op_code == 'acc': 
+    #   accumulator += int(op_arg)
+    #   next_address = current_address + 1
+    # elif op_code == 'jmp':
+    #   next_address += int(op_arg)
+    # elif op_code == 'nop':
+    #   next_address = current_address + 1
     # next loop
     visited.add(current_address)
     current_address = next_address
