@@ -1,6 +1,5 @@
 # https://adventofcode.com/2020/day/8
 from typing import Dict, List, Tuple, Callable
-from enum import Enum, auto
 
 def assert_equals(actual, expected): 
   assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)

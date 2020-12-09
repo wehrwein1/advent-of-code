@@ -1,5 +1,5 @@
-# https://adventofcode.com/2020/day/8
-from typing import Dict, List, Tuple
+# https://adventofcode.com/2020/day/9
+from typing import List
 
 def assert_equals(actual, expected): 
   assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
