@@ -34,47 +34,35 @@ def compute_joltage_diff_counts(joltages : List[int]) -> int:
 assert_equals(compute_joltage_diff_counts(load_joltages('input/10_TEST_small.txt')), { 1 : 7, 3 : 5})
 assert_equals(compute_joltage_diff_counts(load_joltages('input/10_TEST.txt')), { 1 : 22, 3 : 10})
   
-def compute_branch_counts(joltages : List[int]) -> List[int]:
+def compute_adjacency_lists(joltages : List[int]) -> List[int]:
   diffs = compute_joltage_diffs(joltages)
-  branch_counts = []
-  print("joltages:", joltages)
-  print("diffs:   ", diffs)
+  source_to_targets = dict()
+  # print("joltages:", joltages)
+  # print("diffs:   ", diffs)
   for i, diff in enumerate(diffs):
     joltage = joltages[i]
     diff = diffs[i]
     branches = [val for val in joltages[i:] if (val > joltage and val <= joltage + 3)]
-    print('joltages[{}]: diff={}, value={} -> {}'.format(i, diff, joltage, branches))
-    branch_counts.append(len(branches))
-  return branch_counts
-assert_equals(compute_branch_counts(load_joltages('input/10_TEST_small.txt')), [1,1,3,2,1,1,2,1,1,1,1,1])
+    # print('joltages[{}]: diff={}, value={} -> {}'.format(i, diff, joltage, branches))
+    source_to_targets[joltage] = branches
+  return source_to_targets
+assert_equals(compute_adjacency_lists(load_joltages('input/10_TEST_small.txt')), {0:[1], 1:[4], 4:[5,6,7], 5:[6,7], 6:[7], 7:[10], 10:[11,12], 11:[12], 12:[15], 15:[16], 16:[19], 19:[22]})
 
 def count_paths(joltages : List[int]) -> int:
-  branch_counts = compute_branch_counts(joltages)
-  print("branch counts=", branch_counts)
-  total, i, j = 0, 0, 0
-  have_i = False
-  while i < len(branch_counts):
-    try:
-      print('start loop i={}'.format(i))
-      while branch_counts[i] == 1: i+= 1
-      print(' i={}, value={}'.format(i, branch_counts[i]))
-      j = i + 1
-      have_i = True
-      while branch_counts[j] == 1: j+= 1
-      print(' j={}, value={}'.format(j, branch_counts[j]))
-      total += product(branch_counts[i:j+1])
-      print(' non-zero values in indices {}-{}: {}, new sum={}'.format(i,j, branch_counts[i:j+1], total))
-      i = j + 1
-    except IndexError:
-      print('errored out on i={}, j={}, have_i={}'.format(i,j, have_i))
-      if have_i: 
-        print('finalize i value, total += {}'.format(branch_counts[i]))
-        total += branch_counts[i]
-      return total
-  return total
+  source_to_targets = compute_adjacency_lists(joltages)
+  # print("source_to_targets=", source_to_targets)
+  branch_counts = dict()
+  for source, targets in reversed(source_to_targets.items()):
+    value = 0 
+    for target in targets:
+      if target in branch_counts:˝
+        value += branch_counts[target]
+    # print('source={}, targets={}, value={}'.format(source, targets, value))
+    branch_counts[source] = value if value > 0 else 1
+  return branch_counts[0]
 assert_equals(count_paths(load_joltages('input/10_TEST_small.txt')), 8)
 assert_equals(count_paths(load_joltages('input/10_TEST.txt')), 19208)
 
 diff_counts = compute_joltage_diff_counts(load_joltages('input/10_INPUT.txt'))
 print("part 1: product of joltage counts:", product(diff_counts.values()))
-print('part 2: paths:', count_paths(load_joltages('input/10_INPUT.txt')))
+print('part 2: paths count:', count_paths(load_joltages('input/10_INPUT.txt')))
