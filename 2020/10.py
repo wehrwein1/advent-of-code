@@ -1,6 +1,6 @@
 # https://adventofcode.com/2020/day/10
-from typing import Callable, List
-from collections import defaultdict
+from typing import List
+from collections import Counter
 from functools import reduce
 
 def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
@@ -26,11 +26,7 @@ assert_equals(compute_joltage_diffs(load_joltages('input/10_TEST_small.txt')), [
 assert_equals(compute_joltage_diffs(load_joltages('input/10_TEST.txt')), [1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 3, 1, 1, 1, 3, 1, 1, 3, 3, 1, 1, 1, 1, 3, 1, 3, 3, 1, 1, 1, 1, 3])
 
 def compute_joltage_diff_counts(joltages : List[int]) -> int:
-  diff_counts = defaultdict(int)
-  for diff in compute_joltage_diffs(joltages):
-    max_counted_diff = 3 if diff >= 3 else 1 if diff >= 1 else 0
-    diff_counts[max_counted_diff] += 1
-  return diff_counts
+  return Counter([3 if diff >= 3 else 1 if diff >= 1 else 0 for diff in compute_joltage_diffs(joltages)])
 assert_equals(compute_joltage_diff_counts(load_joltages('input/10_TEST_small.txt')), { 1 : 7, 3 : 5})
 assert_equals(compute_joltage_diff_counts(load_joltages('input/10_TEST.txt')), { 1 : 22, 3 : 10})
   
