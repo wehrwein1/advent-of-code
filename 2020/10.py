@@ -17,11 +17,7 @@ assert_equals(product([2,3]), 6)
 assert_equals(product([2,3,4,5,6]), 720)
   
 def compute_joltage_diffs(joltages : List[int]) -> List[int]:
-  diffs = []
-  for i, joltage in enumerate(joltages):
-    if i == 0: continue
-    diffs.append(joltage - joltages[i-1])
-  return diffs
+  return [joltage - joltages[i-1] for i, joltage in enumerate(joltages) if i > 0]
 assert_equals(compute_joltage_diffs(load_joltages('input/10_TEST_small.txt')), [1, 3, 1, 1, 1, 3, 1, 1, 3, 1, 3, 3])
 assert_equals(compute_joltage_diffs(load_joltages('input/10_TEST.txt')), [1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 3, 1, 1, 1, 3, 1, 1, 3, 3, 1, 1, 1, 1, 3, 1, 3, 3, 1, 1, 1, 1, 3])
 
@@ -37,7 +33,6 @@ def compute_adjacency_lists(joltages : List[int]) -> List[int]:
   # print("diffs:   ", diffs)
   for i, diff in enumerate(diffs):
     joltage = joltages[i]
-    diff = diffs[i]
     branches = [val for val in joltages[i:] if (val > joltage and val <= joltage + 3)]
     # print('joltages[{}]: diff={}, value={} -> {}'.format(i, diff, joltage, branches))
     source_to_targets[joltage] = branches
