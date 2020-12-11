@@ -55,7 +55,7 @@ def count_paths(joltages : List[int]) -> int:
   for source, targets in reversed(source_to_targets.items()):
     value = 0 
     for target in targets:
-      if target in branch_counts:˝
+      if target in branch_counts:
         value += branch_counts[target]
     # print('source={}, targets={}, value={}'.format(source, targets, value))
     branch_counts[source] = value if value > 0 else 1
