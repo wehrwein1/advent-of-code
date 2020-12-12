@@ -78,7 +78,6 @@ def simulate(seating_area : List[str], is_part1=True) -> List[str]:
   # print("in simulate()")
   # for row in seating_area:
   #   print(' input:', row)
-  # exit()
   next_state = [row for row in seating_area]
   for row in range(0, num_rows):
     new_row = []
@@ -93,7 +92,6 @@ def simulate(seating_area : List[str], is_part1=True) -> List[str]:
       new_row += [new_seat]
     # print('new_row[{}]={}'.format(row, ''.join(new_row)))
     next_state[row] = ''.join(new_row)
-  # print("simulate input: num_rows: {}, num_cols: {}".format(num_rows, num_cols))
   # print("simulate outpt: num_rows: {}, num_cols: {}".format(num_rows, num_cols))
   # if seating_area == next_state: print("WARNING: simulate() did not change input")
   return next_state
