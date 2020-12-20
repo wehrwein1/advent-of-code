@@ -1,4 +1,4 @@
-# https://adventofcode.com/2015/day/2
+# https://adventofcode.com/2015/day/3
 from typing import Dict, Tuple
 from collections import defaultdict
 
