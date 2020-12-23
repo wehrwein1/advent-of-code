@@ -26,11 +26,11 @@ def load_message_rules(lines : List[str], is_part1=True) -> Tuple[Dict, List[str
     message_rules[11] = "42 31 | 42 11 31"
   return message_rules, messages
 
-def build_rule_regex(rule_spec : str, message_rules : Dict[int,str], is_add_inner_parens=False) -> str:
+def build_rule_regex(rule_spec : str, message_rules : Dict[int,str]) -> str:
   if '"' in rule_spec: return rule_spec.replace('"', '') # literal rule, 'a' or 'b'
   if "|" in rule_spec:
     groups = list(map(str.strip, rule_spec.split(" | ")))
-    regexes = [parened(build_rule_regex(group, message_rules, is_add_inner_parens=True)) for group in groups]
+    regexes = [parened(build_rule_regex(group, message_rules)) for group in groups]
     return parened("|".join(map(parened, regexes)))
   rule_refs = list(map(int, rule_spec.split(' ')))
   return ''.join(map(lambda rule_ref : build_rule_regex(message_rules[rule_ref], message_rules), rule_refs))
