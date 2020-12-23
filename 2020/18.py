@@ -59,7 +59,7 @@ assert_equals(tokenize_expression('(1 + 2) + 3'), ('(1 + 2)', '+ 3'))
 assert_equals(tokenize_expression('1 + (2 * 3) + 4'), ('1 + (2 * 3)', '+ 4'))
 assert_equals(tokenize_expression('(((1 + 2))) + 3'), ('(((1 + 2)))', '+ 3'))
 
-def evaluate_expr(expr : str) -> int:
+def evaluate_expr(expr : str, is_part1=True) -> int:
   if not ' ' in expr: return int(expr)
   head, tail = tokenize_expression(expr)
   print(f" head: '{head}'")
@@ -101,4 +101,9 @@ assert_equals(evaluate_expr('5 + (8 * 3 + 9 + 3 * 4 * 3)'), 437)
 assert_equals(evaluate_expr('5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))'), 12240)
 assert_equals(evaluate_expr('((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2'), 13632)
 
+# part 2
+assert_equals(evaluate_expr('1 + (2 * 3) + (4 * (5 + 6))', is_part1=False), 51)
+assert_equals(evaluate_expr('1 + 2 * 3 + 4 * 5 + 6', is_part1=False), 231)
+
 print(f"part 1: sum of all expr values: {sum(map(evaluate_expr, load_file('2020/input/18_INPUT.txt')))}")
+print(f"part 2: sum of all expr values: {sum(map(lambda line: evaluate_expr(line, is_part1=False), load_file('2020/input/18_INPUT.txt')))}")
