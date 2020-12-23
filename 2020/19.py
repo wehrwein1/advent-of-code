@@ -18,9 +18,12 @@ def partition(lines : List[str], sep='', ignore='//'):
   return partitions
 def parened(text):                    return '({})'.format(text if type(text) == str else ' '.join(text))
 
-def load_message_rules(lines : List[str]) -> Tuple[Dict, List[str]]:
+def load_message_rules(lines : List[str], is_part1=True) -> Tuple[Dict, List[str]]:
   rules_part, messages = partition(lines)
   message_rules = dict( (int(tokens[0]), tokens[1]) for tokens in [rule.split(': ') for rule in rules_part])
+  if not is_part1:
+    message_rules[8]  = "42 | 42 8"
+    message_rules[11] = "42 31 | 42 11 31"
   return message_rules, messages
 
 def build_rule_regex(rule_spec : str, message_rules : Dict[int,str], is_add_inner_parens=False) -> str:
@@ -44,5 +47,8 @@ def find_valid_messages(message_rules : Dict[int,str], messages : List[str], sta
   valid_messages = list(filter(lambda msg : re.match(regex_pattern + "$", msg), messages))
   return valid_messages
 assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST.txt'))), ['ababbb', 'abbbab'])
+assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST2.txt'))), ['bbabbbbaabaabba', 'ababaaaaaabaaab','ababaaaaabbbaba'])
+# assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST2.txt'), is_part1=False)), ['bbabbbbaabaabba', 'babbbbaabbbbbabbbbbbaabaaabaaa', 'aaabbbbbbaaaabaababaabababbabaaabbababababaaa', 'bbbbbbbaaaabbbbaaabbabaaa', 'bbbababbbbaaaaaaaabbababaaababaabab', 'ababaaaaaabaaab', 'ababaaaaabbbaba', 'baabbaaaabbaaaababbaababb', 'abbbbabbbbaaaababbbbbbaaaababb', 'aaaaabbaabaaaaababaa', 'aaaabbaabbaaaaaaabbbabbbaaabbaabaaa', 'aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba'])
 
 print(f"part 1: count of valid messages: {len(find_valid_messages(*load_message_rules(load_file('2020/input/19_INPUT.txt'))))}")
+# print(f"part 2: count of valid messages: {len(find_valid_messages(*load_message_rules(load_file('2020/input/19_INPUT.txt'), is_part1=False)))}")
