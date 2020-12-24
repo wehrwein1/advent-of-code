@@ -1,5 +1,5 @@
 # https://adventofcode.com/2020/day/24
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Set
 from collections import defaultdict
 
 def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
@@ -28,7 +28,7 @@ hexagonal_directions = {        # x,  y,  z
                           'nw' : (0,  1, -1) }
 WHITE : int = 0 # default when unset, defaultdict
 BLACK : int = 1
-def flip_tiles(lines : List[str], position_counts = None): 
+def flip_tiles(lines : List[str], position_counts = None) -> Dict[Tuple[int,int,int], int]: 
   # I learned something - these default param values are created *once* and persisted across calls
   # see https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments
   if position_counts is None: 
@@ -45,60 +45,53 @@ def flip_tiles(lines : List[str], position_counts = None):
 assert_equals(flip_tiles(['esew']),    {(0,-1,1): 1})
 assert_equals(flip_tiles(['nwwswee']), {(0,0,0) : 1})
 
-def get_tiles(position_counts : Dict[Tuple[int,int,int], int], desired_color) -> Dict[Tuple[int,int,int],int]:
-  return {tile:flip_count for tile,flip_count in position_counts.items() if flip_count % 2 == desired_color}
-assert_equals(get_tiles( { (0,0): 1, (0,-1): 2, (1,2): 5}, desired_color=BLACK), {(0, 0): 1, (1, 2): 5})
-assert_equals(get_tiles( { (0,0): 1, (0,-1): 2, (1,2): 5}, desired_color=WHITE), {(0, -1): 2})
+def get_tiles(position_counts : Dict[Tuple[int,int,int], int], desired_color) -> Set[Tuple[int,int,int]]:
+  return set( tile for tile, flip_count in position_counts.items() if flip_count % 2 == desired_color )
+assert_equals(sorted(get_tiles( { (0,0): 1, (0,-1): 2, (1,2): 5}, BLACK)), [(0, 0), (1, 2)])
+assert_equals(get_tiles( { (0,0): 1, (0,-1): 2, (1,2): 5}, WHITE), {(0,-1)})
 
-def tile_count(position_counts : Dict[Tuple[int,int,int], int], desired_color) -> int:
+def count_tiles(position_counts : Dict[Tuple[int,int,int], int], desired_color) -> int:
   return len( get_tiles(position_counts, desired_color=desired_color))
-assert_equals(tile_count( { (0,0): 1, (0,-1): 2, (1,2): 5}, desired_color=BLACK), 2)
+assert_equals(count_tiles( { (0,0): 1, (0,-1): 2, (1,2): 5}, desired_color=BLACK), 2)
 
-def get_all_adjacent_tiles(position_counts : Dict[Tuple[int,int], int], origin_tile) -> Dict[Tuple[int,int], int]:
-  adjacent_tiles = {}
-  for direction, (delta_x, delta_y, delta_z) in hexagonal_directions.items():
-    new_x, new_y, new_z = origin_tile
-    new_x += delta_x
-    new_y += delta_y
-    new_z += delta_z
-    adjacent_tile = (new_x, new_y, new_z)
-    if adjacent_tile in position_counts: 
-      adjacent_tiles[adjacent_tile] = position_counts[adjacent_tile]
-  return adjacent_tiles
+def compute_neighbors(origin_tile) -> List[Tuple[int,int,int]]:
+  return [ 
+    (origin_tile[0] + delta_x, 
+     origin_tile[1] + delta_y, 
+     origin_tile[2] + delta_z) for direction, (delta_x, delta_y, delta_z) in hexagonal_directions.items() ]
+assert_equals(compute_neighbors((0,0,0)), [(1, 0, -1), (1, -1, 0), (0, -1, 1), (-1, 0, 1), (-1, 1, 0), (0, 1, -1)])
+assert_equals(compute_neighbors((2,5,8)), [(3, 5, 7), (3, 4, 8), (2, 4, 9), (1, 5, 9), (1, 6, 8), (2, 6, 7)])
 
 def simulate_art_exhibit(lines : List[str], num_days=100):
   black_tile_counts = []
-  position_counts = defaultdict(int)
-  for i in range(num_days):
-    position_counts = flip_tiles(lines, position_counts=position_counts)
-    black_tiles = get_tiles(position_counts, desired_color=BLACK)
-    white_tiles = get_tiles(position_counts, desired_color=WHITE)
-    assert set(black_tiles).intersection(set(white_tiles)) == set(), 'Black and white tiles overlap??'
+  position_counts = flip_tiles(lines) # state change
+  for _ in range(num_days):
+    black_tiles = get_tiles(position_counts, BLACK)
+    white_tiles = get_tiles(position_counts, WHITE)
     tiles_to_flip = set()
     for black_tile in black_tiles:
-      adjacent_tiles = get_all_adjacent_tiles(position_counts, black_tile)
-      adjacent_black_tiles_count = tile_count(adjacent_tiles, desired_color=BLACK)
-      is_flip = adjacent_black_tiles_count == 0 or adjacent_black_tiles_count > 2
-      if is_flip: tiles_to_flip.add(black_tile)
+      neighbors = compute_neighbors(black_tile)
+      blacks = list(filter(lambda tile : position_counts[tile] % 2 == BLACK, neighbors))
+      if len(blacks) == 0 or len(blacks) > 2: tiles_to_flip.add(black_tile)
+      new_whites = set(filter(lambda tile : position_counts[tile] % 2 == WHITE, neighbors))
+      white_tiles.update(new_whites)
     for white_tile in white_tiles:
-      adjacent_tiles = get_all_adjacent_tiles(position_counts, white_tile)
-      adjacent_black_tiles_count = tile_count(adjacent_tiles, desired_color=BLACK)
-      is_flip = adjacent_black_tiles_count == 2
-      if is_flip: tiles_to_flip.add(white_tile)
+      neighbors = compute_neighbors(white_tile)
+      blacks = list(filter(lambda tile : position_counts[tile] % 2 == BLACK, neighbors))
+      if len(blacks) == 2: tiles_to_flip.add(white_tile)
     for tile in tiles_to_flip:
-      position_counts[tile] += 1 # flips both black and white
-    black_tile_count = tile_count(position_counts, desired_color=BLACK)
-    print(f"Day {i+1}: flipped {len(tiles_to_flip)}, black: {len(black_tiles)}->{black_tile_count}, white: {len(white_tiles)}->{tile_count(position_counts, desired_color=WHITE)}")
-    black_tile_counts += [black_tile_count]
+      position_counts[tile] += 1 # flips both black and white, state change
+    black_tile_counts += [count_tiles(position_counts, BLACK)]
   return black_tile_counts
 # part 2
+assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=1), [15])
 assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=10), [15,12,25,14,23,28,41,37,49,37])
 assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=100)[-1], 2208)
 
 # part 1
 assert_equals(flip_tiles(load_file('2020/input/24_TEST.txt')), {(-3, 1, 2): 1, (1, 2, -3): 2, (-3, 0, 3): 1, (2, 0, -2): 2, (1, 1, -2): 2, (-1, 1, 0): 2, (-2, 2, 0): 1, (0, 1, -1): 1, (-2, 1, 1): 1, (0, 2, -2): 2, (3, 0, -3): 1, (0, -2, 2): 1, (0, 0, 0): 1, (2, -2, 0): 1, (-1, 2, -1): 1})
-assert_equals(tile_count(flip_tiles(load_file('2020/input/24_TEST.txt')), desired_color=BLACK), 10)
-print(f"part 1: number of tiles flipped to black: {tile_count(flip_tiles(load_file('2020/input/24_INPUT.txt')), desired_color=BLACK)}")
-
+assert_equals(count_tiles(flip_tiles(load_file('2020/input/24_TEST.txt')), desired_color=BLACK), 10)
+assert_equals(count_tiles(flip_tiles(load_file('2020/input/24_TEST.txt')), desired_color=WHITE), 5)
+print(f"part 1: number of tiles flipped to black: {count_tiles(flip_tiles(load_file('2020/input/24_INPUT.txt')), desired_color=BLACK)}")
 # part 2
-print(f"part 2: number of tiles flipped to black: {simulate_art_exhibit(load_file('2020/input/24_INPUT.txt'))[-1]}") # tried 187
+print(f"part 2: number of tiles flipped to black: {simulate_art_exhibit(load_file('2020/input/24_INPUT.txt'))[-1]}") 
