@@ -59,7 +59,7 @@ def simulate(cups : str, num_moves : int, result_delim=''):
   current_cup : int = int(cups[0])
   linked_list : Dict[int,int] = to_linked_list(cups)
   # print(f"Initial state: {debug(linked_list)}")
-  timer()
+  if not is_part1: print(f"Loaded / created linked list, elapsed(s): {timer()}")
   while move_count < num_moves:
     three_cups = take(3, linked_list, start_at=current_cup)
     dest_cup = find_destination(linked_list, start_at=current_cup, excluding=three_cups)
@@ -85,12 +85,25 @@ crab_cups = list(map(int, list('362981754')))
 print(f"part 1: cups after 100 moves: {simulate(cups=crab_cups, num_moves=100)}")
 
 # part 2
+timer() # start time measurement
 def numbers_after_one(numbers : List[int]):
   index = numbers.index(1)
-  return [ numbers[index + 1], numbers[index + 2] ]
-crab_cups = list(map(int, list('389125467')))
-one_million_cups = crab_cups + list(range(max(crab_cups) + 1, 1_000_001))
-# assert_equals(one_million_cups[0:12], [3, 6, 2, 9, 8, 1, 7, 5, 4, 10, 11, 12])
-assert_equals(one_million_cups[-1], 1_000_000)
-sequence = simulate(cups=one_million_cups, num_moves=10_000_000, result_delim=',')
-print(f"part 2: product of 2 numbers after 1: {product(numbers_after_one(map(int, sequence)))}")
+  first =  numbers[index + 1]
+  second = numbers[index + 2]
+  print(f"numbers after one: {first}, {second}")
+  return [first, second]
+NUM_CUPS =  1_000_000
+NUM_MOVES = 10_000_000
+# NUM_CUPS =  100 #1_000_000
+# NUM_MOVES = 10_000 #10_000_000
+
+crab_cups = list(map(int, list('362981754')))
+one_million_cups = crab_cups + list(range(max(crab_cups) + 1, NUM_CUPS + 1))
+# crab_cups = list(map(int, list('389125467'))) # for testing only, part 2 description 
+# one_million_cups = crab_cups # for test only 
+
+assert_equals(one_million_cups[0:12], [3, 6, 2, 9, 8, 1, 7, 5, 4, 10, 11, 12])
+assert_equals(one_million_cups[-1], NUM_CUPS)
+sequence = simulate(cups=one_million_cups, num_moves=NUM_MOVES, result_delim=',')
+# sequence = simulate(cups=one_million_cups, num_moves=10, result_delim=',')
+print(f"part 2: product of two numbers after 1: {product(numbers_after_one(list(map(int, sequence.split(',')))))}")
