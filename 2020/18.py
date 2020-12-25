@@ -1,7 +1,6 @@
 # Disclaimer: Maintainability/understandability is the primary software cost driver of software generally 
-# (https://ieeexplore.ieee.org/abstract/document/6650541). Advent of code is a speed-based coding challenge, 
-# so this is not necessarility what I'd consider "good" production-quality code. Would be an exercise to simplify, 
-# reduce duplication, optimize performance, and make it more self-documenting.
+# (https://ieeexplore.ieee.org/abstract/document/6650541), but Advent of code is a speed-based coding challenge
+# not subject to those constraints. Would be an exercise to simplify, reduce duplication, and optimize performance.
 
 # https://adventofcode.com/2020/day/18
 from typing import List, Dict, Tuple, Callable
