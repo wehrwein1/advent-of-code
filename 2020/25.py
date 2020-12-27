@@ -28,16 +28,16 @@ def shared_encryption_key(card_public_key, door_public_key, use_cache=False, tra
   if trace: print(f"handshake_start card {card_public_key} door {door_public_key} use_cache {use_cache}")
   card_loops = compute_loop_size(subject_num=7, search_for=card_public_key)
   if trace: print(f"handshake_card {card_loops} elapsed {timer()}")
-  door_loops = compute_loop_size(subject_num=7, search_for=door_public_key)
-  if trace: print(f"handshake_door {door_loops} elapsed {timer()}")
+  # door_loops = compute_loop_size(subject_num=7, search_for=door_public_key)
+  # if trace: print(f"handshake_door {door_loops} elapsed {timer()}")
   if trace: print(f"handshake_end")
 
   # encryption keys
   shared_encryption_key = transform(subject_num=door_public_key, loops=card_loops)
-  assert_equals(          transform(subject_num=card_public_key, loops=door_loops), shared_encryption_key)
+  # assert_equals(          transform(subject_num=card_public_key, loops=door_loops), shared_encryption_key)
   if trace: print(f"encryption_key {shared_encryption_key} elapsed {timer()}")
   return shared_encryption_key
 
-assert_equals(shared_encryption_key(card_public_key=5764801, door_public_key=17807724, trace=False), 14897079)
+# assert_equals(shared_encryption_key(card_public_key=5764801, door_public_key=17807724, trace=False), 14897079)
 
-print(f"\npart 1: encryption key: {shared_encryption_key(15335876, 15086442)}")
+print(f"\npart 1: encryption key: {shared_encryption_key(15335876, 15086442, use_cache=True)}")
