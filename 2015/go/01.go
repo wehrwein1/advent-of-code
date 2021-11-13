@@ -8,10 +8,8 @@ import (
 )
 
 func main() {
-	bytes, err := os.ReadFile("../input/01_INPUT.txt")
-	check(err)
+	steps := fileContent("../input/01_INPUT.txt")
 	UP, DOWN := "(", ")"
-	steps := string(bytes)
 	log.Println("part 1: Santa ends on floor:", strings.Count(steps, UP)-strings.Count(steps, DOWN))
 	floor := 0
 	i := 0
@@ -26,6 +24,12 @@ func main() {
 		i += 1
 	}
 	log.Println("part 2: Santa first goes to basement on step:", i)
+}
+
+func fileContent(filename string) string {
+	bytes, err := os.ReadFile(filename)
+	check(err)
+	return string(bytes)
 }
 
 func check(e error) {
