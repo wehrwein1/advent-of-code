@@ -2,12 +2,13 @@
 package main
 
 import (
-	"os"
 	"strings"
+
+	"github.com/wehrwein1/advent-of-code/util"
 )
 
 func main() {
-	steps := fileContent("../input/01_INPUT.txt")
+	steps := util.FileContent("../input/01_INPUT.txt")
 	UP, DOWN := "(", ")"
 	println("part 1: Santa ends on floor:", strings.Count(steps, UP)-strings.Count(steps, DOWN))
 	floor := 0
@@ -23,16 +24,4 @@ func main() {
 		i += 1
 	}
 	println("part 2: Santa first goes to basement on step:", i)
-}
-
-func fileContent(filename string) string {
-	bytes, err := os.ReadFile(filename)
-	check(err)
-	return string(bytes)
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
 }
