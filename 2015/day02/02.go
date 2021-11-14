@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 
 	"github.com/wehrwein1/advent-of-code/util"
 )
@@ -24,8 +23,7 @@ func computeSumAreaAndRibbon(lines []string) (sumArea int, sumRibbon int) {
 		areaOfSmallestSide := util.MinInt(l*w, l*h, w*h)
 		// sum
 		sumArea += 2*l*w + 2*w*h + 2*h*l + areaOfSmallestSide
-		sort.Ints(dimensions) // stateful change
-		sumRibbon += util.SumInts(dimensions[:2]...)*2 + l*w*h
+		sumRibbon += util.SumInts(util.SortedInts(dimensions...)[:2]...)*2 + l*w*h
 	}
 	return // neat: return implicit values from declared signature
 }
