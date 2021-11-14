@@ -1,0 +1,3 @@
+{
+  "go.useLanguageServer": false // avoid gopls workspace error, see https://stackoverflow.com/a/66043147/3633993
+}
