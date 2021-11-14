@@ -16,13 +16,10 @@ func main() {
 
 func computeSumAreaAndRibbon(lines []string) (sumArea int, sumRibbon int) {
 	for _, line := range lines {
-		// parse line
-		dimensions := util.StringSplitToInts(line, "x")
-		// compute
-		l, w, h := dimensions[0], dimensions[1], dimensions[2]
+		dimensions := util.StringSplitToInts(line, "x")        // parse line
+		l, w, h := dimensions[0], dimensions[1], dimensions[2] // compute
 		areaOfSmallestSide := util.MinInt(l*w, l*h, w*h)
-		// sum
-		sumArea += 2*l*w + 2*w*h + 2*h*l + areaOfSmallestSide
+		sumArea += 2*l*w + 2*w*h + 2*h*l + areaOfSmallestSide // sum
 		sumRibbon += util.SumInts(util.SortedInts(dimensions...)[:2]...)*2 + l*w*h
 	}
 	return // neat: return implicit values from declared signature
