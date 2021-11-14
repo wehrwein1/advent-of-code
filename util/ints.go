@@ -1,5 +1,7 @@
 package util
 
+import "sort"
+
 func MinInt(items ...int) (minItem int) {
 	minItem = items[0] // panic if empty slice
 	for _, item := range items {
@@ -15,4 +17,9 @@ func SumInts(items ...int) (sum int) {
 		sum += item
 	}
 	return sum
+}
+
+func SortedInts(items ...int) []int {
+	sort.Ints(items) // stateful change
+	return items
 }
