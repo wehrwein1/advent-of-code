@@ -1,3 +1,4 @@
 {
+  "testExplorer.useNativeTesting" : true, // seems to work without "Go Test explorer UI"
   "go.useLanguageServer": true // setting related to gopls workspace error, see https://stackoverflow.com/a/66043147/3633993
 }
