@@ -13,3 +13,12 @@ func StringSplitToInts(text string, delim string) (ret []int) {
 	}
 	return
 }
+
+func StringsToInts(items []string) (ints []int) {
+	for _, item := range items {
+		intval, err := strconv.Atoi(item)
+		Check(err)
+		ints = append(ints, intval)
+	}
+	return
+}
