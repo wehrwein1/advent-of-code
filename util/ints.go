@@ -19,6 +19,14 @@ func SumInts(items ...int) (sum int) {
 	return sum
 }
 
+func ProductInts(coords ...int) int {
+	product := 1
+	for _, coord := range coords {
+		product *= coord
+	}
+	return product
+}
+
 func SortedInts(items ...int) []int {
 	sort.Ints(items) // stateful change
 	return items
