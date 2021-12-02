@@ -1,4 +1,4 @@
 # advent-of-code
-Advent of code puzzles
+Advent of code puzzles, see https://adventofcode.com/
 
-See https://adventofcode.com/
+[![Go](https://github.com/wehrwein1/advent-of-code/actions/workflows/go.yml/badge.svg)](https://github.com/wehrwein1/advent-of-code/actions/workflows/go.yml)
