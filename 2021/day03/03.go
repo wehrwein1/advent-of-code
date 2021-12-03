@@ -13,7 +13,7 @@ var binToDec = util.BinaryStringToDecimal
 
 type If = util.If
 
-func computePowerConsumption(diagnostics []string) (gamma string, epsilon string, product int64) {
+func computePowerConsumption(diagnostics []string) (gamma, epsilon string, product int64) {
 	bits := len(diagnostics[0]) // max # bits
 	println(fmt.Sprintf("#bits %d", bits))
 	gamma = ""   // ones
@@ -29,6 +29,31 @@ func computePowerConsumption(diagnostics []string) (gamma string, epsilon string
 	return
 }
 
+var oxygenSelector = func(countOnes, countZeroes int) rune { return If(countOnes >= countZeroes).Rune('1', '0') }
+var co2Selector = func(countOnes, countZeroes int) rune { return If(countOnes >= countZeroes).Rune('0', '1') }
+
+func computeRatings(diagnostics []string) (oxygen, co2 string, product int64) {
+	bits := len(diagnostics[0]) // max # bits
+	println(fmt.Sprintf("#bits %d", bits))
+	oxygen = computeRating(diagnostics, "mostCommon/oxygen", oxygenSelector)
+	co2 = computeRating(diagnostics, "leastCommon/co2", co2Selector)
+	product = binToDec(oxygen, 32) * binToDec(co2, 32)
+	return
+}
+
+func computeRating(diagnostics []string, selectionName string, selector func(int, int) rune) (rating string) {
+	bits := len(diagnostics[0]) // max # bits
+	for i := 0; i < bits; i++ {
+		countOnes, countZeroes := countOnesAndZeroes(diagnostics, i)
+		selection := selector(countOnes, countZeroes)
+		diagnostics = util.StringsFilter(diagnostics, func(s string) bool { return s[i] == byte(selection) })
+		println(fmt.Sprintf("%s i=%d remaining = %v", selectionName, i, diagnostics))
+		if len(diagnostics) == 1 {
+			return diagnostics[0]
+		}
+	}
+	panic(fmt.Sprintf("what to do? multiple remain: %v", diagnostics))
+}
 
 func main() {
 	diagnostics := util.FileLines("../input/03_INPUT.txt")
@@ -36,9 +61,13 @@ func main() {
 		gamma, epsilon, product := computePowerConsumption(diagnostics)
 		println(fmt.Sprintf("part 1: gamma %s epsilon %s power consumption %d", gamma, epsilon, product))
 	}
+	{
+		oxygen, co2, product := computeRatings(diagnostics)
+		println(fmt.Sprintf("part 2: oxygen %s co2 %s life support %d", oxygen, co2, product))
+	}
 }
 
-func countOnesAndZeroes(diagnostics []string, index int) (countOnes int, countZeroes int) {
+func countOnesAndZeroes(diagnostics []string, index int) (countOnes, countZeroes int) {
 	for _, reading := range diagnostics {
 		if reading[index] == '0' {
 			countZeroes += 1

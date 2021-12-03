@@ -16,3 +16,10 @@ func (c If) String(a, b string) string {
 	}
 	return b
 }
+
+func (c If) Rune(a, b rune) rune {
+	if c {
+		return a
+	}
+	return b
+}
