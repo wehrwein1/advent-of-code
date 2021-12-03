@@ -9,3 +9,10 @@ func (c If) Int(a, b int) int {
 	}
 	return b
 }
+
+func (c If) String(a, b string) string {
+	if c {
+		return a
+	}
+	return b
+}
