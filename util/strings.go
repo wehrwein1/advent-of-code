@@ -12,7 +12,16 @@ var StringContains = strings.Contains
 // Intent: likely remove these functions when go gets generics
 
 func StringSplitToInts(text string, delim string) (ret []int) {
-	for _, dim := range strings.Split(text, delim) {
+	return StringSplitToIntsFunc(text, func(s string) []string { return strings.Split(s, delim) })
+}
+
+func StringSplitToIntsWhitespace(text string) []int {
+	return StringSplitToIntsFunc(text, strings.Fields)
+}
+
+// TODO FIXME [Go generics can't come soon enough]
+func StringSplitToIntsFunc(text string, splitFn func(string) []string) (ret []int) {
+	for _, dim := range splitFn(text) {
 		val, err := strconv.Atoi(dim)
 		Check(err)
 		ret = append(ret, val)

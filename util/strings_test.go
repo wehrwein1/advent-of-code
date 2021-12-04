@@ -24,6 +24,10 @@ func TestStringSplitToInts(t *testing.T) {
 	assert.Equal(t, StringSplitToInts("2x3x4", "x"), []int{2, 3, 4})
 }
 
+func TestStringSplitToIntsWhitespace(t *testing.T) {
+	assert.Equal(t, StringSplitToIntsWhitespace("2   3 4     5"), []int{2, 3, 4, 5})
+}
+
 func TestStringsToInts(t *testing.T) {
 	assert.Equal(t, []int{2, 3, 4, 6}, StringsToInts([]string{"2", "3", "4", "6"}))
 }
