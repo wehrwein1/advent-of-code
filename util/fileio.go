@@ -5,13 +5,21 @@ import (
 	"strings"
 )
 
-func FileLines(filename string) (ret []string) { // whoa! crazy implicit return value syntax https://stackoverflow.com/a/37563128/3633993
+func FileLinesSkipEmpty(filename string) []string {
+	return fileLines(filename, false)
+}
+
+func FileLinesIncludeEmpty(filename string) []string {
+	return fileLines(filename, true)
+}
+
+func fileLines(filename string, isIncludeEmptyLines bool) (ret []string) {
 	bytes, err := os.ReadFile(filename)
 	Check(err)
 	lines := strings.Split(string(bytes), "\n")
 	for _, line := range lines {
 		line = chomp(line)
-		if len(line) > 0 { // ignore empty lines
+		if isIncludeEmptyLines || len(line) > 0 {
 			ret = append(ret, line)
 		}
 	}

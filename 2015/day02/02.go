@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// solution
-	area, ribbon := computeSumAreaAndRibbon(util.FileLines("../input/02_INPUT.txt"))
+	area, ribbon := computeSumAreaAndRibbon(util.FileLinesSkipEmpty("../input/02_INPUT.txt"))
 	println(fmt.Sprintf("part 1: square feet of wrapping paper: %d", area))
 	println(fmt.Sprintf("part 2: feet of ribbon: %d", ribbon))
 }

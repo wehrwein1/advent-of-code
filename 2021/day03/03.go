@@ -56,7 +56,7 @@ func computeRating(diagnostics []string, selectionName string, selector func(int
 }
 
 func main() {
-	diagnostics := util.FileLines("../input/03_INPUT.txt")
+	diagnostics := util.FileLinesSkipEmpty("../input/03_INPUT.txt")
 	{
 		gamma, epsilon, product := computePowerConsumption(diagnostics)
 		println(fmt.Sprintf("part 1: gamma %s epsilon %s power consumption %d", gamma, epsilon, product))

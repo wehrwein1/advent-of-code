@@ -59,7 +59,7 @@ func computePositionPart2(commands []string) (horizontal int, vertical int) {
 }
 
 func main() {
-	commands := util.FileLines("../input/02_INPUT.txt")
+	commands := util.FileLinesSkipEmpty("../input/02_INPUT.txt")
 	println(fmt.Sprintf("part 1: product of position: %d", product(computePositionPart1(commands))))
 	println(fmt.Sprintf("part 2: product of position: %d", product(computePositionPart2(commands))))
 }

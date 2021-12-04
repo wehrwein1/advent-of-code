@@ -22,6 +22,6 @@ func TestStringsFilter(t *testing.T) {
 func TestPartitionSliceStrings(t *testing.T) {
 	testcase1 := []string{"one", "two", "", "three", "four", "", "five", "six", ""}
 	testcase2 := []string{"one", "two", "", "three", "four", "", "five", "six"} // no final delim
-	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, partitionSliceStrings(testcase1))
-	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, partitionSliceStrings(testcase2))
+	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, PartitionSliceStrings(testcase1))
+	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, PartitionSliceStrings(testcase2))
 }

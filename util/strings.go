@@ -39,7 +39,7 @@ func StringsFilter(items []string, retainIf func(string) bool) (result []string)
 	return
 }
 
-func partitionSliceStrings(lines []string) (partitions [][]string) { // partition on empty lines
+func PartitionSliceStrings(lines []string) (partitions [][]string) { // partition on empty lines
 	var currentPartition []string
 	for _, line := range lines {
 		isNewPartitition := len(chomp(line)) == 0

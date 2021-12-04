@@ -31,7 +31,7 @@ func computeWindow(measurements []int) (windows []int) {
 }
 
 func main() {
-	data := toInts(util.FileLines("../input/01_INPUT.txt"))
+	data := toInts(util.FileLinesSkipEmpty("../input/01_INPUT.txt"))
 	println(fmt.Sprintf("part 1: # depth increases: %d", countDepthIncreases(data)))
 	println(fmt.Sprintf("part 2: # window increases: %d", countRollingWindowIncreases(data)))
 }
