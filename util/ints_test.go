@@ -10,6 +10,11 @@ func TestSumInts(t *testing.T) {
 	assert.Equal(t, SumInts(3, 66, 2, 7), 78, "sumInts() results different")
 }
 
+func TestIntSliceContains(t *testing.T) {
+	assert.Equal(t, false, IntSliceContains([]int{1, 2, 3}, 4))
+	assert.Equal(t, true, IntSliceContains([]int{1, 2, 3}, 2))
+}
+
 func TestProductInts(t *testing.T) {
 	assert.Equal(t, 150, ProductInts(15, 10))
 }

@@ -19,6 +19,15 @@ func SumInts(items ...int) (sum int) {
 	return sum
 }
 
+func IntSliceContains(items []int, searchedItem int) bool {
+	for _, item := range items {
+		if item == searchedItem {
+			return true
+		}
+	}
+	return false
+}
+
 func ProductInts(coords ...int) int {
 	product := 1
 	for _, coord := range coords {
