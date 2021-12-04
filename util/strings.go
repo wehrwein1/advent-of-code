@@ -22,11 +22,15 @@ func StringSplitToInts(text string, delim string) (ret []int) {
 
 func StringsToInts(items []string) (ints []int) {
 	for _, item := range items {
-		intval, err := strconv.Atoi(item)
-		Check(err)
-		ints = append(ints, intval)
+		ints = append(ints, StringToInt(item))
 	}
 	return
+}
+
+func StringToInt(value string) int {
+	intval, err := strconv.Atoi(value)
+	Check(err)
+	return intval
 }
 
 // adapted from https://stackoverflow.com/a/37563128/3633993
@@ -50,7 +54,7 @@ func PartitionSliceStrings(lines []string) (partitions [][]string) { // partitio
 		}
 		currentPartition = append(currentPartition, chomp(line)) // collect current partition
 	}
-	if (len(currentPartition) > 0) {
+	if len(currentPartition) > 0 {
 		partitions = append(partitions, currentPartition)
 	}
 	return
