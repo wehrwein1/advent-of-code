@@ -18,3 +18,10 @@ func TestStringsToInts(t *testing.T) {
 func TestStringsFilter(t *testing.T) {
 	assert.Equal(t, []string{"br", "bo", "ba"}, StringsFilter([]string{"aa", "ab", "br", "cc", "bo", "ba", "xt", "zz"}, func(s string) bool { return strings.HasPrefix(s, "b") }))
 }
+
+func TestPartitionSliceStrings(t *testing.T) {
+	testcase1 := []string{"one", "two", "", "three", "four", "", "five", "six", ""}
+	testcase2 := []string{"one", "two", "", "three", "four", "", "five", "six"} // no final delim
+	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, partitionSliceStrings(testcase1))
+	assert.Equal(t, [][]string{{"one", "two"}, {"three", "four"}, {"five", "six"}}, partitionSliceStrings(testcase2))
+}
