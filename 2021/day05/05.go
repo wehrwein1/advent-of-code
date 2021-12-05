@@ -12,7 +12,7 @@ type Point = util.Point
 type Vector = util.Vector
 
 func parseLines(filename string) (vectors []Vector) {
-	lines := util.FileLinesIncludeEmpty(filename)
+	lines := util.FileLinesSkipEmpty(filename)
 	for _, line := range lines {
 		if len(line) > 0 {
 			tokens := strings.Split(line, " -> ")
