@@ -15,12 +15,23 @@ func TestIntSliceContains(t *testing.T) {
 	assert.Equal(t, true, IntSliceContains([]int{1, 2, 3}, 2))
 }
 
+func TestIntSliceIndexOf(t *testing.T) {
+	assert.Equal(t, -1, IntSliceIndexOf([]int{1, 2, 3}, func(val int) bool { return val == 5 }))
+	assert.Equal(t, 0, IntSliceIndexOf([]int{1, 2, 3}, func(val int) bool { return val == 1 }))
+	assert.Equal(t, 1, IntSliceIndexOf([]int{1, 2, 3}, func(val int) bool { return val == 2 }))
+	assert.Equal(t, 2, IntSliceIndexOf([]int{1, 2, 3}, func(val int) bool { return val == 3 }))
+}
+
 func TestProductInts(t *testing.T) {
 	assert.Equal(t, 150, ProductInts(15, 10))
 }
 
 func TestMinInt(t *testing.T) {
-	assert.Equal(t, MinInt(31, 66, 2, 7), 2, "minInt() results different")
+	assert.Equal(t, 2, MinInt(31, 66, 2, 7), "minInt() results different")
+}
+
+func TestMaxInt(t *testing.T) {
+	assert.Equal(t, 66, MaxInt(31, 66, 2, 7), "minInt() results different")
 }
 
 func TestSortedInts(t *testing.T) {

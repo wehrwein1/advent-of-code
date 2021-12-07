@@ -12,6 +12,16 @@ func MinInt(items ...int) (minItem int) {
 	return
 }
 
+func MaxInt(items ...int) (maxItem int) {
+	maxItem = items[0] // panic if empty slice
+	for _, item := range items {
+		if item > maxItem {
+			maxItem = item
+		}
+	}
+	return
+}
+
 func SumInts(items ...int) (sum int) {
 	for _, item := range items {
 		sum += item
@@ -26,6 +36,15 @@ func IntSliceContains(items []int, searchedItem int) bool {
 		}
 	}
 	return false
+}
+
+func IntSliceIndexOf(items []int, predicate func(val int) bool) int { // https://stackoverflow.com/a/18203895
+	for i := 0; i < len(items); i++ {
+		if predicate(items[i]) {
+			return i
+		}
+	}
+	return -1
 }
 
 func ProductInts(coords ...int) int {
