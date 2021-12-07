@@ -7,16 +7,58 @@ import (
 	"github.com/wehrwein1/advent-of-code/util"
 )
 
+type If = util.If
+
+var min = util.MinInt
+var indexOf = util.IntSliceIndexOf
+
 var parsePositions = func(positionsCsv string) []int { return util.StringSplitToInts(positionsCsv, ",") }
 
 func main() {
 	positions := parsePositions(util.FileContent("../input/07_INPUT.txt"))
-	_, sumFuel := computeMinFuel(positions)
-	println(fmt.Sprintf("part 1: sum fuel %d", sumFuel))
+	_, sumFuelPart1 := computeMinFuel(positions, constantFuelUse)
+	println(fmt.Sprintf("part 1: sum fuel %d", sumFuelPart1))
+	_, sumFuelPart2 := computeMinFuel(positions, linearIncreaseFuelUse)
+	println(fmt.Sprintf("part 2: sum fuel %d", sumFuelPart2))
 }
 
-func computeMinFuel(positions []int) (int, int) {
-	minFuelPos := 0
-	sumFuel := 0
-	return minFuelPos, sumFuel
+var constantFuelUse = func(crabPos int, pos int) int { return If(crabPos > pos).Int(crabPos-pos, pos-crabPos) }
+
+func linearIncreaseFuelUse(crabPos int, pos int) (total int) {
+	distance := constantFuelUse(crabPos, pos)
+	inc := 1
+	for i := 0; i < distance; i++ {
+		total += inc
+		inc++
+	}
+	return
+}
+
+func computeMinFuel(crabPositions []int, fuelUseFunc func(crabPos int, pos int) int) (int, int) {
+	minPos := util.MinInt(crabPositions...)
+	maxPos := util.MaxInt(crabPositions...)
+	println(fmt.Sprintf("initial crab positions range [%d,%d]", minPos, maxPos))
+	println(fmt.Sprintf("initial crab positions %v", crabPositions))
+	minFuelAtPos := make([]int, maxPos+1)
+	for i := range minFuelAtPos {
+		minFuelAtPos[i] = -1
+	}
+	for pos := minPos; pos < maxPos+1; pos++ {
+		if minFuelAtPos[pos] > 0 {
+			continue // already did this positions
+		}
+		sumFuel := 0
+		for i := 0; i < len(crabPositions); i++ {
+			crabPos := crabPositions[i]
+			fuel := fuelUseFunc(crabPos, pos)
+			// println(fmt.Sprintf("Move %d -> %d = %d fuel", crabPos, pos, fuel))
+			sumFuel += fuel
+		}
+		minFuelAtPos[pos] = sumFuel
+		// println(fmt.Sprintf("Sum fuel at pos=%d -> %d", pos, sumFuel))
+	}
+
+	minValue := min(minFuelAtPos...)
+	minFuelPos := indexOf(minFuelAtPos, func(val int) bool { return val == minValue })
+	return minFuelPos, minValue
 }
