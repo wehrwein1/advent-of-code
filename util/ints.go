@@ -69,6 +69,14 @@ func MapInts(items []int, f func(int) int) (results []int) {
 	return
 }
 
+func MapIntsToBools(items []int, f func(int) bool) []bool {
+	boolValues := []bool{}
+	for _, item := range items {
+		boolValues = append(boolValues, f(item))
+	}
+	return boolValues
+}
+
 func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
 	rowCount := len(rowsAndCols)
 	colCount := len(rowsAndCols[0])

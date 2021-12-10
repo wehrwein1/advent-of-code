@@ -39,6 +39,11 @@ func TestMapInts(t *testing.T) {
 	assert.Equal(t, []int{20, 40, 60}, MapInts([]int{10, 20, 30}, func(i int) int { return i * 2 }))
 }
 
+func TestMapIntsToBools(t *testing.T) {
+	assert.Equal(t, []bool{}, MapIntsToBools([]int{}, func(n int) bool { return false }))
+	assert.Equal(t, []bool{true, true, false, false, true}, MapIntsToBools([]int{1, 5, 10, 15, 0}, func(n int) bool { return n < 10 }))
+}
+
 func TestSortedInts(t *testing.T) {
 	assert.Equal(t, []int{1, 2, 3, 4, 5}, SortedInts(4, 1, 2, 5, 3))
 }
