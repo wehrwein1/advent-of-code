@@ -2,6 +2,8 @@ package util
 
 import "sort"
 
+var IncrementInt = func(n int) int { return n + 1 }
+
 func MinInt(items ...int) (minItem int) {
 	minItem = items[0] // panic if empty slice
 	for _, item := range items {
@@ -58,4 +60,11 @@ func ProductInts(coords ...int) int {
 func SortedInts(items ...int) []int {
 	sort.Ints(items) // stateful change
 	return items
+}
+
+func MapInts(items []int, f func(int) int) (results []int) {
+	for _, item := range items {
+		results = append(results, f(item))
+	}
+	return
 }

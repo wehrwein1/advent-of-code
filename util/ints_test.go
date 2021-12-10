@@ -34,6 +34,11 @@ func TestMaxInt(t *testing.T) {
 	assert.Equal(t, 66, MaxInt(31, 66, 2, 7), "minInt() results different")
 }
 
+func TestMapInts(t *testing.T) {
+	assert.Equal(t, []int{11, 21, 31}, MapInts([]int{10, 20, 30}, IncrementInt))
+	assert.Equal(t, []int{20, 40, 60}, MapInts([]int{10, 20, 30}, func(i int) int { return i * 2 }))
+}
+
 func TestSortedInts(t *testing.T) {
 	assert.Equal(t, []int{1, 2, 3, 4, 5}, SortedInts(4, 1, 2, 5, 3))
 }
