@@ -8,7 +8,29 @@ import (
 
 func TestDay(t *testing.T) {
 	testcase := fileLines("../input/09_TEST.txt")
-	assert.Equal(t, []int{1, 0, 5, 5}, findLowPoints(parseLines(testcase)))
-	assert.Equal(t, []int{2, 1, 6, 6}, toRiskLevels([]int{1, 0, 5, 5}))
+	notUsed := -1
+	assert.Equal(t, []LowPoint{
+		{Row: 0, Col: 1, Value: 1},
+		{Row: 0, Col: 9, Value: 0},
+		{Row: 2, Col: 2, Value: 5},
+		{Row: 4, Col: 6, Value: 5},
+	}, findLowPoints(parseLines(testcase)))
+	assert.Equal(t, []int{2, 1, 6, 6}, toRiskLevels([]LowPoint{
+		{Row: notUsed, Col: notUsed, Value: 1},
+		{Row: notUsed, Col: notUsed, Value: 0},
+		{Row: notUsed, Col: notUsed, Value: 5},
+		{Row: notUsed, Col: notUsed, Value: 5},
+	}))
 	assert.Equal(t, 15, sumRiskLevels(testcase))
+
+}
+
+func SkipTestDayPart2(t *testing.T) {
+	testcase := fileLines("../input/09_TEST.txt")
+	notUsed := -1
+	assert.Equal(t, 3, computeBasinSizes([]LowPoint{{Row: 0, Col: 1, Value: notUsed}}))
+	assert.Equal(t, 9, computeBasinSizes([]LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
+	assert.Equal(t, 14, computeBasinSizes([]LowPoint{{Row: 2, Col: 2, Value: notUsed}}))
+	assert.Equal(t, 9, computeBasinSizes([]LowPoint{{Row: 4, Col: 6, Value: notUsed}}))
+	assert.Equal(t, 1134, product(computeBasinSizes(findLowPoints(parseLines(testcase)))...))
 }

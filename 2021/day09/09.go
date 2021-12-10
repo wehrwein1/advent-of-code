@@ -8,6 +8,7 @@ import (
 )
 
 var sum = util.SumInts
+var product = util.ProductInts
 var all = util.AllTrue
 var fileLines = util.FileLinesSkipEmpty
 
@@ -21,17 +22,22 @@ func parseLines(digitLines []string) (digitRows [][]int) {
 
 func main() {
 	println(fmt.Sprintf("part 1: rum risk levels %d", sumRiskLevels(fileLines("../input/09_INPUT.txt"))))
+	println(fmt.Sprintf("part 2: product basin sizes %d", product(computeBasinSizes(findLowPoints(parseLines(fileLines("../input/09_INPUT.txt"))))...)))
 }
 
 func sumRiskLevels(digitLines []string) int {
 	return sum(toRiskLevels(findLowPoints(parseLines(digitLines)))...)
 }
 
-func toRiskLevels(lowPoints []int) []int {
-	return util.MapInts(lowPoints, util.IncrementInt)
+func toRiskLevels(lowPoints []LowPoint) []int {
+	lowPointValues := []int{}
+	for _, lowPoint := range lowPoints {
+		lowPointValues = append(lowPointValues, lowPoint.Value)
+	}
+	return util.MapInts(lowPointValues, util.IncrementInt)
 }
 
-func findLowPoints(digitRows [][]int) (lowPoints []int) {
+func findLowPoints(digitRows [][]int) (lowPoints []LowPoint) {
 	rowCount := len(digitRows)
 	colCount := len(digitRows[0])
 	println(fmt.Sprintf("rowCount %d, colCount %d", rowCount, colCount))
@@ -46,9 +52,19 @@ func findLowPoints(digitRows [][]int) (lowPoints []int) {
 			}
 			isLowPoint := all(util.MapIntsToBools(neighborValues, func(value int) bool { return currentValue < value })...)
 			if isLowPoint {
-				lowPoints = append(lowPoints, currentValue)
+				lowPoints = append(lowPoints, LowPoint{Row: r, Col: c, Value: currentValue})
 			}
 		}
 	}
 	return
+}
+
+func computeBasinSizes(lowPoint []LowPoint) (basinSizes []int) {
+	return
+}
+
+type LowPoint struct {
+	Row   int
+	Col   int
+	Value int
 }
