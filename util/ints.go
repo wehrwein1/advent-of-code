@@ -68,3 +68,14 @@ func MapInts(items []int, f func(int) int) (results []int) {
 	}
 	return
 }
+
+func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
+	rowCount := len(rowsAndCols)
+	colCount := len(rowsAndCols[0])
+	rowOk := (0 <= rowIndex) && (rowIndex < rowCount)
+	colOk := (0 <= colIndex) && (colIndex < colCount)
+	if rowOk && colOk {
+		return rowsAndCols[rowIndex][colIndex], true
+	}
+	return 0 /* arbitrary not found value*/, false
+}
