@@ -22,7 +22,8 @@ func parseLines(digitLines []string) (digitRows [][]int) {
 
 func main() {
 	println(fmt.Sprintf("part 1: rum risk levels %d", sumRiskLevels(fileLines("../input/09_INPUT.txt"))))
-	println(fmt.Sprintf("part 2: product basin sizes %d", product(computeBasinSizes(findLowPoints(parseLines(fileLines("../input/09_INPUT.txt"))))...)))
+	grid := parseLines(fileLines("../input/09_INPUT.txt"))
+	println(fmt.Sprintf("part 2: product basin sizes %d", product(computeBasinSizes(grid, findLowPoints(grid))...)))
 }
 
 func sumRiskLevels(digitLines []string) int {
@@ -59,12 +60,23 @@ func findLowPoints(digitRows [][]int) (lowPoints []LowPoint) {
 	return
 }
 
-func computeBasinSizes(lowPoint []LowPoint) (basinSizes []int) {
+func computeBasinSizes(grid [][]int, lowPoints []LowPoint) (basinSizes []int) {
+	for _, lowPoint := range lowPoints {
+		println(fmt.Sprintf("%v", lowPoint))
+		basinPoints := util.Int2dArrayDepthFirstSearch(grid, lowPoint.ToPoint(), isGridPointValueLessThan9)
+		basinSizes = append(basinSizes, len(basinPoints))
+	}
 	return
 }
+
+var isGridPointValueLessThan9 = func(grid [][]int, p util.Point) bool { return grid[p.X][p.Y] < 9 }
 
 type LowPoint struct {
 	Row   int
 	Col   int
 	Value int
+}
+
+func (lp LowPoint) ToPoint() util.Point {
+	return *util.NewPoint(lp.Row, lp.Col)
 }

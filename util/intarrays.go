@@ -23,6 +23,10 @@ func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int) (n
 	return
 }
 
+func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, isValid func(grid [][]int, point Point) bool) (reachablePoints []Point) {
+	return
+}
+
 type Int2dArrayNeighbor struct {
 	Row       int
 	Col       int

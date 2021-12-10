@@ -26,11 +26,11 @@ func TestDay(t *testing.T) {
 }
 
 func SkipTestDayPart2(t *testing.T) {
-	testcase := fileLines("../input/09_TEST.txt")
+	data := parseLines(fileLines("../input/09_TEST.txt"))
 	notUsed := -1
-	assert.Equal(t, 3, computeBasinSizes([]LowPoint{{Row: 0, Col: 1, Value: notUsed}}))
-	assert.Equal(t, 9, computeBasinSizes([]LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
-	assert.Equal(t, 14, computeBasinSizes([]LowPoint{{Row: 2, Col: 2, Value: notUsed}}))
-	assert.Equal(t, 9, computeBasinSizes([]LowPoint{{Row: 4, Col: 6, Value: notUsed}}))
-	assert.Equal(t, 1134, product(computeBasinSizes(findLowPoints(parseLines(testcase)))...))
+	assert.Equal(t, []int{3}, computeBasinSizes(data, []LowPoint{{Row: 0, Col: 1, Value: notUsed}}))
+	// assert.Equal(t, []int{9}, computeBasinSizes([]LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
+	// assert.Equal(t, []int{14}, computeBasinSizes([]LowPoint{{Row: 2, Col: 2, Value: notUsed}}))
+	// assert.Equal(t, []int{9}, computeBasinSizes([]LowPoint{{Row: 4, Col: 6, Value: notUsed}}))
+	// assert.Equal(t, 1134, product(computeBasinSizes(findLowPoints(parseLines(testcase)))...))
 }
