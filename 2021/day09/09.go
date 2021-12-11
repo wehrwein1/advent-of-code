@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/wehrwein1/advent-of-code/util"
 )
@@ -23,7 +24,7 @@ func parseLines(digitLines []string) (digitRows [][]int) {
 func main() {
 	println(fmt.Sprintf("part 1: rum risk levels %d", sumRiskLevels(fileLines("../input/09_INPUT.txt"))))
 	grid := parseLines(fileLines("../input/09_INPUT.txt"))
-	println(fmt.Sprintf("part 2: product basin sizes %d", product(computeBasinSizes(grid, findLowPoints(grid))...)))
+	println(fmt.Sprintf("part 2: product basin sizes %d", product(threeLargest(computeBasinSizes(grid, findLowPoints(grid)))...)))
 }
 
 func sumRiskLevels(digitLines []string) int {
@@ -60,16 +61,21 @@ func findLowPoints(digitRows [][]int) (lowPoints []LowPoint) {
 	return
 }
 
+var isGridPointValueLessThan9 = func(grid [][]int, p util.Point) bool { return grid[p.X][p.Y] < 9 }
+
 func computeBasinSizes(grid [][]int, lowPoints []LowPoint) (basinSizes []int) {
 	for _, lowPoint := range lowPoints {
-		println(fmt.Sprintf("%v", lowPoint))
 		basinPoints := util.Int2dArrayDepthFirstSearch(grid, lowPoint.ToPoint(), isGridPointValueLessThan9)
-		basinSizes = append(basinSizes, len(basinPoints))
+		basinSizes = append(basinSizes, len(basinPoints)+1) // (+1 for DFS start point = low point = omitted from DFS results)
+		println(fmt.Sprintf("lowPoint %v basinSize %d", lowPoint, basinSizes[len(basinSizes)-1]))
 	}
 	return
 }
 
-var isGridPointValueLessThan9 = func(grid [][]int, p util.Point) bool { return grid[p.X][p.Y] < 9 }
+func threeLargest(numbers []int) []int {
+	sort.Ints(numbers)
+	return numbers[len(numbers)-3:]
+}
 
 type LowPoint struct {
 	Row   int

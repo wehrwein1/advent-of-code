@@ -24,6 +24,7 @@ func TestIntSliceIndexOf(t *testing.T) {
 
 func TestProductInts(t *testing.T) {
 	assert.Equal(t, 150, ProductInts(15, 10))
+	assert.Equal(t, 720, ProductInts(1, 2, 3, 4, 5, 6))
 }
 
 func TestMinInt(t *testing.T) {

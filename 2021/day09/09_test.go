@@ -25,12 +25,14 @@ func TestDay(t *testing.T) {
 
 }
 
-func SkipTestDayPart2(t *testing.T) {
+func TestDayPart2(t *testing.T) {
 	data := parseLines(fileLines("../input/09_TEST.txt"))
 	notUsed := -1
 	assert.Equal(t, []int{3}, computeBasinSizes(data, []LowPoint{{Row: 0, Col: 1, Value: notUsed}}))
-	// assert.Equal(t, []int{9}, computeBasinSizes([]LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
-	// assert.Equal(t, []int{14}, computeBasinSizes([]LowPoint{{Row: 2, Col: 2, Value: notUsed}}))
-	// assert.Equal(t, []int{9}, computeBasinSizes([]LowPoint{{Row: 4, Col: 6, Value: notUsed}}))
-	// assert.Equal(t, 1134, product(computeBasinSizes(findLowPoints(parseLines(testcase)))...))
+	assert.Equal(t, []int{9}, computeBasinSizes(data, []LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
+	assert.Equal(t, []int{14}, computeBasinSizes(data, []LowPoint{{Row: 2, Col: 2, Value: notUsed}}))
+	assert.Equal(t, []int{9}, computeBasinSizes(data, []LowPoint{{Row: 4, Col: 6, Value: notUsed}}))
+	assert.Equal(t, []int{3, 9, 14, 9}, computeBasinSizes(data, findLowPoints(data)))
+	assert.Equal(t, []int{9, 9, 14}, threeLargest([]int{3, 9, 14, 9}))
+	assert.Equal(t, 1134, product(threeLargest(computeBasinSizes(data, findLowPoints(data)))...))
 }

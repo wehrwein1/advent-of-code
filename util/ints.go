@@ -49,10 +49,10 @@ func IntSliceIndexOf(items []int, predicate func(val int) bool) int { // https:/
 	return -1
 }
 
-func ProductInts(coords ...int) int {
+func ProductInts(numbers ...int) int {
 	product := 1
-	for _, coord := range coords {
-		product *= coord
+	for _, n := range numbers {
+		product *= n
 	}
 	return product
 }
