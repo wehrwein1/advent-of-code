@@ -45,6 +45,24 @@ func TestInt2dArrayDepthFirstSearch(t *testing.T) {
 		{9, 1, 2, 9},
 		{9, 9, 6, 9},
 		{9, 9, 10, 11}}
-	var isGridPointValueLessThan9 = func(grid [][]int, p Point) bool { return grid[p.X][p.Y] < 9 }
-	assert.Equal(t, []Point{{X: 0, Y: 0}}, Int2dArrayDepthFirstSearch(grid, *NewPoint(0, 2), isGridPointValueLessThan9))
+	{
+		var isGridPointValueLessThan9 = func(grid [][]int, p Point) bool { return grid[p.X][p.Y] < 9 }
+		startPoint := *NewPoint(0, 2)
+		assert.ElementsMatch(t,
+			[]Point{
+				{X: 1, Y: 2},
+				{X: 0, Y: 1},
+			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueLessThan9)) // DFS result excludes start point
+	}
+	{
+		var isGridPointValueExactly9 = func(grid [][]int, p Point) bool { return grid[p.X][p.Y] == 9 }
+		startPoint := *NewPoint(2, 1)
+		assert.ElementsMatch(t,
+			[]Point{
+				{X: 2, Y: 0},
+				{X: 1, Y: 0},
+				{X: 0, Y: 0},
+				{X: 1, Y: 1},
+			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueExactly9))
+	}
 }
