@@ -11,8 +11,7 @@ func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (f
 	return 0 /* arbitrary not found value*/, false
 }
 
-func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int) (neighbors []Int2dArrayNeighbor) {
-	directions := []Direction{North, East, South, West}
+func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int, directions []Direction) (neighbors []Int2dArrayNeighbor) {
 	for _, direction := range directions {
 		row, col := direction.Translate(rowIndex, colIndex)
 		value, isFound := Int2dArrayHasValueAtPos(rowsAndCols, row, col)
@@ -23,14 +22,14 @@ func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int) (n
 	return
 }
 
-func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse func(grid [][]int, point Point) bool) []Point {
+func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse func(grid [][]int, point Point) bool, searchDirections []Direction) []Point {
 	visited := NewPointSet()
 	reachablePoints := NewPointSet()
 	queue := NewPointQueue(len(rowsAndCols) * len(rowsAndCols[0])) // safe assumption for now
 	queue.push(startAt)
 	for queue.length() > 0 {
 		point := queue.pop()
-		neighbors := Int2dArrayFindNeighbors(rowsAndCols, point.X, point.Y)
+		neighbors := Int2dArrayFindNeighbors(rowsAndCols, point.X, point.Y, searchDirections)
 		for _, neighbor := range neighbors {
 			neighborPoint := *NewPoint(neighbor.Row, neighbor.Col)
 			canTraverse := !visited.has(neighborPoint) && canTraverse(rowsAndCols, neighborPoint)

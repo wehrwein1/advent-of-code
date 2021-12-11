@@ -50,3 +50,10 @@ func TestDirectionTranslate(t *testing.T) {
 		assert.Equal(t, -1, newCol)
 	}
 }
+
+func TestString(t *testing.T) {
+	assert.Equal(t, "North", North.String())
+	assert.Equal(t, "NorthWest", NorthWest.String())
+	assert.Equal(t, "South", South.String())
+	assert.Equal(t, "SouthEast", SouthEast.String())
+}

@@ -12,6 +12,7 @@ var sum = util.SumInts
 var product = util.ProductInts
 var all = util.AllTrue
 var fileLines = util.FileLinesSkipEmpty
+var NESW = util.PrimaryFourDirections
 
 func parseLines(digitLines []string) (digitRows [][]int) {
 	for _, digitLine := range digitLines {
@@ -47,7 +48,7 @@ func findLowPoints(digitRows [][]int) (lowPoints []LowPoint) {
 		for c := 0; c < colCount; c++ {
 			currentValue := digitRows[r][c]
 			// println(fmt.Sprintf("row %d col %d => %d", r, c, currentValue))
-			neighbors := util.Int2dArrayFindNeighbors(digitRows, r, c)
+			neighbors := util.Int2dArrayFindNeighbors(digitRows, r, c, NESW)
 			neighborValues := []int{}
 			for _, neighbor := range neighbors {
 				neighborValues = append(neighborValues, neighbor.Value)
@@ -65,7 +66,7 @@ var isGridPointValueLessThan9 = func(grid [][]int, p util.Point) bool { return g
 
 func computeBasinSizes(grid [][]int, lowPoints []LowPoint) (basinSizes []int) {
 	for _, lowPoint := range lowPoints {
-		basinPoints := util.Int2dArrayDepthFirstSearch(grid, lowPoint.ToPoint(), isGridPointValueLessThan9)
+		basinPoints := util.Int2dArrayDepthFirstSearch(grid, lowPoint.ToPoint(), isGridPointValueLessThan9, NESW)
 		basinSizes = append(basinSizes, len(basinPoints)+1) // (+1 for DFS start point = low point = omitted from DFS results)
 		println(fmt.Sprintf("lowPoint %v basinSize %d", lowPoint, basinSizes[len(basinSizes)-1]))
 	}

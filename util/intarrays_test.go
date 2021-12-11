@@ -37,7 +37,7 @@ func TestInt2dArrayFindNeighbors(t *testing.T) {
 		{Row: 1, Col: 2, Value: 6, Direction: East},  // east of 5
 		{Row: 2, Col: 1, Value: 9, Direction: South}, // south of 5
 		{Row: 1, Col: 0, Value: 4, Direction: West},  // west of 5
-	}, Int2dArrayFindNeighbors(grid, 1, 1))
+	}, Int2dArrayFindNeighbors(grid, 1, 1, PrimaryFourDirections))
 }
 
 func TestInt2dArrayDepthFirstSearch(t *testing.T) {
@@ -52,7 +52,7 @@ func TestInt2dArrayDepthFirstSearch(t *testing.T) {
 			[]Point{
 				{X: 1, Y: 2},
 				{X: 0, Y: 1},
-			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueLessThan9)) // DFS result excludes start point
+			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueLessThan9, PrimaryFourDirections)) // DFS result excludes start point
 	}
 	{
 		var isGridPointValueExactly9 = func(grid [][]int, p Point) bool { return grid[p.X][p.Y] == 9 }
@@ -63,6 +63,6 @@ func TestInt2dArrayDepthFirstSearch(t *testing.T) {
 				{X: 1, Y: 0},
 				{X: 0, Y: 0},
 				{X: 1, Y: 1},
-			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueExactly9))
+			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueExactly9, PrimaryFourDirections))
 	}
 }

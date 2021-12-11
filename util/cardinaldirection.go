@@ -16,6 +16,9 @@ const (
 	NorthWest
 )
 
+var PrimaryFourDirections = []Direction{North, East, South, West}
+var AllDirections = []Direction{North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest}
+
 func (me Direction) String() string {
 	return [...]string{"North", "NorthEast", "East", "SouthEast", "South", "SouthWest", "West", "NorthWest"}[me]
 }
