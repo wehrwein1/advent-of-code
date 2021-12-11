@@ -22,6 +22,7 @@ func (me Direction) String() string {
 
 func (direction Direction) Translate(row int, col int) (newRow int, newCol int) {
 	switch direction {
+	// main 4 directions
 	case North:
 		return row - 1, col
 	case East:
@@ -30,6 +31,15 @@ func (direction Direction) Translate(row int, col int) (newRow int, newCol int) 
 		return row + 1, col
 	case West:
 		return row, col - 1
+	// diagonals
+	case NorthEast:
+		return row - 1, col + 1
+	case SouthEast:
+		return row + 1, col + 1
+	case SouthWest:
+		return row + 1, col - 1
+	case NorthWest:
+		return row - 1, col - 1
 	default:
 		panic(fmt.Sprintf("unhandled direction case: %s", direction.String()))
 	}

@@ -7,6 +7,7 @@ import (
 )
 
 func TestDirectionTranslate(t *testing.T) {
+	// main 4 directions
 	{
 		newRow, newCol := North.Translate(0, 0)
 		assert.Equal(t, -1, newRow)
@@ -27,13 +28,25 @@ func TestDirectionTranslate(t *testing.T) {
 		assert.Equal(t, 0, newRow)
 		assert.Equal(t, -1, newCol)
 	}
-	var panicMsg string
-	defer func() { // defer() has stack semantics, push first = run second
-		assert.Equal(t, "unhandled direction case: NorthEast", panicMsg, "panic() msg different")
-	}()
-	defer func() { // defer() has stack semantics, push last = run first. Intent: basically try/catch
-		panicInfo := recover()
-		panicMsg = panicInfo.(string)
-	}()
-	NorthEast.Translate(0, 0)
+	// diagonals
+	{
+		newRow, newCol := NorthEast.Translate(0, 0)
+		assert.Equal(t, -1, newRow)
+		assert.Equal(t, 1, newCol)
+	}
+	{
+		newRow, newCol := SouthEast.Translate(0, 0)
+		assert.Equal(t, 1, newRow)
+		assert.Equal(t, 1, newCol)
+	}
+	{
+		newRow, newCol := SouthWest.Translate(0, 0)
+		assert.Equal(t, 1, newRow)
+		assert.Equal(t, -1, newCol)
+	}
+	{
+		newRow, newCol := NorthWest.Translate(0, 0)
+		assert.Equal(t, -1, newRow)
+		assert.Equal(t, -1, newCol)
+	}
 }
