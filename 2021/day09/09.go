@@ -13,23 +13,16 @@ var product = util.ProductInts
 var all = util.AllTrue
 var fileLines = util.FileLinesSkipEmpty
 var NESW = util.PrimaryFourDirections
-
-func parseLines(digitLines []string) (digitRows [][]int) {
-	for _, digitLine := range digitLines {
-		println(digitLine)
-		digitRows = append(digitRows, util.StringSplitToInts(digitLine, ""))
-	}
-	return
-}
+var parseIntGrid = util.StringsToInt2dArray
 
 func main() {
 	println(fmt.Sprintf("part 1: rum risk levels %d", sumRiskLevels(fileLines("../input/09_INPUT.txt"))))
-	grid := parseLines(fileLines("../input/09_INPUT.txt"))
+	grid := parseIntGrid(fileLines("../input/09_INPUT.txt"))
 	println(fmt.Sprintf("part 2: product basin sizes %d", product(threeLargest(computeBasinSizes(grid, findLowPoints(grid)))...)))
 }
 
 func sumRiskLevels(digitLines []string) int {
-	return sum(toRiskLevels(findLowPoints(parseLines(digitLines)))...)
+	return sum(toRiskLevels(findLowPoints(parseIntGrid(digitLines)))...)
 }
 
 func toRiskLevels(lowPoints []LowPoint) []int {

@@ -32,6 +32,14 @@ func TestStringsToInts(t *testing.T) {
 	assert.Equal(t, []int{2, 3, 4, 6}, StringsToInts([]string{"2", "3", "4", "6"}))
 }
 
+func TestStringsToInt2dArray(t *testing.T) {
+	assert.Equal(t, [][]int{
+		{2, 3, 4, 5},
+		{6, 7, 8, 9},
+		{0, 1, 2, 3},
+	}, StringsToInt2dArray([]string{"2345", "6789", "0123"}))
+}
+
 func TestStringsFilter(t *testing.T) {
 	assert.Equal(t, []string{"br", "bo", "ba"}, StringsFilter([]string{"aa", "ab", "br", "cc", "bo", "ba", "xt", "zz"}, func(s string) bool { return strings.HasPrefix(s, "b") }))
 }

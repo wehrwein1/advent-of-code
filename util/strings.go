@@ -36,6 +36,13 @@ func StringsToInts(items []string) (ints []int) {
 	return
 }
 
+func StringsToInt2dArray(digitStrings []string) (intGrid [][]int) {
+	for _, digitLine := range digitStrings {
+		intGrid = append(intGrid, StringSplitToInts(digitLine, ""))
+	}
+	return
+}
+
 func StringToInt(value string) int {
 	intval, err := strconv.Atoi(value)
 	Check(err)

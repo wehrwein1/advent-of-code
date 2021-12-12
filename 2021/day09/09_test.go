@@ -14,7 +14,7 @@ func TestDay(t *testing.T) {
 		{Row: 0, Col: 9, Value: 0},
 		{Row: 2, Col: 2, Value: 5},
 		{Row: 4, Col: 6, Value: 5},
-	}, findLowPoints(parseLines(testcase)))
+	}, findLowPoints(parseIntGrid(testcase)))
 	assert.Equal(t, []int{2, 1, 6, 6}, toRiskLevels([]LowPoint{
 		{Row: notUsed, Col: notUsed, Value: 1},
 		{Row: notUsed, Col: notUsed, Value: 0},
@@ -26,7 +26,7 @@ func TestDay(t *testing.T) {
 }
 
 func TestDayPart2(t *testing.T) {
-	data := parseLines(fileLines("../input/09_TEST.txt"))
+	data := parseIntGrid(fileLines("../input/09_TEST.txt"))
 	notUsed := -1
 	assert.Equal(t, []int{3}, computeBasinSizes(data, []LowPoint{{Row: 0, Col: 1, Value: notUsed}}))
 	assert.Equal(t, []int{9}, computeBasinSizes(data, []LowPoint{{Row: 0, Col: 9, Value: notUsed}}))
