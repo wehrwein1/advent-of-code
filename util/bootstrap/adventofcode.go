@@ -18,7 +18,7 @@ var str = strconv.Itoa
 var mkdir = util.Mkdir
 
 func year() int { return time.Now().Year() }
-func day() int  { return 10 } // { return time.Now().Day() }
+func day() int  { return time.Now().Day() }
 
 func Bootstrap() {
 	rootdir, bootstrapdir, templatedir := dirs()
