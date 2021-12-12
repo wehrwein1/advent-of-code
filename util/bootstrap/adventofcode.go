@@ -27,10 +27,10 @@ func Bootstrap() {
 	rootdir, bootstrapdir, templatedir := dirs()
 	year := year()
 	day := day()
-	daydir := path.Join(rootdir, str(year), fmt.Sprintf("day%d", day))
+	daydir := path.Join(rootdir, str(year), fmt.Sprintf("day%02d", day))
 	inputdir := path.Join(rootdir, str(year), "input")
-	inputTextFile := path.Join(inputdir, fmt.Sprintf("%d_INPUT.txt", day))
-	dayHtmlFile := path.Join(inputdir, "html", fmt.Sprintf("%d.html", day))
+	inputTextFile := path.Join(inputdir, fmt.Sprintf("%02d_INPUT.txt", day))
+	dayHtmlFile := path.Join(inputdir, "html", fmt.Sprintf("%02d.html", day))
 	dayUrl := fmt.Sprintf("https://adventofcode.com/%d/day/%d", year, day)
 	inputUrl := fmt.Sprintf("%s/input", dayUrl)
 	session := util.FileContent(path.Join(bootstrapdir, ".session.txt"))
@@ -45,13 +45,13 @@ func Bootstrap() {
 	println()
 	downloadFileWithSessionCookie(inputUrl, inputTextFile, session) // download input file
 	downloadFileWithSessionCookie(dayUrl, dayHtmlFile, session)     // download day HTML file
-	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%d_TEST.txt", day)))
+	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%02d_TEST.txt", day)))
 	mkdir(daydir)
 	templates := map[string]string{
-		"day.tmpl":      fmt.Sprintf("day%d.go", day),
-		"day_test.tmpl": fmt.Sprintf("day%d_test.go", day),
+		"day.tmpl":      fmt.Sprintf("%02d.go", day),
+		"day_test.tmpl": fmt.Sprintf("%02d_test.go", day),
 	}
-	data := TemplateData{Year: year, Day: day}
+	data := TemplateData{Year: str(year), Day: fmt.Sprintf("%02d", day)}
 	for template, destfile := range templates {
 		applyTemplate(path.Join(templatedir, template), path.Join(daydir, destfile), data)
 	}
@@ -106,11 +106,12 @@ func applyTemplate(templateFile string, destFile string, data interface{}) {
 	if err := t.Execute(fileout, data); err != nil {
 		log.Fatalf("error running template: %s", err.Error())
 	}
+	println(fmt.Sprintf("bootstrap created %s", destFile))
 }
 
 type TemplateData struct {
-	Year int
-	Day  int
+	Year string
+	Day  string
 }
 
 func findTestcase(html string) string {
