@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path"
+	"regexp"
 	"runtime"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -25,18 +28,24 @@ func Bootstrap() {
 	year := year()
 	day := day()
 	daydir := path.Join(rootdir, str(year), fmt.Sprintf("day%d", day))
-	inputUrl := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
-	inputDestFile := path.Join(rootdir, str(year), "input", fmt.Sprintf("%d_INPUT.txt", day))
+	inputdir := path.Join(rootdir, str(year), "input")
+	inputTextFile := path.Join(inputdir, fmt.Sprintf("%d_INPUT.txt", day))
+	dayHtmlFile := path.Join(inputdir, "html", fmt.Sprintf("%d.html", day))
+	dayUrl := fmt.Sprintf("https://adventofcode.com/%d/day/%d", year, day)
+	inputUrl := fmt.Sprintf("%s/input", dayUrl)
 	session := util.FileContent(path.Join(bootstrapdir, ".session.txt"))
 	println()
 	println(fmt.Sprintf("bootstrap rootdir       %s", rootdir))
 	println(fmt.Sprintf("bootstrap bootstrapdir  %s", bootstrapdir))
 	println(fmt.Sprintf("bootstrap templatedir   %s", templatedir))
 	println(fmt.Sprintf("bootstrap daydir        %s", daydir))
-	println(fmt.Sprintf("bootstrap input         %s", inputUrl))
-	println(fmt.Sprintf("bootstrap inputfile     %s", inputDestFile))
+	println(fmt.Sprintf("bootstrap inputfile     %s", inputTextFile))
+	println(fmt.Sprintf("bootstrap htmlfile      %s", dayHtmlFile))
+	println(fmt.Sprintf("bootstrap inputurl      %s", inputUrl))
 	println()
-	downloadFileWithSessionCookie(inputUrl, inputDestFile, session) // download input file
+	downloadFileWithSessionCookie(inputUrl, inputTextFile, session) // download input file
+	downloadFileWithSessionCookie(dayUrl, dayHtmlFile, session)     // download day HTML file
+	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%d_TEST.txt", day)))
 	mkdir(daydir)
 	templates := map[string]string{
 		"day.tmpl":      fmt.Sprintf("day%d.go", day),
@@ -45,6 +54,14 @@ func Bootstrap() {
 	data := TemplateData{Year: year, Day: day}
 	for template, destfile := range templates {
 		applyTemplate(path.Join(templatedir, template), path.Join(daydir, destfile), data)
+	}
+}
+
+func extractTestcaseExamples(dayHtmlFile, destFile string) {
+	html := util.FileContent(dayHtmlFile)
+	testcase := findTestcase(html)
+	if err := ioutil.WriteFile(destFile, []byte(testcase), util.FileModeUserReadWrite); err != nil {
+		log.Fatalf("error writing file: %s", err.Error())
 	}
 }
 
@@ -64,12 +81,13 @@ func dirs() (rootdir, bootstrapdir, templatedir string) {
 }
 
 // https://www.reddit.com/r/adventofcode/comments/a2vonl/how_to_download_inputs_with_a_script/
-func downloadFileWithSessionCookie(url string, filepath string, session string) {
-	if _, err := os.Stat(filepath); err == nil { // file exists
-		println(fmt.Sprintf("warn: skip download file (already exists): %s", filepath))
+func downloadFileWithSessionCookie(url string, destfilepath string, session string) {
+	if _, err := os.Stat(destfilepath); err == nil { // file exists
+		println(fmt.Sprintf("warn: skip download file (already exists): %s", destfilepath))
 		return
 	}
-	cmd := exec.Command("curl", "-o", filepath, url, "--cookie", fmt.Sprintf("session=%s", session))
+	mkdir(path.Dir(destfilepath))
+	cmd := exec.Command("curl", "-o", destfilepath, url, "--cookie", fmt.Sprintf("session=%s", session))
 	if err := cmd.Run(); err != nil {
 		log.Fatalf("error download failed: %s", err.Error())
 	}
@@ -93,4 +111,20 @@ func applyTemplate(templateFile string, destFile string, data interface{}) {
 type TemplateData struct {
 	Year int
 	Day  int
+}
+
+func findTestcase(html string) string {
+	regex := regexp.MustCompile("<pre><code>(?P<code>(.*|\n|\r)+)+</code></pre>")
+	match := regex.FindStringSubmatch(html)
+	paramsMap := make(map[string]string)
+	for i, name := range regex.SubexpNames() {
+		if i > 0 && i <= len(match) {
+			if strings.Contains(match[i], "</code></pre>") {
+				// println(fmt.Sprintf("match[%d] \"%s\" '%s'", i, name, match[1]))
+				paramsMap[name] = strings.Split(match[i], "</code></pre>")[0]
+			}
+		}
+	}
+	// println(fmt.Sprintf("%v", paramsMap))
+	return paramsMap["code"]
 }

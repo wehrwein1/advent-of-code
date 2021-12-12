@@ -3,3 +3,4 @@ __pycache__
 **/scratchpad*
 
 util/bootstrap/**/.session.txt
+**/input/html
