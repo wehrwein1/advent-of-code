@@ -1,0 +1,25 @@
+// https://adventofcode.com/{{ .Year}}/day/{{ .Day}}
+package main
+
+import (
+	"fmt"
+	"log"
+	"path"
+	"runtime"
+	"time"
+
+  "github.com/wehrwein1/advent-of-code/util"
+)
+
+var sum = util.SumInts
+var product = util.ProductInts
+var all = util.AllTrue
+var fileLines = util.FileLinesSkipEmpty
+
+func main() {
+	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/{{ .Day}}_INPUT.txt"))))
+}
+
+func computeDay(lines []string) (res int) {
+  return 
+}
