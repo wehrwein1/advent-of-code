@@ -59,6 +59,20 @@ func Int2dArrayMap(rowsAndCols [][]int, mapFunction func(grid [][]int, point Poi
 	}
 }
 
+func Int2dArrayFindPoints(grid [][]int, selector func(g [][]int, p Point) bool) (matchedPoints []Point) {
+	rowCount := RowCount(grid)
+	colCount := ColCount(grid)
+	for r := 0; r < rowCount; r++ {
+		for c := 0; c < colCount; c++ {
+			p := *NewPoint(r, c)
+			if selector(grid, p) {
+				matchedPoints = append(matchedPoints, p)
+			}
+		}
+	}
+	return
+}
+
 type Int2dArrayNeighbor struct {
 	Row       int
 	Col       int

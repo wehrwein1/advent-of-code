@@ -86,3 +86,16 @@ func TestInt2dArrayMap(t *testing.T) {
 		{5, 6, 7},
 		{8, 9, 10}}, grid)
 }
+
+func TestInt2dArrayFindPoints(t *testing.T) {
+	grid := [][]int{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9}}
+	assert.ElementsMatch(t, []Point{
+		*NewPoint(0, 1),
+		*NewPoint(1, 0),
+		*NewPoint(1, 2),
+		*NewPoint(2, 1),
+	}, Int2dArrayFindPoints(grid, func(g [][]int, p Point) bool { return g[p.X][p.Y]%2 == 0 }))
+}
