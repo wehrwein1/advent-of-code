@@ -49,23 +49,23 @@ func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse 
 	return keys
 }
 
-func Int2dArrayMap(rowsAndCols [][]int, mapFunction func(grid [][]int, point Point) int) {
+func Int2dArrayMap(rowsAndCols [][]int, mapFunction func(grid [][]int, cellValue int, p Point) int) {
 	rowCount := RowCount(rowsAndCols)
 	colCount := ColCount(rowsAndCols)
 	for r := 0; r < rowCount; r++ {
 		for c := 0; c < colCount; c++ {
-			rowsAndCols[r][c] = mapFunction(rowsAndCols, *NewPoint(r, c))
+			rowsAndCols[r][c] = mapFunction(rowsAndCols, rowsAndCols[r][c], *NewPoint(r, c))
 		}
 	}
 }
 
-func Int2dArrayFindPoints(grid [][]int, selector func(g [][]int, p Point) bool) (matchedPoints []Point) {
+func Int2dArrayFindPoints(grid [][]int, selector func(g [][]int, cellValue int, p Point) bool) (matchedPoints []Point) {
 	rowCount := RowCount(grid)
 	colCount := ColCount(grid)
 	for r := 0; r < rowCount; r++ {
 		for c := 0; c < colCount; c++ {
 			p := *NewPoint(r, c)
-			if selector(grid, p) {
+			if selector(grid, grid[r][c], p) {
 				matchedPoints = append(matchedPoints, p)
 			}
 		}

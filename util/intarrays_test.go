@@ -80,7 +80,7 @@ func TestInt2dArrayMap(t *testing.T) {
 		{1, 2, 3},
 		{4, 5, 6},
 		{7, 8, 9}}
-	Int2dArrayMap(grid, func(grid [][]int, point Point) int { return grid[point.X][point.Y] + 1 })
+	Int2dArrayMap(grid, func(grid [][]int, cellValue int, point Point) int { return cellValue + 1 })
 	assert.Equal(t, [][]int{
 		{2, 3, 4},
 		{5, 6, 7},
@@ -97,5 +97,5 @@ func TestInt2dArrayFindPoints(t *testing.T) {
 		*NewPoint(1, 0),
 		*NewPoint(1, 2),
 		*NewPoint(2, 1),
-	}, Int2dArrayFindPoints(grid, func(g [][]int, p Point) bool { return g[p.X][p.Y]%2 == 0 }))
+	}, Int2dArrayFindPoints(grid, func(g [][]int, cellValue int, p Point) bool { return cellValue%2 == 0 }))
 }
