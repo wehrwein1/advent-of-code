@@ -66,3 +66,23 @@ func TestInt2dArrayDepthFirstSearch(t *testing.T) {
 			}, Int2dArrayDepthFirstSearch(grid, startPoint, isGridPointValueExactly9, PrimaryFourDirections))
 	}
 }
+
+func TestRowCountAndColCount(t *testing.T) {
+	grid := [][]int{
+		{1, 2, 3},
+		{4, 5, 6}}
+	assert.Equal(t, 2, RowCount(grid))
+	assert.Equal(t, 3, ColCount(grid))
+}
+
+func TestInt2dArrayMap(t *testing.T) {
+	grid := [][]int{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9}}
+	Int2dArrayMap(grid, func(grid [][]int, point Point) int { return grid[point.X][point.Y] + 1 })
+	assert.Equal(t, [][]int{
+		{2, 3, 4},
+		{5, 6, 7},
+		{8, 9, 10}}, grid)
+}
