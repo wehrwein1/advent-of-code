@@ -1,4 +1,4 @@
-// https://adventofcode.com/{{ .Year}}/day/{{ .Day}}
+// https://adventofcode.com/{{ .Year}}/day/{{ .Day1}}
 package main
 
 import (
@@ -17,7 +17,7 @@ var all = util.AllTrue
 var fileLines = util.FileLinesSkipEmpty
 
 func main() {
-	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/{{ .Day}}_INPUT.txt"))))
+	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/{{ .Day2}}_INPUT.txt"))))
 }
 
 func computeDay(lines []string) (res int) {

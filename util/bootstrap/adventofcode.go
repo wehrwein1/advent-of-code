@@ -51,7 +51,7 @@ func Bootstrap() {
 		"day.tmpl":      fmt.Sprintf("%02d.go", day),
 		"day_test.tmpl": fmt.Sprintf("%02d_test.go", day),
 	}
-	data := TemplateData{Year: str(year), Day: fmt.Sprintf("%02d", day)}
+	data := TemplateData{Year: str(year), Day1: str(day), Day2: fmt.Sprintf("%02d", day)}
 	for template, destfile := range templates {
 		applyTemplate(path.Join(templatedir, template), path.Join(daydir, destfile), data)
 	}
@@ -111,7 +111,8 @@ func applyTemplate(templateFile string, destFile string, data interface{}) {
 
 type TemplateData struct {
 	Year string
-	Day  string
+	Day2 string // padded to 2 digits
+	Day1 string // not padded
 }
 
 func findTestcase(html string) string {
