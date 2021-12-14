@@ -1,10 +1,8 @@
 package util
 
 func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
-	rowCount := len(rowsAndCols)
-	colCount := len(rowsAndCols[0])
-	rowOk := (0 <= rowIndex) && (rowIndex < rowCount)
-	colOk := (0 <= colIndex) && (colIndex < colCount)
+	rowOk := (0 <= rowIndex) && (rowIndex < RowCount(rowsAndCols))
+	colOk := (0 <= colIndex) && (colIndex < ColCount(rowsAndCols))
 	if rowOk && colOk {
 		return rowsAndCols[rowIndex][colIndex], true
 	}
@@ -51,6 +49,30 @@ func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse 
 	return keys
 }
 
+func Int2dArrayMap(rowsAndCols [][]int, mapFunction func(grid [][]int, cellValue int, p Point) int) {
+	rowCount := RowCount(rowsAndCols)
+	colCount := ColCount(rowsAndCols)
+	for r := 0; r < rowCount; r++ {
+		for c := 0; c < colCount; c++ {
+			rowsAndCols[r][c] = mapFunction(rowsAndCols, rowsAndCols[r][c], *NewPoint(r, c))
+		}
+	}
+}
+
+func Int2dArrayFindPoints(grid [][]int, selector func(g [][]int, cellValue int, p Point) bool) (matchedPoints []Point) {
+	rowCount := RowCount(grid)
+	colCount := ColCount(grid)
+	for r := 0; r < rowCount; r++ {
+		for c := 0; c < colCount; c++ {
+			p := *NewPoint(r, c)
+			if selector(grid, grid[r][c], p) {
+				matchedPoints = append(matchedPoints, p)
+			}
+		}
+	}
+	return
+}
+
 type Int2dArrayNeighbor struct {
 	Row       int
 	Col       int
@@ -93,4 +115,12 @@ func (s PointSet) put(val Point) {
 func (s PointSet) has(val Point) bool {
 	_, ok := s.data[val]
 	return ok
+}
+
+func RowCount(grid [][]int) int {
+	return len(grid)
+}
+
+func ColCount(grid [][]int) int {
+	return len(grid[0])
 }
