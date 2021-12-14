@@ -3,83 +3,107 @@ package main
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/wehrwein1/advent-of-code/util"
 )
 
-// var sum = util.SumInts
-// var product = util.ProductInts
-// var all = util.AllTrue
+type LineResult int
+
+const (
+	Valid      LineResult = iota // 0
+	Corrupt                      // 1
+	Incomplete                   // 2
+)
+
+type If = util.If
+
 var fileLines = util.FileLinesSkipEmpty
+var openCloseChars = []rune{
+	'(', ')',
+	'[', ']',
+	'{', '}',
+	'<', '>'}
+var invalidCharValues = map[rune]int{
+	')': 3,
+	']': 57,
+	'}': 1197,
+	'>': 25137}
+var completionStringValues = map[rune]int{
+	')': 1,
+	']': 2,
+	'}': 3,
+	'>': 4}
 
 func main() {
-	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/10_INPUT.txt"))))
+	println(fmt.Sprintf("part 1: sum syntax error score %d", sumSyntaxErrorScore(fileLines("../input/10_INPUT.txt")...)))
+	println(fmt.Sprintf("part 2: middle completion score %d", middleCompletionStringScore(fileLines("../input/10_INPUT.txt")...)))
 }
 
-func computeDay(lines []string) (res int) {
-	allChars := []rune{
-		'(', ')',
-		'[', ']',
-		'{', '}',
-		'<', '>'}
-
+func sumSyntaxErrorScore(lines ...string) (syntaxErrorScore int) {
 	for _, line := range lines {
-		// println(line)
-		isLineValid := true
-		scanCounts := map[rune]int{}
-		for _, char := range allChars {
-			scanCounts[char] = 0
-		}
-		for lineCharIndex, char := range []rune(line) {
-			scanCounts[char] += 1
-			// charIndex := indexOf(allChars, char)
-			// isOpen := charIndex%2 == 0
-
-			// var openChar, closeChar rune
-			// if isOpen {
-			// 	openChar = char
-			// 	closeChar = allChars[charIndex+1]
-			// } else {
-			// 	openChar = allChars[charIndex-1]
-			// 	closeChar = char
-			// }
-			// any close > open count
-			for j := 0; j < len(allChars); j += 2 {
-				openChar := allChars[j]
-				closeChar := allChars[j+1]
-				openCount := scanCounts[openChar]
-				closeCount := scanCounts[closeChar]
-				if closeCount > openCount {
-					println(fmt.Sprintf("line invalid '%s' at index %d: closed '%c' (%d) > open '%c' (%d)", line, lineCharIndex, closeChar, closeCount, openChar, openCount))
-					isLineValid = false
-					break
-				}
-			}
-
-			// 	scanCounts[char] += 1
-			// } else {
-			// 	scanCounts[char] += 1
-			// }
-
-			if !isLineValid {
-				break
-			}
-
-		}
-		if isLineValid {
+		lineResult, invalidIndex, expectedChar := evaluateLine(line, util.NewRuneStack())
+		switch lineResult {
+		case Valid:
 			println(fmt.Sprintf("line valid   '%s'", line))
+		case Corrupt:
+			illegalChar := line[invalidIndex]
+			println(fmt.Sprintf("line corrupt '%s' at index %d: expected: %c, was: %c", line, invalidIndex, expectedChar, illegalChar))
+			syntaxErrorScore += invalidCharValues[rune(illegalChar)]
+		case Incomplete:
+			println(fmt.Errorf("not implemented: %v", lineResult))
+		default:
+			println(fmt.Errorf("unhandled case: %v", lineResult))
 		}
 	}
+	return
+}
 
-	charValues := map[rune]int{
-		')': 3,
-		']': 57,
-		'}': 1197,
-		'>': 25137,
+func middleCompletionStringScore(lines ...string) (middleScore int) {
+	scores := []int{}
+	for _, line := range lines {
+		closes := util.NewRuneStack()
+		lineResult, _, _ := evaluateLine(line, closes)
+		if lineResult == Incomplete {
+			chars := []rune{}
+			for !closes.IsEmpty() {
+				chars = append(chars, closes.Pop())
+			}
+			completionString := string(chars)
+			scores = append(scores, completionStringScore(completionString))
+		}
 	}
-	return charValues[')']
+	sort.Ints(scores)
+	return scores[len(scores)/2]
+}
 
-	// return
+func completionStringScore(completionString string) (score int) {
+	for _, char := range completionString {
+		score *= 5
+		score += completionStringValues[char]
+	}
+	return score
+}
+
+func evaluateLine(line string, closes *util.RuneStack) (valid LineResult, invalidIndex int, expectedChar rune) {
+	for lineCharIndex, char := range []rune(line) {
+		charIndex := indexOf(openCloseChars, char)
+		isOpen := charIndex%2 == 0
+		if isOpen {
+			closeChar := openCloseChars[charIndex+1]
+			closes.Push(closeChar)
+		} else {
+			expectedClose := closes.Pop()
+			if char != expectedClose {
+				return Corrupt, lineCharIndex, expectedClose
+			}
+		}
+	}
+	if closes.IsEmpty() {
+		return Valid, -1, -1
+	} else {
+		return Incomplete, len(line), closes.Peek()
+	}
 }
 
 func indexOf(items []rune, char rune) int {
