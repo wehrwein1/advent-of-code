@@ -33,7 +33,7 @@ func Bootstrap() {
 	dayHtmlFile := path.Join(inputdir, "html", fmt.Sprintf("%02d.html", day))
 	dayUrl := fmt.Sprintf("https://adventofcode.com/%d/day/%d", year, day)
 	inputUrl := fmt.Sprintf("%s/input", dayUrl)
-	session := util.FileContent(path.Join(bootstrapdir, ".session.txt"))
+	session := loadSessionFile(path.Join(bootstrapdir, ".session.txt"))
 	println()
 	println(fmt.Sprintf("bootstrap rootdir       %s", rootdir))
 	println(fmt.Sprintf("bootstrap bootstrapdir  %s", bootstrapdir))
@@ -55,6 +55,15 @@ func Bootstrap() {
 	for template, destfile := range templates {
 		applyTemplate(path.Join(templatedir, template), path.Join(daydir, destfile), data)
 	}
+}
+
+func loadSessionFile(filename string) (filecontent string) {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		fileout, _ := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, 0666) // create empty file, per https://stackoverflow.com/a/35558965
+		fileout.Close()
+	}
+	return util.Chomp(string(bytes))
 }
 
 func extractTestcaseExamples(dayHtmlFile, destFile string) {
