@@ -24,7 +24,7 @@ func fileLines(filename string, isIncludeEmptyLines bool) (ret []string) {
 	}
 	lines := strings.Split(string(bytes), "\n")
 	for _, line := range lines {
-		line = chomp(line)
+		line = Chomp(line)
 		if isIncludeEmptyLines || len(line) > 0 {
 			ret = append(ret, line)
 		}
@@ -37,10 +37,10 @@ func FileContent(filename string) string {
 	if err != nil {
 		log.Fatalf("error reading file: %s", err.Error())
 	}
-	return chomp(string(bytes))
+	return Chomp(string(bytes))
 }
 
-func chomp(text string) string {
+func Chomp(text string) string {
 	return strings.TrimRight(text, "\r\n") // handle windows line endings too https://stackoverflow.com/a/44449581
 }
 

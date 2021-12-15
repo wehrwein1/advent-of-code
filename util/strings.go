@@ -62,13 +62,13 @@ func StringsFilter(items []string, retainIf func(string) bool) (result []string)
 func PartitionSliceStrings(lines []string) (partitions [][]string) { // partition on empty lines
 	var currentPartition []string
 	for _, line := range lines {
-		isNewPartitition := len(chomp(line)) == 0
+		isNewPartitition := len(Chomp(line)) == 0
 		if isNewPartitition {
 			partitions = append(partitions, currentPartition)
 			currentPartition = []string{}
 			continue
 		}
-		currentPartition = append(currentPartition, chomp(line)) // collect current partition
+		currentPartition = append(currentPartition, Chomp(line)) // collect current partition
 	}
 	if len(currentPartition) > 0 {
 		partitions = append(partitions, currentPartition)
