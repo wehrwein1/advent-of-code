@@ -1,4 +1,4 @@
-package util
+package ds
 
 // TODO FIXME this likely goes away once generics arrives
 

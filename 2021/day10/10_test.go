@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/ds"
 )
 
 func TestDayPart1(t *testing.T) {
@@ -41,14 +41,14 @@ func TestDayPart2(t *testing.T) {
 }
 
 func assertLineValid(t *testing.T, line string) {
-	lineResult, invalidIndex, expectedChar := evaluateLine(line, util.NewRuneStack())
+	lineResult, invalidIndex, expectedChar := evaluateLine(line, ds.NewRuneStack())
 	assert.Equal(t, Valid, lineResult, "line result different")
 	assert.Equal(t, -1, invalidIndex, "index different")
 	assert.Equal(t, int32(-1), expectedChar, "char different")
 }
 
 func assertLineCorrupt(t *testing.T, line string, expectedInvalidIndex int, expectedChar rune) {
-	lineResult, actualInvalidIndex, actualChar := evaluateLine(line, util.NewRuneStack())
+	lineResult, actualInvalidIndex, actualChar := evaluateLine(line, ds.NewRuneStack())
 	assert.Equal(t, Corrupt, lineResult, "line result different")
 	assert.Equal(t, expectedInvalidIndex, actualInvalidIndex, "index different")
 	assert.Equal(t, expectedChar, actualChar, "char different")
