@@ -1,10 +1,8 @@
 from typing import List
-import os
 import re
-import sys
 
 # https://adventofcode.com/2020/day/4
-lines = [line for line in map(str.rstrip, open(os.path.join(os.path.dirname(sys.argv[0]), 'input/04_INPUT.txt')))]
+lines = [line for line in map(str.rstrip, open('2020/input/04_INPUT.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/04_TEST.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/04_TEST_INVALID.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/04_TEST_VALID.txt'))]
