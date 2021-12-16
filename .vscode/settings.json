@@ -1,4 +1,15 @@
 {
+  "files.exclude": {
+    "**/*.pyc": true,
+    "**/.pytest_cache/": true,
+    "**/*__vsctk__*": true,
+    "**/__init__.py": false,
+    "**/__pycache__": true,
+  },
+  "go.useLanguageServer": true, // setting related to gopls workspace error, see https://stackoverflow.com/a/66043147/3633993
+  "python.envFile": ".env",
+  "python.testing.pytestArgs": [ "."],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
   "testExplorer.useNativeTesting" : true, // seems to work without "Go Test explorer UI"
-  "go.useLanguageServer": true // setting related to gopls workspace error, see https://stackoverflow.com/a/66043147/3633993
 }
