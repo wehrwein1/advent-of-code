@@ -1,0 +1,23 @@
+# This is a basic workflow to help you get started with Actions
+name: python
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2 # https://github.com/actions/setup-python
+        with:
+          python-version: '3.x'
+      - name: install pytest
+        run: |
+          pip install -U pytest
+          python --version
+          pytest --version
+      - name: Run pytest
+        run: | 
+          pytest
