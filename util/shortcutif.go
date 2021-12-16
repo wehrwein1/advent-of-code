@@ -23,3 +23,10 @@ func (c If) Rune(a, b rune) rune {
 	}
 	return b
 }
+
+func (c If) Interface(a, b interface{}) interface{} {
+	if c {
+		return a
+	}
+	return b
+}
