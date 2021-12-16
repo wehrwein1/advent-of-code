@@ -1,6 +1,12 @@
 package util
 
-import "sort"
+import (
+	"fmt"
+	"log"
+	"sort"
+	"strconv"
+	"strings"
+)
 
 var IncrementInt = func(n int) int { return n + 1 }
 
@@ -47,6 +53,19 @@ func IntSliceIndexOf(items []int, predicate func(val int) bool) int { // https:/
 		}
 	}
 	return -1
+}
+
+func IntSliceToDigitsValue(items []int) int {
+	removeChars := []string{"[", "]", " "}
+	buffer := fmt.Sprintf("%v", items)
+	for _, removeChar := range removeChars {
+		buffer = strings.Replace(buffer, removeChar, "", -1)
+	}
+	val, err := strconv.Atoi(buffer)
+	if err != nil {
+		log.Fatalf("error converting %v to digit value: %v", items, err)
+	}
+	return val
 }
 
 func ProductInts(numbers ...int) int {

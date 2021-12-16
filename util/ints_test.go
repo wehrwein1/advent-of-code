@@ -22,6 +22,11 @@ func TestIntSliceIndexOf(t *testing.T) {
 	assert.Equal(t, 2, IntSliceIndexOf([]int{1, 2, 3}, func(val int) bool { return val == 3 }))
 }
 
+func TestIntSliceToDigitsValue(t *testing.T) {
+	assert.Equal(t, 5432, IntSliceToDigitsValue([]int{5, 4, 3, 2}))
+	assert.Equal(t, 90210, IntSliceToDigitsValue([]int{9, 0, 2, 1, 0}))
+}
+
 func TestProductInts(t *testing.T) {
 	assert.Equal(t, 150, ProductInts(15, 10))
 	assert.Equal(t, 720, ProductInts(1, 2, 3, 4, 5, 6))
