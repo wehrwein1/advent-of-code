@@ -18,6 +18,8 @@ jobs:
           pip install -U pytest
           python --version
           pytest --version
+          echo "PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH" >> $GITHUB_ENV
       - name: Run pytest
         run: | 
+          echo "PYTHONPATH=$PYTHONPATH"
           pytest
