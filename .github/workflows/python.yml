@@ -23,4 +23,6 @@ jobs:
           echo "PYTHONPATH=$PYTHONPATH"
       - name: Run pytest
         run: | 
+          echo "pwd=$(pwd)"
+          echo "PYTHONPATH=$PYTHONPATH"
           pytest
