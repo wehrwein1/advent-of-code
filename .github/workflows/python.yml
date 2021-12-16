@@ -18,6 +18,7 @@ jobs:
           pip install -U pytest
           python --version
           pytest --version
+          echo "PYTHONPATH=$PYTHONPATH"
       - name: Run pytest
         run: | 
           pytest
