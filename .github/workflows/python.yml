@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: pytest
+      - name: Setup pytest
         uses: cclauss/GitHub-Action-for-pytest@0.5.0
-        run: pytest
+      - name: Run pytest
+        run: pytest 
