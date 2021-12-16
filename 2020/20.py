@@ -1,22 +1,12 @@
 # https://adventofcode.com/2020/day/20
-from typing import List, Dict, Tuple
-from functools import reduce
+from typing import List
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
+from pyutil.ints import product
+from pyutil.strings import partition
 import re
 
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def load_tiles(filename):             return list(map(Tile.create_from_data, partition(load_file(filename))))
-def product(numbers : List[int]):     return reduce(lambda x, y: x * y, numbers)
-def partition(lines : List[str], sep='', ignore='//'):
-  active_lines = list(filter(lambda line : not line.startswith(ignore), lines))
-  partitions = []
-  for line in active_lines:
-    if line == sep or not partitions:
-      partitions.append([])
-      if line != sep: partitions[-1].append(line)
-      continue
-    partitions[-1].append(line)
-  return partitions
+def load_tiles(filename):             return list(map(Tile.create_from_data, partition(file_lines(filename))))
 
 class Tile:
   @staticmethod
@@ -33,7 +23,7 @@ def solve(tiles) -> List[List[int]]:
   for tile in tiles:
     print(tile)
   return [[0,0],[0,0]] # TODO FIXME
-assert_equals(solve(load_tiles('input/20_TEST_sm.txt')), [[1,2], [3,4]])
+assert_equals(solve(load_tiles('2020/input/20_TEST_sm.txt')), [[1,2], [3,4]])
 
 def corners(tile_arrangement : List[List[int]]) -> List[int]:
   return [tile_arrangement[0][0],  tile_arrangement[0][-1],
@@ -41,4 +31,4 @@ def corners(tile_arrangement : List[List[int]]) -> List[int]:
 assert_equals(corners([[1,2,3],[4,5,6],[7,8,9]]), [1,3,7,9])
 assert_equals(product(corners([[1,2,3],[4,5,6],[7,8,9]])), 1*3*7*9)
 
-print('part 1: product of corners:', product(corners(solve(load_tiles('input/20_INPUT.txt')))))
+print('part 1: product of corners:', product(corners(solve(load_tiles('2020/input/20_INPUT.txt')))))

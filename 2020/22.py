@@ -1,22 +1,12 @@
 # https://adventofcode.com/2020/day/22
 from typing import List
 from collections import defaultdict
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def partition(lines : List[str], sep='', ignore='//'):
-  active_lines = list(filter(lambda line : not line.startswith(ignore), lines))
-  partitions = []
-  for line in active_lines:
-    if line == sep or not partitions:
-      partitions.append([])
-      if line != sep: partitions[-1].append(line)
-      continue
-    partitions[-1].append(line)
-  return partitions
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
+from pyutil.strings import partition
 
 def load_decks(filename):
-  return list(map(lambda lst : list(map(int, lst[1:])), partition(load_file(filename))))
+  return list(map(lambda lst : list(map(int, lst[1:])), partition(file_lines(filename))))
 def score(deck : List[int]):
   score = 0
   for i, val in enumerate(reversed(deck)):
@@ -71,11 +61,11 @@ def play_war(initial_player_decks : list, state=defaultdict(list), state_depth=0
   # print(f'Game {state_depth + 1} over at round {i}: Player {1 if player1_deck else 2} won: {winning_player_deck}')
   if not is_part1: del state[state_depth]
   return 'Player1' if player1_deck else 'Player2', winning_player_deck
-assert_equals(play_war(load_decks('input/22_TEST.txt')), ('Player2', [3, 2, 10, 6, 8, 5, 9, 4, 7, 1]))
-assert_equals(score(play_war(load_decks('input/22_TEST.txt'))[1]), 306)
-assert_equals(play_war(load_decks('input/22_TEST_sm.txt'), is_part1=False), ('Player1', [43,19]))
-assert_equals(play_war(load_decks('input/22_TEST.txt'), is_part1=False), ('Player2', [7, 5, 6, 2, 4, 1, 10, 8, 9, 3]))
-assert_equals(score(play_war(load_decks('input/22_TEST.txt'), is_part1=False)[1]), 291)
+assert_equals(play_war(load_decks('2020/input/22_TEST.txt')), ('Player2', [3, 2, 10, 6, 8, 5, 9, 4, 7, 1]))
+assert_equals(score(play_war(load_decks('2020/input/22_TEST.txt'))[1]), 306)
+assert_equals(play_war(load_decks('2020/input/22_TEST_sm.txt'), is_part1=False), ('Player1', [43,19]))
+assert_equals(play_war(load_decks('2020/input/22_TEST.txt'), is_part1=False), ('Player2', [7, 5, 6, 2, 4, 1, 10, 8, 9, 3]))
+assert_equals(score(play_war(load_decks('2020/input/22_TEST.txt'), is_part1=False)[1]), 291)
 
-print(f'part 1: winning player score: {score(play_war(load_decks("input/22_INPUT.txt"))[1])}')
-print(f'part 2: winning player score: {score(play_war(load_decks("input/22_INPUT.txt"), is_part1=False)[1])}')
+print(f'part 1: winning player score: {score(play_war(load_decks("2020/input/22_INPUT.txt"))[1])}')
+print(f'part 2: winning player score: {score(play_war(load_decks("2020/input/22_INPUT.txt"), is_part1=False)[1])}')

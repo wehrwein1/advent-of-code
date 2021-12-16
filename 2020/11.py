@@ -1,10 +1,8 @@
 # https://adventofcode.com/2020/day/11
 from typing import List, Dict
 from collections import Counter
-from functools import reduce
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 def set_char(text : str, i : int, one_char : str): # Note: O(n), eek
   buffer = list(''.join(text))
@@ -64,10 +62,10 @@ def count_seats_nearby(seating_area : List[str], row, col, is_part1=True) -> Dic
     # return dict( (seat_char, sum([1 for seat in ''.join(nearby_seats) if seat == seat_char]) + (-1 if seating_area[row][col] == seat_char else 0)) for seat_char in ['#','L','.'])
   seating_area[row] = set_char(seating_area[row], col, active_seat)
   return ''.join(nearby_seats)
-assert_equals(count_seats_nearby(load_file('input/11_TEST.txt'), row=1, col=1), 'L.LL*LL.L')  # {'#': 0, 'L': 6, '.' : 2})
-assert_equals(count_seats_nearby(load_file('input/11_TEST.txt'), row=0, col=1), 'L*LLLL')     # {'#': 0, 'L': 5, '.' : 0})
-assert_equals(count_seats_nearby(load_file('input/11_TEST.txt'), row=6, col=7), 'L.L.*.LLL')  # {'#': 0, 'L': 5, '.' : 3})
-assert_equals(count_seats_nearby(load_file('input/11_TEST.txt'), row=8, col=9), 'LL.*LL')     # {'#': 0, 'L': 4, '.' : 1})
+assert_equals(count_seats_nearby(file_lines('2020/input/11_TEST.txt'), row=1, col=1), 'L.LL*LL.L')  # {'#': 0, 'L': 6, '.' : 2})
+assert_equals(count_seats_nearby(file_lines('2020/input/11_TEST.txt'), row=0, col=1), 'L*LLLL')     # {'#': 0, 'L': 5, '.' : 0})
+assert_equals(count_seats_nearby(file_lines('2020/input/11_TEST.txt'), row=6, col=7), 'L.L.*.LLL')  # {'#': 0, 'L': 5, '.' : 3})
+assert_equals(count_seats_nearby(file_lines('2020/input/11_TEST.txt'), row=8, col=9), 'LL.*LL')     # {'#': 0, 'L': 4, '.' : 1})
 # part 2 tests
 assert_equals(count_seats_nearby(['.......#.','...#.....','.#.......','.........','..#L....#','....#....','.........','#........','...#.....'], row=4, col=3, is_part1=False), '####*####') # {'#' : 8, 's' : 1})
 assert_equals(count_seats_nearby(['.##.##.','#.#.#.#','##...##','...L...','##...##','#.#.#.#','.##.##.'], row=3, col=3, is_part1=False), '????*????') # {'?' : 8, 's' : 1}) # none occuplied ('#') 
@@ -104,7 +102,7 @@ part1_simulations = [
   ['#.#L.L#.##','#LLL#LL.L#','L.L.L..#..','#LLL.##.L#','#.LL.LL.LL','#.LL#L#.##','..L.L.....','#L#LLLL#L#','#.LLLLLL.L','#.#L#L#.##'], # (2)
   ['#.#L.L#.##','#LLL#LL.L#','L.#.L..#..','#L##.##.L#','#.#L.LL.LL','#.#L#L#.##','..L.L.....','#L#L##L#L#','#.LLLLLL.L','#.#L#L#.##']  # (3)
 ]
-assert_equals(simulate(load_file('input/11_TEST.txt')), part1_simulations[0])
+assert_equals(simulate(file_lines('2020/input/11_TEST.txt')), part1_simulations[0])
 assert_equals(simulate(part1_simulations[0]),           part1_simulations[1])
 assert_equals(simulate(part1_simulations[1]),           part1_simulations[2])
 assert_equals(simulate(part1_simulations[2]),           part1_simulations[3])
@@ -119,7 +117,7 @@ part2_simulations = [
   ['#.L#.L#.L#','#LLLLLL.LL','L.L.L..#..','##L#.#L.L#','L.L#.#L.L#','#.L####.LL','..#.#.....','LLL###LLL#','#.LLLLL#.L','#.L#LL#.L#'],
   ['#.L#.L#.L#','#LLLLLL.LL','L.L.L..#..','##L#.#L.L#','L.L#.LL.L#','#.LLLL#.LL','..#.L.....','LLL###LLL#','#.LLLLL#.L','#.L#LL#.L#']
 ]
-assert_equals(simulate(load_file('input/11_TEST.txt'), is_part1=False), part2_simulations[0])
+assert_equals(simulate(file_lines('2020/input/11_TEST.txt'), is_part1=False), part2_simulations[0])
 assert_equals(simulate(part2_simulations[0],           is_part1=False), part2_simulations[1])
 assert_equals(simulate(part2_simulations[1],           is_part1=False), part2_simulations[2])
 assert_equals(simulate(part2_simulations[2],           is_part1=False), part2_simulations[3])
@@ -138,8 +136,8 @@ def count_seats_stable(seating_area, is_part1=True):
   stable_seats = simulate_until_stable(seating_area, is_part1)
   all_seats = ''.join(stable_seats)
   return Counter(all_seats)
-assert_equals(count_seats_stable(load_file('input/11_TEST.txt')), {'#': 37, 'L': 34, '.': 29})
-assert_equals(count_seats_stable(load_file('input/11_TEST.txt'))[seat_occupied], 37)
+assert_equals(count_seats_stable(file_lines('2020/input/11_TEST.txt')), {'#': 37, 'L': 34, '.': 29})
+assert_equals(count_seats_stable(file_lines('2020/input/11_TEST.txt'))[seat_occupied], 37)
 
-print('part 1: count occupied seats:', count_seats_stable(load_file('input/11_INPUT.txt'), is_part1=True)[seat_occupied])
-print('part 2: count occupied seats:', count_seats_stable(load_file('input/11_INPUT.txt'), is_part1=False)[seat_occupied])
+print('part 1: count occupied seats:', count_seats_stable(file_lines('2020/input/11_INPUT.txt'), is_part1=True)[seat_occupied])
+print('part 2: count occupied seats:', count_seats_stable(file_lines('2020/input/11_INPUT.txt'), is_part1=False)[seat_occupied])

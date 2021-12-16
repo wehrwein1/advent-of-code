@@ -1,9 +1,7 @@
 # https://adventofcode.com/2020/day/7
 from typing import Dict, List, Tuple
+from pyutil.testing import assert_equals
 import numpy as np
-
-def assert_equals(actual, expected): 
-  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
 
 # functions
 def parse_rule(luggage_rule: str) -> Tuple[str, Dict[str,str]]:
@@ -59,7 +57,7 @@ def count_colors_reachable(bags : List[str], rules : Dict[str,Dict[str,str]]) ->
       colors_count += 1  
   return colors_count
 
-lines = [line for line in map(str.rstrip, open('input/07_INPUT.txt'))]
+lines = [line for line in map(str.rstrip, open('2020/input/07_INPUT.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/07_TEST.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/07_TEST2.txt'))]
 print('\ninput (len={}): {}'.format(len(lines), lines))

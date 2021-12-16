@@ -4,22 +4,10 @@
 
 # https://adventofcode.com/2020/day/17
 from typing import List, Dict, Tuple
-from collections import defaultdict, Counter
+from collections import Counter
 import numpy
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-
-def partition(lines : List[str], sep='', ignore='//'):
-  active_lines = list(filter(lambda line : not line.startswith(ignore), lines))
-  partitions = []
-  for line in active_lines:
-    if line == sep or not partitions:
-      partitions.append([])
-      if line != sep: partitions[-1].append(line)
-      continue
-    partitions[-1].append(line)
-  return partitions
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 # part 1: apply change rules in three dimensions.
 # Mark cells as either active (#) or inactive (.) 
@@ -54,4 +42,4 @@ assert_equals(simulate(['.#.','..#', '###'], num_cycles=3),
                   ['.......', '.......', '..##...', '..###..', '.......', '.......', '.......']]) # z  2 
 assert_equals(counts(simulate(['.#.','..#', '###'], num_cycles=6))['#'], 112)
 
-print(f"part 1: count of active cubes: {counts(simulate(load_file('2020/input/17_INPUT.txt')))}")
+print(f"part 1: count of active cubes: {counts(simulate(file_lines('2020/input/17_INPUT.txt')))}")

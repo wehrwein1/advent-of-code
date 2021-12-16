@@ -1,10 +1,10 @@
 # https://adventofcode.com/2020/day/21
 from typing import List, Dict, Set, Tuple
 from collections import defaultdict
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 import re
 
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
 def parse(line) -> Tuple[Set[str], Set[str]]: 
   if not (match := re.search('(.*) \(contains ([^\)]*)\)', line)): raise SystemError('Parse error:', line)
   ingredients, allergens = match.group(1), match.group(2)
@@ -43,13 +43,13 @@ def find_allergy_ingredients(lines : List[str]) -> Dict[str, int]:
   # print("sum:", sum_allergen_free_ingredient_counts)
   allergen_incredients = dict( (key, list(value)[0]) for key, value in allergen_to_ingredients.items() )
   return allergen_incredients, sum_allergen_free_ingredient_counts
-assert_equals(find_allergy_ingredients(load_file('input/21_TEST.txt')), ( {'dairy': 'mxmxvkd', 'fish': 'sqjhc', 'soy': 'fvjkl'}, 5))
+assert_equals(find_allergy_ingredients(file_lines('2020/input/21_TEST.txt')), ( {'dairy': 'mxmxvkd', 'fish': 'sqjhc', 'soy': 'fvjkl'}, 5))
 
 def dangerous_ingredients(allergen_to_ingredient):
   return ','.join([allergen_to_ingredient[allerg] for allerg in sorted(allergen_to_ingredient)])
 
 # number of times allergy free incredients appear in entire list
 # allergen_incredients, count = find_allergy_ingredients(load_file('input/21_TEST.txt'))
-allergen_incredients, count = find_allergy_ingredients(load_file('input/21_INPUT.txt'))
+allergen_incredients, count = find_allergy_ingredients(file_lines('2020/input/21_INPUT.txt'))
 print('part1: count allergy free ingredients:', count)
 print("part2: dangerous ingredients: '{}'".format(dangerous_ingredients(allergen_incredients)))

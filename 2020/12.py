@@ -1,9 +1,7 @@
 # https://adventofcode.com/2020/day/12
 from typing import List
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-
+from pyutil.testing import assert_equals
+from pyutil.fileio import file_lines
 cardinal_direction_vectors = dict( { 'N' : (0, 1), 
                                      'E' : (1, 0),
                                      'S' : (0,-1),
@@ -75,8 +73,8 @@ def compute_manhattan_distance(instructions : List[str], is_part1=True):
         facing_direction = new_dir
   # print('final location:', (x, y))
   return sum(map(abs, (x,y)))
-assert_equals(compute_manhattan_distance(load_file('input/12_TEST.txt')), 25)
-assert_equals(compute_manhattan_distance(load_file('input/12_TEST.txt'), is_part1=False), 286)
+assert_equals(compute_manhattan_distance(file_lines('2020/input/12_TEST.txt')), 25)
+assert_equals(compute_manhattan_distance(file_lines('2020/input/12_TEST.txt'), is_part1=False), 286)
 
-print('part1 manhattan distance: ', compute_manhattan_distance(load_file('input/12_INPUT.txt')))
-print('part2 manhattan distance: ', compute_manhattan_distance(load_file('input/12_INPUT.txt'), is_part1=False))
+print('part1 manhattan distance: ', compute_manhattan_distance(file_lines('2020/input/12_INPUT.txt')))
+print('part2 manhattan distance: ', compute_manhattan_distance(file_lines('2020/input/12_INPUT.txt'), is_part1=False))

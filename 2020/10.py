@@ -1,18 +1,15 @@
 # https://adventofcode.com/2020/day/10
 from typing import List
 from collections import Counter
-from functools import reduce
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
+from pyutil.ints import product
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 def load_joltages(filename, wall_joltage = 0): 
-  joltages = sorted(map(int, load_file(filename)))
+  joltages = sorted(map(int, file_lines(filename)))
   my_device_handles = max(joltages) + 3
   return [wall_joltage] + joltages + [my_device_handles]
 
-def product(numbers : List[int]) -> int: 
-  return reduce((lambda x, y: x * y), numbers)
 assert_equals(product([2,3]), 6)
 assert_equals(product([2,3,4,5,6]), 720)
   

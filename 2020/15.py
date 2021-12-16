@@ -1,8 +1,7 @@
 # https://adventofcode.com/2020/day/15
 from typing import List, Dict
 from collections import defaultdict
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.testing import assert_equals
 
 def spoken_numbers(starting_numbers : List[int], n : int = 2020):
   last_spoken_turns :  Dict[int,List[int]] = defaultdict(list) # TODO much better to use a ring buffer of length 2 here

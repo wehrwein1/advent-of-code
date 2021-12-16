@@ -1,8 +1,7 @@
 # https://adventofcode.com/2015/day/2
 from typing import List, Tuple
-
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.testing import assert_equals
+from pyutil.fileio import file_lines
 
 def compute_area_and_ribbon(lines : List[int]) -> Tuple[int, int]:
   area = 0
@@ -16,6 +15,6 @@ def compute_area_and_ribbon(lines : List[int]) -> Tuple[int, int]:
 assert_equals(compute_area_and_ribbon(['2x3x4']), (58, 34))
 assert_equals(compute_area_and_ribbon(['1x1x10']), (43, 14))
 
-area, ribbon = compute_area_and_ribbon(load_file('input/02_INPUT.txt'))
+area, ribbon = compute_area_and_ribbon(file_lines('2015/input/02_INPUT.txt'))
 print('part 1: square feet of wrapping paper:', area)
 print('part 2: feet of ribbon:', ribbon)

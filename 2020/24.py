@@ -1,9 +1,8 @@
 # https://adventofcode.com/2020/day/24
 from typing import List, Dict, Tuple, Set
 from collections import defaultdict
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 def parse_instructions(line: str) -> List[str]:
   instructions = []
@@ -84,14 +83,14 @@ def simulate_art_exhibit(lines : List[str], num_days=100):
     black_tile_counts += [count_tiles(position_counts, BLACK)]
   return black_tile_counts
 # part 2
-assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=1), [15])
-assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=10), [15,12,25,14,23,28,41,37,49,37])
-assert_equals(simulate_art_exhibit(load_file('2020/input/24_TEST.txt'), num_days=100)[-1], 2208)
+assert_equals(simulate_art_exhibit(file_lines('2020/input/24_TEST.txt'), num_days=1), [15])
+assert_equals(simulate_art_exhibit(file_lines('2020/input/24_TEST.txt'), num_days=10), [15,12,25,14,23,28,41,37,49,37])
+assert_equals(simulate_art_exhibit(file_lines('2020/input/24_TEST.txt'), num_days=100)[-1], 2208)
 
 # part 1
-assert_equals(flip_tiles(load_file('2020/input/24_TEST.txt')), {(-3, 1, 2): 1, (1, 2, -3): 2, (-3, 0, 3): 1, (2, 0, -2): 2, (1, 1, -2): 2, (-1, 1, 0): 2, (-2, 2, 0): 1, (0, 1, -1): 1, (-2, 1, 1): 1, (0, 2, -2): 2, (3, 0, -3): 1, (0, -2, 2): 1, (0, 0, 0): 1, (2, -2, 0): 1, (-1, 2, -1): 1})
-assert_equals(count_tiles(flip_tiles(load_file('2020/input/24_TEST.txt')), desired_color=BLACK), 10)
-assert_equals(count_tiles(flip_tiles(load_file('2020/input/24_TEST.txt')), desired_color=WHITE), 5)
-print(f"part 1: number of tiles flipped to black: {count_tiles(flip_tiles(load_file('2020/input/24_INPUT.txt')), desired_color=BLACK)}")
+assert_equals(flip_tiles(file_lines('2020/input/24_TEST.txt')), {(-3, 1, 2): 1, (1, 2, -3): 2, (-3, 0, 3): 1, (2, 0, -2): 2, (1, 1, -2): 2, (-1, 1, 0): 2, (-2, 2, 0): 1, (0, 1, -1): 1, (-2, 1, 1): 1, (0, 2, -2): 2, (3, 0, -3): 1, (0, -2, 2): 1, (0, 0, 0): 1, (2, -2, 0): 1, (-1, 2, -1): 1})
+assert_equals(count_tiles(flip_tiles(file_lines('2020/input/24_TEST.txt')), desired_color=BLACK), 10)
+assert_equals(count_tiles(flip_tiles(file_lines('2020/input/24_TEST.txt')), desired_color=WHITE), 5)
+print(f"part 1: number of tiles flipped to black: {count_tiles(flip_tiles(file_lines('2020/input/24_INPUT.txt')), desired_color=BLACK)}")
 # part 2
-print(f"part 2: number of tiles flipped to black: {simulate_art_exhibit(load_file('2020/input/24_INPUT.txt'))[-1]}") 
+print(f"part 2: number of tiles flipped to black: {simulate_art_exhibit(file_lines('2020/input/24_INPUT.txt'))[-1]}") 
