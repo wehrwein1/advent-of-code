@@ -1,13 +1,10 @@
 # https://adventofcode.com/2020/day/13
 from typing import List
 from timeit import default_timer as timer
-from functools import reduce
-from datetime import datetime
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def product(numbers : List[int]):     return reduce((lambda x, y: x * y), numbers)
-def print_time():                     print("time:", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+from pyutil.fileio import file_lines
+from pyutil.ints import product
+from pyutil.testing import assert_equals
+from pyutil.timing import print_time
 
 def earliest_departure_product(lines : List[str], is_part1=True, start_at=0) -> int:
   start_timestamp, bus_ids = int(lines[0]), lines[1].split(',')
@@ -68,7 +65,7 @@ assert_equals(earliest_departure_product(['000','67,7,x,59,61'], is_part1=False)
 assert_equals(earliest_departure_product(['000','1789,37,47,1889'], is_part1=False), 1_202_161_486)
 # exit()
 print_time()
-print('part 1: ', earliest_departure_product(load_file('input/13_INPUT.txt')))
+print('part 1: ', earliest_departure_product(file_lines('2020/input/13_INPUT.txt')))
 print_time()
-print('part 2: ', earliest_departure_product(load_file('input/13_INPUT.txt'), is_part1=False, start_at=100000000000000))
+print('part 2: ', earliest_departure_product(file_lines('2020/input/13_INPUT.txt'), is_part1=False, start_at=100000000000000))
 print_time()

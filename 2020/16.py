@@ -7,11 +7,9 @@
 # https://adventofcode.com/2020/day/16
 from typing import List, Dict, Tuple
 from collections import defaultdict
-from functools import reduce
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def product(numbers : List[int]):     return reduce(lambda x, y: x * y, numbers)
+from pyutil.fileio import file_lines
+from pyutil.ints import product
+from pyutil.testing import assert_equals
 
 # part 1:
 # decode your train ticket
@@ -57,8 +55,8 @@ def find_error_ticket_fields(lines : List[str]) -> Tuple[List[int], Dict]:
 
   error_tickets = [num for num in nums if not is_in_any_range(num, field_ranges.values())]
   return error_tickets, field_ranges
-assert_equals(find_error_ticket_fields(load_file('input/16_TEST.txt'))[0], [4, 55, 12])
-assert_equals(sum(find_error_ticket_fields(load_file('input/16_TEST.txt'))[0]), 71)
+assert_equals(find_error_ticket_fields(file_lines('2020/input/16_TEST.txt'))[0], [4, 55, 12])
+assert_equals(sum(find_error_ticket_fields(file_lines('2020/input/16_TEST.txt'))[0]), 71)
 
 def find_my_ticket(lines : List[str]):
   # discard tickets containing error fields
@@ -118,11 +116,11 @@ def find_my_ticket(lines : List[str]):
   # print('my_ticket:', my_ticket_values)
   my_ticket = dict( { field_name : my_ticket_values[field_indices[field_name]] for field_name in field_indices.keys() } )
   return my_ticket
-assert_equals(find_my_ticket(load_file('input/16_TEST2.txt')), {'class' : 12, 'row' : 11, 'seat' : 13})
+assert_equals(find_my_ticket(file_lines('2020/input/16_TEST2.txt')), {'class' : 12, 'row' : 11, 'seat' : 13})
 
 def fields_product(ticket_fields : Dict[str, int], field_prefix='departure'):
   return product([field_value for field_name, field_value in ticket_fields.items() if field_name.startswith(field_prefix)])
 assert_equals(fields_product( { 'departure time' : 4, 'schedule' : 7, 'departure platform' : 5, 'departure something' : 3}), 4*5*3)
 
-print('part 1 sum error tickets:', sum(find_error_ticket_fields(load_file('input/16_INPUT.txt'))[0]))
-print('part 2 product departure fields:', fields_product(find_my_ticket(load_file('input/16_INPUT.txt'))))
+print('part 1 sum error tickets:', sum(find_error_ticket_fields(file_lines('2020/input/16_INPUT.txt'))[0]))
+print('part 2 product departure fields:', fields_product(find_my_ticket(file_lines('2020/input/16_INPUT.txt'))))

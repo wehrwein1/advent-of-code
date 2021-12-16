@@ -1,21 +1,10 @@
 # https://adventofcode.com/2020/day/19
 from typing import List, Dict, Tuple
-from collections import defaultdict
-from functools import reduce
 import re
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
+from pyutil.strings import partition
 
-def assert_equals(actual, expected):  assert actual == expected, f"\n expected: '{expected}'\n actual:   '{actual}'"
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def partition(lines : List[str], sep='', ignore='//'):
-  active_lines = list(filter(lambda line : not line.startswith(ignore), lines))
-  partitions = []
-  for line in active_lines:
-    if line == sep or not partitions:
-      partitions.append([])
-      if line != sep: partitions[-1].append(line)
-      continue
-    partitions[-1].append(line)
-  return partitions
 def parened(text):                    return '({})'.format(text if type(text) == str else ' '.join(text))
 
 def load_message_rules(lines : List[str], is_part1=True) -> Tuple[Dict, List[str]]:
@@ -46,9 +35,9 @@ def find_valid_messages(message_rules : Dict[int,str], messages : List[str], sta
   regex_pattern = build_rule_regex(message_rules[starting_rule], message_rules)
   valid_messages = list(filter(lambda msg : re.match(regex_pattern + "$", msg), messages))
   return valid_messages
-assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST.txt'))), ['ababbb', 'abbbab'])
-assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST2.txt'))), ['bbabbbbaabaabba', 'ababaaaaaabaaab','ababaaaaabbbaba'])
+assert_equals(find_valid_messages(*load_message_rules(file_lines('2020/input/19_TEST.txt'))), ['ababbb', 'abbbab'])
+assert_equals(find_valid_messages(*load_message_rules(file_lines('2020/input/19_TEST2.txt'))), ['bbabbbbaabaabba', 'ababaaaaaabaaab','ababaaaaabbbaba'])
 # assert_equals(find_valid_messages(*load_message_rules(load_file('2020/input/19_TEST2.txt'), is_part1=False)), ['bbabbbbaabaabba', 'babbbbaabbbbbabbbbbbaabaaabaaa', 'aaabbbbbbaaaabaababaabababbabaaabbababababaaa', 'bbbbbbbaaaabbbbaaabbabaaa', 'bbbababbbbaaaaaaaabbababaaababaabab', 'ababaaaaaabaaab', 'ababaaaaabbbaba', 'baabbaaaabbaaaababbaababb', 'abbbbabbbbaaaababbbbbbaaaababb', 'aaaaabbaabaaaaababaa', 'aaaabbaabbaaaaaaabbbabbbaaabbaabaaa', 'aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba'])
 
-print(f"part 1: count of valid messages: {len(find_valid_messages(*load_message_rules(load_file('2020/input/19_INPUT.txt'))))}")
+print(f"part 1: count of valid messages: {len(find_valid_messages(*load_message_rules(file_lines('2020/input/19_INPUT.txt'))))}")
 # print(f"part 2: count of valid messages: {len(find_valid_messages(*load_message_rules(load_file('2020/input/19_INPUT.txt'), is_part1=False)))}")

@@ -1,9 +1,8 @@
 # https://adventofcode.com/2015/day/5
 from collections import Counter
 import re
-
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.testing import assert_equals
+from pyutil.fileio import file_lines
 
 def is_nice(text : str) -> bool:
   NAUGHTY_SUBSTRINGS = ['ab', 'cd', 'pq', 'xy']
@@ -20,4 +19,4 @@ assert_equals(is_nice('jchzalrnumimnmhp'), False)
 assert_equals(is_nice('haegwjzuvuyypxyu'), False)
 assert_equals(is_nice('dvszwmarrgswjxmb'), False)
 
-print(f"Part 1: count of nice strings: {Counter(map(is_nice, load_file('2015/input/05_INPUT.txt')))[True]}")
+print(f"Part 1: count of nice strings: {Counter(map(is_nice, file_lines('2015/input/05_INPUT.txt')))[True]}")

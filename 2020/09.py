@@ -1,11 +1,9 @@
 # https://adventofcode.com/2020/day/9
 from typing import List
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
-def assert_equals(actual, expected): 
-  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-
-def load_file(filename): 
-  return [int(line) for line in map(str.rstrip, open(filename))]
+def load_file(filename): return file_lines(filename, lineMapper=int)
 
 def compute_all_sums(numbers):
   sums = []
@@ -24,7 +22,7 @@ def find_non_sum_number(preamble_length : int, lines : List[str]) -> int:
     if num not in compute_all_sums(preamble):
       # print('part 1:', num)
       return num
-assert_equals(find_non_sum_number(preamble_length=5, lines=load_file('input/09_TEST.txt')), 127)
+assert_equals(find_non_sum_number(preamble_length=5, lines=load_file('2020/input/09_TEST.txt')), 127)
 
 def find_encryption_weakness(invalid_num : int, lines : List[str]) -> int:
   i = 0
@@ -39,9 +37,9 @@ def find_encryption_weakness(invalid_num : int, lines : List[str]) -> int:
       # print('part 2:', search_range)
       return min(search_range) + max(search_range)
     i += 1
-assert_equals(find_encryption_weakness(invalid_num=127, lines=load_file('input/09_TEST.txt')), 62)
+assert_equals(find_encryption_weakness(invalid_num=127, lines=load_file('2020/input/09_TEST.txt')), 62)
 
-lines = load_file('input/09_INPUT.txt'); #print('\ninput (len={}): {}'.format(len(lines), lines))
+lines = load_file('2020/input/09_INPUT.txt'); #print('\ninput (len={}): {}'.format(len(lines), lines))
 invalid_number = find_non_sum_number(preamble_length=25, lines=lines)
 print('part 1:', invalid_number)
 print('part 2:', find_encryption_weakness(invalid_num=invalid_number, lines=lines))

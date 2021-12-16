@@ -1,8 +1,7 @@
 # https://adventofcode.com/2020/day/25
 from collections import defaultdict
 from timeit import default_timer as timer
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.testing import assert_equals
 
 def shared_encryption_key(card_public_key, door_public_key, use_cache=False, trace=True):
   cache = defaultdict(dict) # subject_num -> {loops -> value}

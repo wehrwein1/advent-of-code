@@ -1,5 +1,4 @@
 import string
-import collections
 
 def print_grid(grid):
 	#print(grid)

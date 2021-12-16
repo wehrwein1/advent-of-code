@@ -3,10 +3,10 @@
 # not subject to those constraints. Would be an exercise to simplify, reduce duplication, and optimize performance.
 
 # https://adventofcode.com/2020/day/18
-from typing import List, Dict, Tuple, Callable
+from typing import Callable
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
-def assert_equals(actual, expected):  assert actual == expected, f"\n expected: {expected}\n actual:   {actual}"
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
 def parened(text):                    return '({})'.format(text if text is str else ' '.join(text))
 def remove_all(text, remove_chars):
   for remove_char in remove_chars:
@@ -104,5 +104,5 @@ assert_equals(evaluate_expr('((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2'), 
 assert_equals(evaluate_expr('1 + (2 * 3) + (4 * (5 + 6))', is_part1=False), 51)
 assert_equals(evaluate_expr('1 + 2 * 3 + 4 * 5 + 6', is_part1=False), 231)
 
-print(f"part 1: sum of all expr values: {sum(map(evaluate_expr, load_file('2020/input/18_INPUT.txt')))}")
-print(f"part 2: sum of all expr values: {sum(map(lambda line: evaluate_expr(line, is_part1=False), load_file('2020/input/18_INPUT.txt')))}")
+print(f"part 1: sum of all expr values: {sum(map(evaluate_expr, file_lines('2020/input/18_INPUT.txt')))}")
+print(f"part 2: sum of all expr values: {sum(map(lambda line: evaluate_expr(line, is_part1=False), file_lines('2020/input/18_INPUT.txt')))}")

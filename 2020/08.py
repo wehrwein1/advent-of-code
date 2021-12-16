@@ -1,8 +1,7 @@
 # https://adventofcode.com/2020/day/8
 from typing import Dict, List, Tuple, Callable
-
-def assert_equals(actual, expected): 
-  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 # instruction set
 instruction_set : Dict[str, Callable[[int,int,str],List[int]]] = dict( { # returns accumulator, next_address
@@ -44,12 +43,10 @@ def execute_program(instructions : List[str]) -> Tuple[int, bool, bool]:
     current_address = next_address
     # print(" visited={}, accum={}".format(list(visited), accumulator))
   return accumulator, is_infinite_loop(), is_terminated_normally()
-assert_equals(execute_program(instructions=[line for line in map(str.rstrip, open('input/08_TEST.txt'))]),  (5, True, False))
-assert_equals(execute_program(instructions=[line for line in map(str.rstrip, open('input/08_TEST2.txt'))]), (8, False, True))
+assert_equals(execute_program(instructions=file_lines('2020/input/08_TEST.txt')),  (5, True, False))
+assert_equals(execute_program(instructions=file_lines('2020/input/08_TEST2.txt')), (8, False, True))
 
-lines = [line for line in map(str.rstrip, open('input/08_INPUT.txt'))]
-# lines = [line for line in map(str.rstrip, open('input/08_TEST.txt'))]
-print('\ninput (len={}): {}'.format(len(lines), lines))
+lines = file_lines('2020/input/08_INPUT.txt')
 print('\npart 1 result:', execute_program(lines))
 
 # find buggy instruction
@@ -59,11 +56,11 @@ for address, instruction in enumerate(lines):
   print("checking address", address, instruction)
   if instruction.startswith('nop'): 
     modified_instruction = instruction.replace('nop','jmp') 
-    modified_program = [line for line in map(str.rstrip, open('input/08_INPUT.txt'))]
+    modified_program = file_lines('2020/input/08_INPUT.txt')
     modified_program[address] = modified_instruction
   elif instruction.startswith('jmp'): 
     modified_instruction = instruction.replace('jmp','nop')
-    modified_program = [line for line in map(str.rstrip, open('input/08_INPUT.txt'))]
+    modified_program = file_lines('2020/input/08_INPUT.txt')
     modified_program[address] = modified_instruction
   if modified_program:
     accumulator, is_infinite_loop, is_terminated_normally = execute_program(instructions=modified_program)

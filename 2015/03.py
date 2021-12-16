@@ -1,9 +1,8 @@
 # https://adventofcode.com/2015/day/3
 from typing import Dict, Tuple
 from collections import defaultdict
-
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
+from pyutil.testing import assert_equals
+from pyutil.fileio import file_lines
 
 def compute_deliveries(directions : str, is_part1=True) -> Dict[Tuple[int, int], int]:
   if not is_part1:
@@ -29,5 +28,5 @@ assert_equals(compute_deliveries('^v', is_part1=False),         {(0,-1): 1, (0 ,
 assert_equals(compute_deliveries('^>v<', is_part1=False),       {(0, 0): 2, (0, 1): 1, (1, 0): 1})
 assert_equals(compute_deliveries('^v^v^v^v^v', is_part1=False), {(0, -5): 1, (0, -4): 1, (0, -3): 1, (0, -2): 1, (0, -1): 1, (0, 0): 1, (0, 1): 1, (0, 2): 1, (0, 3): 1, (0, 4): 1, (0, 5): 1})
 
-print('part 1: houses receiving 1+ present (santa):', len(compute_deliveries(load_file('input/03_INPUT.txt')[0])))
-print('part 1: houses receiving 1+ present (santa + robo):', len(compute_deliveries(load_file('input/03_INPUT.txt')[0], is_part1=False)))
+print('part 1: houses receiving 1+ present (santa):', len(compute_deliveries(file_lines('2015/input/03_INPUT.txt')[0])))
+print('part 1: houses receiving 1+ present (santa + robo):', len(compute_deliveries(file_lines('2015/input/03_INPUT.txt')[0], is_part1=False)))

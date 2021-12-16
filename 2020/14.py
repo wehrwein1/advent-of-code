@@ -1,8 +1,7 @@
 # https://adventofcode.com/2020/day/14
 from typing import List, Dict
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def load_file(filename):              return [line for line in map(str.rstrip, open(filename))]
+from pyutil.fileio import file_lines
+from pyutil.testing import assert_equals
 
 def set_char(text : str, i : int, one_char : str): # Note: O(n), eek
   buffer = list(''.join(text))
@@ -96,8 +95,8 @@ def allocate_memory(lines : List[str], is_part1=True) -> Dict[int, int]:
         memory[addr] = int(value)
       addresses : List[int] = list() # clear addresses for next assignment
   return memory
-assert_equals(sum(allocate_memory(load_file('input/14_TEST.txt')).values()), 165)
-assert_equals(allocate_memory(load_file('input/14_TEST2.txt'), is_part1=False), {26: 1, 27: 1, 58: 100, 59: 100, 16: 1, 17: 1, 18: 1, 19: 1, 24: 1, 25: 1} )
+assert_equals(sum(allocate_memory(file_lines('2020/input/14_TEST.txt')).values()), 165)
+assert_equals(allocate_memory(file_lines('2020/input/14_TEST2.txt'), is_part1=False), {26: 1, 27: 1, 58: 100, 59: 100, 16: 1, 17: 1, 18: 1, 19: 1, 24: 1, 25: 1} )
 assert_equals(allocate_memory(['mask = 000000000000000000000000000000000000', 'mem[42] = 100'], is_part1=False), {42: 100})
 assert_equals(allocate_memory(['mask = 000000000000000000000000000000101010', 'mem[42] = 100'], is_part1=False), {42: 100})
 assert_equals(allocate_memory(['mask = 000000000000000000000000000000000001', 'mem[42] = 100'], is_part1=False), {43: 100})
@@ -106,7 +105,7 @@ assert_equals(allocate_memory(['mask = 00000000000000000000000000000001010X', 'm
 assert_equals(allocate_memory(['mask = 100000000000000000000000000000000000', 'mem[0] = 100'], is_part1=False), {34359738368 : 100})
 assert_equals(allocate_memory(['mask = X00000000000000000000000000000000000', 'mem[0] = 100'], is_part1=False), {0: 100, 34359738368: 100})
 assert_equals(allocate_memory(['mask = 000000000000000000000000000000X1001X', 'mem[42] = 100'], is_part1=False), {26: 100, 27: 100, 58: 100, 59: 100})
-assert_equals(sum(allocate_memory(load_file('input/14_TEST2.txt'), is_part1=False).values()), 208)
+assert_equals(sum(allocate_memory(file_lines('2020/input/14_TEST2.txt'), is_part1=False).values()), 208)
 
-print('part 1 sum memory values:', sum(allocate_memory(load_file('input/14_INPUT.txt')).values()))
-print('part 2 sum memory values:', sum(allocate_memory(load_file('input/14_INPUT.txt'), is_part1=False).values()))
+print('part 1 sum memory values:', sum(allocate_memory(file_lines('2020/input/14_INPUT.txt')).values()))
+print('part 2 sum memory values:', sum(allocate_memory(file_lines('2020/input/14_INPUT.txt'), is_part1=False).values()))

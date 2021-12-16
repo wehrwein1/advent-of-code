@@ -1,9 +1,7 @@
 from typing import List, Dict, Set
-from functools import reduce
 from timeit import default_timer as timer
-
-def assert_equals(actual, expected):  assert actual == expected, '\n expected: {}\n actual:   {}'.format(expected, actual)
-def product(numbers : List[int]):     return reduce(lambda x, y: x * y, numbers)
+from pyutil.ints import product
+from pyutil.testing import assert_equals
 
 def to_linked_list(cups):
   nodes = dict( zip( map(int, [cups[-1], *cups[:-1]]), map(int, cups)))

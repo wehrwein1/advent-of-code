@@ -1,8 +1,9 @@
+# https://adventofcode.com/2020/day/4
 from typing import List
 import re
+from pyutil.fileio import file_lines
 
-# https://adventofcode.com/2020/day/4
-lines = [line for line in map(str.rstrip, open('2020/input/04_INPUT.txt'))]
+lines = file_lines('2020/input/04_INPUT.txt')
 # lines = [line for line in map(str.rstrip, open('input/04_TEST.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/04_TEST_INVALID.txt'))]
 # lines = [line for line in map(str.rstrip, open('input/04_TEST_VALID.txt'))]
