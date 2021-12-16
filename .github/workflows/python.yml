@@ -10,20 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - name: Setup pytest
-      #   uses: cclauss/GitHub-Action-for-pytest@0.5.0
       - uses: actions/setup-python@v2 # https://github.com/actions/setup-python
         with:
           python-version: '3.x'
       - name: install pytest
         run: |
           pip install -U pytest
+          python --version
           pytest --version
       - name: Run pytest
         run: | 
-          python --version
-          python -m pytest 
-      - name: Run pytest directly
-        run: | 
-          python --version
-          pytest 
+          pytest
