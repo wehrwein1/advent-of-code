@@ -11,5 +11,8 @@
   "python.testing.pytestArgs": [ "."],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
+  "[rust]": {
+    "editor.formatOnSave": false // disabled until I figure out prettier-ignore for targeted code blocks
+  },
   "testExplorer.useNativeTesting" : true, // seems to work without "Go Test explorer UI"
 }
