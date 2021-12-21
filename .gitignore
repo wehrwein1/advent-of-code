@@ -1,6 +1,7 @@
 .DS_Store
 __pycache__
 **/scratchpad*
+**/target
 *.log
 
 util/bootstrap/**/.session.txt

@@ -2,6 +2,7 @@
   "recommendations": [
     "michelemelluso.gitignore",
     "golang.go",
-    "cschleiden.vscode-github-actions"
+    "cschleiden.vscode-github-actions",
+    "rust-lang.rust"
   ]
 }
