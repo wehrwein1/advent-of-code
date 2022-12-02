@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -33,7 +32,8 @@ func Bootstrap() {
 	dayHtmlFile := path.Join(inputdir, "html", fmt.Sprintf("%02d.html", day))
 	dayUrl := fmt.Sprintf("https://adventofcode.com/%d/day/%d", year, day)
 	inputUrl := fmt.Sprintf("%s/input", dayUrl)
-	session := loadSessionFile(path.Join(bootstrapdir, ".session.txt"))
+	session := readFileContent(path.Join(bootstrapdir, ".session.txt"))
+	emailAddress := readFileContent(path.Join(bootstrapdir, ".emailAddressForUserAgentHeader.txt"))
 	println()
 	println(fmt.Sprintf("bootstrap rootdir       %s", rootdir))
 	println(fmt.Sprintf("bootstrap bootstrapdir  %s", bootstrapdir))
@@ -43,8 +43,8 @@ func Bootstrap() {
 	println(fmt.Sprintf("bootstrap htmlfile      %s", dayHtmlFile))
 	println(fmt.Sprintf("bootstrap inputurl      %s", inputUrl))
 	println()
-	downloadFileWithSessionCookie(inputUrl, inputTextFile, session) // download input file
-	downloadFileWithSessionCookie(dayUrl, dayHtmlFile, session)     // download day HTML file
+	downloadFileWithSessionCookie(inputUrl, inputTextFile, session, emailAddress) // download input file
+	downloadFileWithSessionCookie(dayUrl, dayHtmlFile, session, emailAddress)     // download day HTML file
 	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%02d_TEST.txt", day)))
 	mkdir(daydir)
 	templates := map[string]string{
@@ -57,7 +57,7 @@ func Bootstrap() {
 	}
 }
 
-func loadSessionFile(filename string) (filecontent string) {
+func readFileContent(filename string) (filecontent string) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		fileout, _ := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, 0666) // create empty file, per https://stackoverflow.com/a/35558965
@@ -69,7 +69,7 @@ func loadSessionFile(filename string) (filecontent string) {
 func extractTestcaseExamples(dayHtmlFile, destFile string) {
 	html := util.FileContent(dayHtmlFile)
 	testcase := findTestcase(html)
-	if err := ioutil.WriteFile(destFile, []byte(testcase), util.FileModeUserReadWrite); err != nil {
+	if err := os.WriteFile(destFile, []byte(testcase), util.FileModeUserReadWrite); err != nil {
 		log.Fatalf("error writing file: %s", err.Error())
 	}
 }
@@ -90,13 +90,17 @@ func dirs() (rootdir, bootstrapdir, templatedir string) {
 }
 
 // https://www.reddit.com/r/adventofcode/comments/a2vonl/how_to_download_inputs_with_a_script/
-func downloadFileWithSessionCookie(url string, destfilepath string, session string) {
+func downloadFileWithSessionCookie(url string, destfilepath string, session string, emailAddress string) {
 	if _, err := os.Stat(destfilepath); err == nil { // file exists
 		println(fmt.Sprintf("warn: skip download file (already exists): %s", destfilepath))
 		return
 	}
 	mkdir(path.Dir(destfilepath))
-	cmd := exec.Command("curl", "-o", destfilepath, url, "--cookie", fmt.Sprintf("session=%s", session))
+	userAgentHeaderValue := fmt.Sprintf("https://github.com/wehrwein1/advent-of-code/blob/main/util/bootstrap/adventofcode.go by %s", emailAddress) // https://www.reddit.com/r/adventofcode/comments/z9dhtd/please_include_your_contact_info_in_the_useragent
+	cmd := exec.Command("curl", "-o", destfilepath, url,
+		"--cookie", fmt.Sprintf("session=%s", session),
+		"-A", userAgentHeaderValue,
+	)
 	if err := cmd.Run(); err != nil {
 		log.Fatalf("error download failed: %s", err.Error())
 	}
