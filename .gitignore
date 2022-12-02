@@ -6,3 +6,4 @@ __pycache__
 
 util/bootstrap/**/.session.txt
 **/input/html
+util/bootstrap/emailAddressForUserAgentHeader.txt
