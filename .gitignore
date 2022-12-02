@@ -4,5 +4,5 @@ __pycache__
 **/target
 *.log
 
-util/bootstrap/**/.session.txt
+util/bootstrap/**/.*.txt
 **/input/html
