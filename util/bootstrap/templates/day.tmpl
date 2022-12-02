@@ -11,16 +11,24 @@ import (
   "github.com/wehrwein1/advent-of-code/util"
 )
 
+type ProblemPart int
+
+const (
+	Part1 ProblemPart = iota
+	Part2
+)
+
 var sum = util.SumInts
 var product = util.ProductInts
 var all = util.AllTrue
 var fileLines = util.FileLinesSkipEmpty
 
 func main() {
-	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/{{ .Day2}}_INPUT.txt"))))
+	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/{{ .Day2}}_INPUT.txt"), Part1)))
+	println(fmt.Sprintf("part 2: %d", computeDay(fileLines("../input/{{ .Day2}}_INPUT.txt"), Part2)))
 }
 
-func computeDay(lines []string) (res int) {
+func computeDay(lines []string, part ProblemPart) (res int) {
   for _, line := range lines {
 		println(line)
 	}

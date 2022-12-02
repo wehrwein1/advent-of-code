@@ -7,5 +7,6 @@ import (
 )
 
 func TestDay(t *testing.T) {
-	assert.Equal(t, -1, computeDay(fileLines("../input/{{ .Day2}}_INPUT.txt")))
+	assert.Equal(t, -1, computeDay(fileLines("../input/{{ .Day2}}_TEST.txt"), Part1))
+	assert.Equal(t, -1, computeDay(fileLines("../input/{{ .Day2}}_TEST.txt"), Part2))
 }
