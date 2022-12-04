@@ -3,18 +3,17 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/wehrwein1/advent-of-code/util"
 	"github.com/wehrwein1/advent-of-code/util/ds"
 )
 
-type RuneSet = ds.RuneSet
-
 var fileLines = util.FileLinesSkipEmpty
 var part1CountedDigits = []digit{One, Four, Seven, Eight}
 var prettyPrint = func(runes []rune, printBrackets bool) string {
-	return util.PrettyPrintRuneSlice(runes, "", printBrackets)
+	return PrettyPrintRuneSlice(runes, "", printBrackets)
 }
 
 func main() {
@@ -45,9 +44,9 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 	segmentEncodings := strings.Split(tokens[0], " ")
 	// outputSignals := tokens[1]
 	// state
-	signalIndexCandidates := map[int]ds.RuneSet{} // e.g. 0 => ('a','c','d')
+	signalIndexCandidates := map[int]RuneSet{} // e.g. 0 => ('a','c','d')
 	for i := 0; i < Eight.segmentCount(); i++ {
-		signalIndexCandidates[i] = *ds.NewRuneSet()
+		signalIndexCandidates[i] = *NewRuneSet()
 	}
 	println(fmt.Sprintf("line '%s'", line))
 	// process exact match encodings
@@ -57,9 +56,9 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 			candidates := []rune(segmentEncoding)
 			for _, digitSegment := range digit.segments() {
 				if signalIndexCandidates[digitSegment].IsEmpty() {
-					signalIndexCandidates[digitSegment].Put(candidates...)
+					signalIndexCandidates[digitSegment].PutAll(candidates...)
 				} else {
-					signalIndexCandidates[digitSegment] = *runeSetUnion(signalIndexCandidates[digitSegment], *ds.NewRuneSet(candidates...))
+					signalIndexCandidates[digitSegment] = *runeSetUnion(signalIndexCandidates[digitSegment], *NewRuneSet(candidates...))
 				}
 				println(fmt.Sprintf("After digit %v segmentIndex %d in %v", digit, digitSegment, signalIndexCandidates[digitSegment]))
 			}
@@ -77,11 +76,11 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 	return signalPatterns, util.IntSliceToDigitsValue(outputValues)
 }
 
-func printProgress(signalIndexCandidates map[int]ds.RuneSet) {
+func printProgress(signalIndexCandidates map[int]RuneSet) {
 	maxNumberOfSegments := Eight.segmentCount()
 	for i := 0; i < maxNumberOfSegments; i++ {
 		candidates := signalIndexCandidates[i].Keys()
-		println(fmt.Sprintf("segmentIndex %d in %s", i, prettyPrint(util.RuneSlice(candidates).Sorted(), true)))
+		println(fmt.Sprintf("segmentIndex %d in %s", i, prettyPrint(RuneSlice(candidates).Sorted(), true)))
 	}
 }
 
@@ -148,11 +147,70 @@ func digitForUniqueSegmentCount(segmentCount int) (digit digit, ok bool) {
 func runeSetUnion(s1, s2 RuneSet) *RuneSet { // TODO FIXME clarity memory behavior, return value as convenience
 	smaller := util.If(s1.Len() <= s2.Len()).Interface(s1, s2).(RuneSet)
 	larger := util.If(s1.Len() > s2.Len()).Interface(s1, s2).(RuneSet)
-	union := ds.NewRuneSet()
+	union := NewRuneSet()
 	for _, k := range smaller.Keys() {
 		if larger.Has(k) {
 			union.Put(k)
 		}
 	}
 	return union
+}
+
+type RuneSet struct {
+	ds.Set
+}
+
+func NewRuneSet(items ...rune) *RuneSet {
+	s := &RuneSet{}
+	s.Set = *ds.NewSet()
+	s.PutAll(items...)
+	return s
+}
+
+func (s RuneSet) Keys() []rune {
+	keys := make([]rune, s.Len()) // https://stackoverflow.com/a/27848197/3633993
+	i := 0
+	for _, k := range s.Set.Keys() {
+		keys[i] = k.(rune)
+		i++
+	}
+	return keys
+}
+
+func (s RuneSet) PutAll(items ...rune) {
+	for _, item := range items {
+		s.Set.Put(item)
+	}
+}
+
+func (s RuneSet) String() string {
+	chars := []string{}
+	for _, k := range s.Keys() {
+		chars = append(chars, fmt.Sprintf("%c", k))
+	}
+	return fmt.Sprintf("[%s]", strings.Join(chars, " "))
+}
+
+func PrettyPrintRuneSlice(runes []rune, delim string, printBrackets bool) string {
+	chars := []string{}
+	for _, r := range runes {
+		chars = append(chars, fmt.Sprintf("%c", r))
+	}
+	formatString := util.If(printBrackets).String("[%s]", "%s")
+	return fmt.Sprintf(formatString, strings.Join(chars, delim))
+}
+
+type RuneSlice []rune
+
+func (sl RuneSlice) Sorted() (sortedRunes []rune) {
+	intValues := []int{}
+	for _, k := range sl {
+		intValues = append(intValues, int(k))
+	}
+	sort.Ints(intValues)
+	sortedRunes = make([]rune, len(intValues))
+	for i := 0; i < len(intValues); i++ {
+		sortedRunes[i] = rune(intValues[i])
+	}
+	return
 }

@@ -1,35 +1,37 @@
 package ds
 
-import (
-	"fmt"
-	"strings"
-)
+import "github.com/wehrwein1/advent-of-code/util"
 
-// TODO FIXME this likely goes away once generics arrives
-
-// **************
-// IntSet
-// **************
-
-type IntSet struct { // would generalize further if had generics
-	data map[int]bool
+// Set
+type Set struct {
+	data map[any]bool
 }
 
-func NewIntSet() *IntSet {
-	return &IntSet{data: make(map[int]bool)}
+var itemExists = true
+
+func NewSet(items ...any) *Set {
+	s := &Set{data: make(map[any]bool)}
+	s.PutAll(items...)
+	return s
 }
 
-func (s IntSet) Put(val int) {
-	s.data[val] = true
-}
-
-func (s IntSet) Has(val int) bool {
+func (s Set) Has(val any) bool {
 	_, ok := s.data[val]
 	return ok
 }
 
-func (s IntSet) Keys() []int {
-	keys := make([]int, len(s.data)) // https://stackoverflow.com/a/27848197/3633993
+func (s Set) Put(val any) {
+	s.data[val] = itemExists
+}
+
+func (s Set) PutAll(vals ...any) {
+	for _, val := range vals {
+		s.data[val] = itemExists
+	}
+}
+
+func (s Set) Keys() []any {
+	keys := make([]any, len(s.data)) // https://stackoverflow.com/a/27848197/3633993
 	i := 0
 	for k := range s.data {
 		keys[i] = k
@@ -38,57 +40,26 @@ func (s IntSet) Keys() []int {
 	return keys
 }
 
-// **************
-// RuneSet
-// **************
-
-type RuneSet struct { // would generalize further if had generics
-	data map[rune]bool
-}
-
-func NewRuneSet(initialVals ...rune) *RuneSet {
-	s := RuneSet{data: make(map[rune]bool)}
-	s.Put(initialVals...)
-	return &s
-}
-
-func (s RuneSet) Put(vals ...rune) {
-	for _, val := range vals {
-		s.data[val] = true
-	}
-}
-
-func (s RuneSet) Has(val rune) bool {
-	_, ok := s.data[val]
-	return ok
-}
-
-func (s RuneSet) Remove(val rune) {
+func (s Set) Remove(val rune) {
 	delete(s.data, val)
 }
 
-func (s RuneSet) Keys() []rune {
-	keys := make([]rune, len(s.data)) // https://stackoverflow.com/a/27848197/3633993
-	i := 0
-	for k := range s.data {
-		keys[i] = k
-		i++
-	}
-	return keys
-}
-
-func (s RuneSet) Len() int {
+func (s Set) Len() int {
 	return len(s.data)
 }
 
-func (s RuneSet) IsEmpty() bool {
+func (s Set) IsEmpty() bool {
 	return s.Len() == 0
 }
 
-func (s RuneSet) String() string {
-	chars := []string{}
-	for k := range s.data {
-		chars = append(chars, fmt.Sprintf("%c", k))
+func (s1 Set) Union(s2 Set) *Set { // TODO FIXME clarity memory behavior, return value as convenience
+	smaller := util.If(s1.Len() <= s2.Len()).Interface(s1, s2).(Set)
+	larger := util.If(s1.Len() > s2.Len()).Interface(s1, s2).(Set)
+	union := NewSet()
+	for _, k := range smaller.Keys() {
+		if larger.Has(k) {
+			union.Put(k)
+		}
 	}
-	return fmt.Sprintf("[%s]", strings.Join(chars, " "))
+	return union
 }
