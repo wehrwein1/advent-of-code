@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wehrwein1/advent-of-code/util/ds"
 )
 
 func TestDayPart1(t *testing.T) {
@@ -27,7 +26,24 @@ func SkipTestDayPart2(t *testing.T) {
 	// assert.Equal(t, 61229, sumOutputValues(fileLines("../input/08_TEST.txt")))
 }
 
-func TestRuneSetUnion(t *testing.T) {
-	assert.ElementsMatch(t, []rune{}, runeSetUnion(*ds.NewRuneSet(), *ds.NewRuneSet('a', 'b', 'c')).Keys())
-	assert.ElementsMatch(t, []rune{'b', 'd'}, runeSetUnion(*ds.NewRuneSet('b', 'd'), *ds.NewRuneSet('a', 'b', 'c', 'd')).Keys())
+func TestRuneSet(t *testing.T) {
+	s := NewRuneSet()
+	assert.Equal(t, "[]", s.String())
+	s.PutAll('a', 'b')
+	assert.ElementsMatch(t, []rune{'a', 'b'}, s.Keys())
+	assert.Contains(t, s.String(), "a") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
+	assert.Contains(t, s.String(), "b") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
+	s.Remove('a')
+	assert.Equal(t, false, s.Has('a'))
+	assert.Equal(t, "[b]", s.String())
+	s.Remove('b')
+	assert.Equal(t, true, s.IsEmpty())
+}
+
+func TestPrettyPrintRuneSlice(t *testing.T) {
+	assert.Equal(t, "[a b c]", PrettyPrintRuneSlice([]rune{'a', 'b', 'c'}, " ", true))
+}
+
+func TestSortedRuneSlice(t *testing.T) {
+	assert.Equal(t, []rune{'a', 'b', 'c', 'd'}, RuneSlice([]rune{'d', 'a', 'c', 'b'}).Sorted())
 }
