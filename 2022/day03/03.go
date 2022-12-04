@@ -19,8 +19,6 @@ var sum = util.SumInts
 
 var fileLines = util.FileLinesSkipEmpty
 
-type Set = ds.Set
-
 func main() {
 	println(fmt.Sprintf("part 1: %d", computeDay(fileLines("../input/03_INPUT.txt"), Part1)))
 	println(fmt.Sprintf("part 2: %d", computeDay(fileLines("../input/03_INPUT.txt"), Part2)))
@@ -59,28 +57,21 @@ func getCommonItem(items ...string) rune {
 	var commonItems string
 	for i := 0; i < len(items); {
 		first := items[i]
-		set1 := *makeSet([]rune(first))
-		var set2 Set
+		set1 := *ds.NewSet([]rune(first)...)
+		var set2 ds.Set[rune]
 		if i == 0 { // initial state empty
 			second := items[i+1]
-			set2 = *makeSet([]rune(second))
+			set2 = *ds.NewSet([]rune(second)...)
 			i += 2
 		} else {
 			second := commonItems
-			set2 = *makeSet([]rune(second))
+			set2 = *ds.NewSet([]rune(second)...)
 			i += 1
 		}
 		// merge common items
-		commonItems = string(getRuneArray(set1.Intersection(set2).Keys()))
+		commonItems = string(set1.Intersection(set2).Keys())
 	}
 	return rune(commonItems[0])
-}
-
-func getRuneArray(array []any) (res []rune) {
-	for _, item := range array {
-		res = append(res, item.(rune))
-	}
-	return
 }
 
 func priority(commonItem rune) int {
@@ -93,12 +84,4 @@ func priority(commonItem rune) int {
 	}
 	const min_uppercase_priority = 27
 	return min_uppercase_priority + ord - int('A')
-}
-
-func makeSet(compartment []rune) *Set {
-	s := ds.NewSet()
-	for _, item := range compartment {
-		s.Put(item)
-	}
-	return s
 }

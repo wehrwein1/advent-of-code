@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/wehrwein1/advent-of-code/util/ds"
 )
 
 func TestDayPart1(t *testing.T) {
@@ -27,15 +28,15 @@ func SkipTestDayPart2(t *testing.T) {
 }
 
 func TestRuneSet(t *testing.T) {
-	s := NewRuneSet()
-	assert.Equal(t, "[]", s.String())
+	s := *ds.NewSet[rune]()
+	assert.Equal(t, "[]", RunesString(s))
 	s.PutAll('a', 'b')
 	assert.ElementsMatch(t, []rune{'a', 'b'}, s.Keys())
-	assert.Contains(t, s.String(), "a") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
-	assert.Contains(t, s.String(), "b") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
+	assert.Contains(t, RunesString(s), "a") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
+	assert.Contains(t, RunesString(s), "b") // sets are unordered, could be "[a b]" or "[b a]" depending on impl
 	s.Remove('a')
 	assert.Equal(t, false, s.Has('a'))
-	assert.Equal(t, "[b]", s.String())
+	assert.Equal(t, "[b]", RunesString(s))
 	s.Remove('b')
 	assert.Equal(t, true, s.IsEmpty())
 }
