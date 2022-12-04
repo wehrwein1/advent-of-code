@@ -44,7 +44,7 @@ func main() {
 
 func sumSyntaxErrorScore(lines ...string) (syntaxErrorScore int) {
 	for _, line := range lines {
-		lineResult, invalidIndex, expectedChar := evaluateLine(line, ds.NewRuneStack())
+		lineResult, invalidIndex, expectedChar := evaluateLine(line, ds.NewStack[rune]())
 		switch lineResult {
 		case Valid:
 			println(fmt.Sprintf("line valid   '%s'", line))
@@ -64,7 +64,7 @@ func sumSyntaxErrorScore(lines ...string) (syntaxErrorScore int) {
 func middleCompletionStringScore(lines ...string) (middleScore int) {
 	scores := []int{}
 	for _, line := range lines {
-		closes := ds.NewRuneStack()
+		closes := ds.NewStack[rune]()
 		lineResult, _, _ := evaluateLine(line, closes)
 		if lineResult == Incomplete {
 			chars := []rune{}
@@ -87,7 +87,7 @@ func completionStringScore(completionString string) (score int) {
 	return score
 }
 
-func evaluateLine(line string, closes *ds.RuneStack) (valid LineResult, invalidIndex int, expectedChar rune) {
+func evaluateLine(line string, closes *ds.Stack[rune]) (valid LineResult, invalidIndex int, expectedChar rune) {
 	for lineCharIndex, char := range []rune(line) {
 		charIndex := indexOf(openCloseChars, char)
 		isOpen := charIndex%2 == 0
