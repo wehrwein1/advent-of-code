@@ -35,6 +35,8 @@ func Bootstrap() {
 	session := readFileContent(path.Join(bootstrapdir, ".session.txt"))
 	emailAddress := readFileContent(path.Join(bootstrapdir, ".emailAddressForUserAgentHeader.txt"))
 	println()
+	println(fmt.Sprintf("bootstrap config/sess.  %s", session))
+	println(fmt.Sprintf("bootstrap config/email  %s", emailAddress))
 	println(fmt.Sprintf("bootstrap rootdir       %s", rootdir))
 	println(fmt.Sprintf("bootstrap bootstrapdir  %s", bootstrapdir))
 	println(fmt.Sprintf("bootstrap templatedir   %s", templatedir))
