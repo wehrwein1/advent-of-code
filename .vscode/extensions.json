@@ -3,6 +3,6 @@
     "michelemelluso.gitignore",
     "golang.go",
     "cschleiden.vscode-github-actions",
-    "rust-lang.rust"
+    "rust-lang.rust-analyzer"
   ]
 }
