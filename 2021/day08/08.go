@@ -44,9 +44,9 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 	segmentEncodings := strings.Split(tokens[0], " ")
 	// outputSignals := tokens[1]
 	// state
-	signalIndexCandidates := map[int]RuneSet{} // e.g. 0 => ('a','c','d')
+	signalIndexCandidates := map[int]ds.Set[rune]{} // e.g. 0 => ('a','c','d')
 	for i := 0; i < Eight.segmentCount(); i++ {
-		signalIndexCandidates[i] = *NewRuneSet()
+		signalIndexCandidates[i] = *ds.NewSet[rune]()
 	}
 	println(fmt.Sprintf("line '%s'", line))
 	// process exact match encodings
@@ -58,7 +58,7 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 				if signalIndexCandidates[digitSegment].IsEmpty() {
 					signalIndexCandidates[digitSegment].PutAll(candidates...)
 				} else {
-					signalIndexCandidates[digitSegment] = *runeSetUnion(signalIndexCandidates[digitSegment], *NewRuneSet(candidates...))
+					signalIndexCandidates[digitSegment] = *(signalIndexCandidates[digitSegment]).Intersection(*ds.NewSet(candidates...))
 				}
 				println(fmt.Sprintf("After digit %v segmentIndex %d in %v", digit, digitSegment, signalIndexCandidates[digitSegment]))
 			}
@@ -76,7 +76,7 @@ func decodeSignal(line string) (signalPatterns map[string]int, outputValue int) 
 	return signalPatterns, util.IntSliceToDigitsValue(outputValues)
 }
 
-func printProgress(signalIndexCandidates map[int]RuneSet) {
+func printProgress(signalIndexCandidates map[int]ds.Set[rune]) {
 	maxNumberOfSegments := Eight.segmentCount()
 	for i := 0; i < maxNumberOfSegments; i++ {
 		candidates := signalIndexCandidates[i].Keys()
@@ -144,46 +144,7 @@ func digitForUniqueSegmentCount(segmentCount int) (digit digit, ok bool) {
 	return
 }
 
-func runeSetUnion(s1, s2 RuneSet) *RuneSet { // TODO FIXME clarity memory behavior, return value as convenience
-	smaller := util.If(s1.Len() <= s2.Len()).Interface(s1, s2).(RuneSet)
-	larger := util.If(s1.Len() > s2.Len()).Interface(s1, s2).(RuneSet)
-	union := NewRuneSet()
-	for _, k := range smaller.Keys() {
-		if larger.Has(k) {
-			union.Put(k)
-		}
-	}
-	return union
-}
-
-type RuneSet struct {
-	ds.Set
-}
-
-func NewRuneSet(items ...rune) *RuneSet {
-	s := &RuneSet{}
-	s.Set = *ds.NewSet()
-	s.PutAll(items...)
-	return s
-}
-
-func (s RuneSet) Keys() []rune {
-	keys := make([]rune, s.Len()) // https://stackoverflow.com/a/27848197/3633993
-	i := 0
-	for _, k := range s.Set.Keys() {
-		keys[i] = k.(rune)
-		i++
-	}
-	return keys
-}
-
-func (s RuneSet) PutAll(items ...rune) {
-	for _, item := range items {
-		s.Set.Put(item)
-	}
-}
-
-func (s RuneSet) String() string {
+func RunesString(s ds.Set[rune]) string {
 	chars := []string{}
 	for _, k := range s.Keys() {
 		chars = append(chars, fmt.Sprintf("%c", k))
