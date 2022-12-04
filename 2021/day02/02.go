@@ -9,7 +9,6 @@ import (
 	"github.com/wehrwein1/advent-of-code/util"
 )
 
-var check = util.Check
 var product = util.ProductInts
 
 func computePositionPart1(commands []string) (horizontal int, vertical int) {
@@ -17,7 +16,9 @@ func computePositionPart1(commands []string) (horizontal int, vertical int) {
 		tokens := strings.Split(command, " ")
 		operation := tokens[0]
 		distance, err := strconv.Atoi(tokens[1])
-		check(err)
+		if err != nil {
+			panic(err)
+		}
 		switch operation {
 		case "up":
 			vertical -= distance
@@ -39,7 +40,9 @@ func computePositionPart2(commands []string) (horizontal int, vertical int) {
 		tokens := strings.Split(command, " ")
 		operation := tokens[0]
 		distance, err := strconv.Atoi(tokens[1])
-		check(err)
+		if err != nil {
+			panic(err)
+		}
 		switch operation {
 		case "up":
 			// vertical -= distance // part 2 difference
