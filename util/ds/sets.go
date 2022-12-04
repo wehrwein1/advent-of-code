@@ -52,7 +52,7 @@ func (s Set) IsEmpty() bool {
 	return s.Len() == 0
 }
 
-func (s1 Set) Union(s2 Set) *Set { // TODO FIXME clarity memory behavior, return value as convenience
+func (s1 Set) Intersection(s2 Set) *Set { // TODO FIXME clarity memory behavior, return value as convenience
 	smaller := util.If(s1.Len() <= s2.Len()).Interface(s1, s2).(Set)
 	larger := util.If(s1.Len() > s2.Len()).Interface(s1, s2).(Set)
 	union := NewSet()

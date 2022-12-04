@@ -14,7 +14,8 @@ func TestIntSet(t *testing.T) {
 	assert.Equal(t, true, s.Has(88))
 }
 
-func TestUnion(t *testing.T) {
-	assert.ElementsMatch(t, []rune{}, NewSet().Union(*NewSet('a', 'b', 'c')).Keys())
-	assert.ElementsMatch(t, []rune{'b', 'd'}, NewSet('b', 'd').Union(*NewSet('a', 'b', 'c', 'd')).Keys())
+func TestIntersection(t *testing.T) {
+	assert.ElementsMatch(t, []rune{}, NewSet().Intersection(*NewSet('a', 'b', 'c')).Keys())
+	assert.ElementsMatch(t, []rune{}, NewSet('a', 'b', 'c').Intersection(*NewSet('x', 'y', 'z')).Keys())
+	assert.ElementsMatch(t, []rune{'a', 'b'}, NewSet('a', 'b', 'c').Intersection(*NewSet('_', 'b', 'a')).Keys())
 }
