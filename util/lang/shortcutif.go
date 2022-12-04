@@ -1,4 +1,4 @@
-package util
+package lang
 
 // adapted from https://stackoverflow.com/a/59375088/3633993
 type If bool

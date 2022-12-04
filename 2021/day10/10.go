@@ -7,6 +7,7 @@ import (
 
 	"github.com/wehrwein1/advent-of-code/util"
 	"github.com/wehrwein1/advent-of-code/util/ds"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 type LineResult int
@@ -17,7 +18,7 @@ const (
 	Incomplete                   // 2
 )
 
-type If = util.If
+type If = lang.If
 
 var fileLines = util.FileLinesSkipEmpty
 var openCloseChars = []rune{
