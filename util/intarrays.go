@@ -1,5 +1,7 @@
 package util
 
+import "github.com/wehrwein1/advent-of-code/util/ds"
+
 func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
 	rowOk := (0 <= rowIndex) && (rowIndex < RowCount(rowsAndCols))
 	colOk := (0 <= colIndex) && (colIndex < ColCount(rowsAndCols))
@@ -21,31 +23,26 @@ func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int, di
 }
 
 func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse func(grid [][]int, point Point) bool, searchDirections []Direction) []Point {
-	visited := NewPointSet()
-	reachablePoints := NewPointSet()
-	queue := NewPointQueue(len(rowsAndCols) * len(rowsAndCols[0])) // safe assumption for now
-	queue.push(startAt)
-	for queue.length() > 0 {
-		point := queue.pop()
+	visited := ds.NewSet[Point]()
+	reachablePoints := ds.NewSet[Point]()
+	queue := ds.NewQueue[Point](len(rowsAndCols) * len(rowsAndCols[0])) // safe assumption for now
+	queue.Enqueue(startAt)
+	for !queue.IsEmpty() {
+		point := queue.Dequeue()
 		neighbors := Int2dArrayFindNeighbors(rowsAndCols, point.X, point.Y, searchDirections)
 		for _, neighbor := range neighbors {
 			neighborPoint := *NewPoint(neighbor.Row, neighbor.Col)
-			canTraverse := !visited.has(neighborPoint) && canTraverse(rowsAndCols, neighborPoint)
+			canTraverse := !visited.Has(neighborPoint) && canTraverse(rowsAndCols, neighborPoint)
 			if canTraverse {
-				reachablePoints.put(neighborPoint)
-				queue.push(neighborPoint) // continue DFS
+				reachablePoints.Put(neighborPoint)
+				queue.Enqueue(neighborPoint) // continue DFS
 			} else {
-				visited.put(neighborPoint)
+				visited.Put(neighborPoint)
 			}
 		}
-		visited.put(point) // mark current as visited
+		visited.Put(point) // mark current as visited
 	}
-	i := 0 // all this to read map.keys()
-	keys := make([]Point, len(reachablePoints.data))
-	for k := range reachablePoints.data {
-		keys[i] = k
-		i++
-	}
+	keys := reachablePoints.Keys()
 	return keys
 }
 
@@ -78,43 +75,6 @@ type Int2dArrayNeighbor struct {
 	Col       int
 	Value     int       // coordinate position value
 	Direction Direction // coordinate position relative to external origin
-}
-
-type PointQueue struct { // would generalize further if had generics
-	data chan Point
-}
-
-func NewPointQueue(capacity int) *PointQueue {
-	return &PointQueue{data: make(chan Point, 1000)}
-}
-
-func (queue PointQueue) push(val Point) {
-	queue.data <- val
-}
-
-func (queue PointQueue) pop() Point {
-	return <-queue.data
-}
-
-func (queue PointQueue) length() int {
-	return len(queue.data)
-}
-
-type PointSet struct { // would generalize further if had generics
-	data map[Point]bool
-}
-
-func NewPointSet() *PointSet {
-	return &PointSet{data: make(map[Point]bool)}
-}
-
-func (s PointSet) put(val Point) {
-	s.data[val] = true
-}
-
-func (s PointSet) has(val Point) bool {
-	_, ok := s.data[val]
-	return ok
 }
 
 func RowCount(grid [][]int) int {
