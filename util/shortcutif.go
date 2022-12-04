@@ -17,6 +17,13 @@ func (c If) String(a, b string) string {
 	return b
 }
 
+func (c If) Bool(a, b bool) bool {
+	if c {
+		return a
+	}
+	return b
+}
+
 func (c If) Rune(a, b rune) rune {
 	if c {
 		return a
