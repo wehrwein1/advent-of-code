@@ -5,12 +5,13 @@ import (
 	"fmt"
 
 	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 // var sum = util.SumInts
 // var product = util.ProductInts
 // var all = util.AllTrue
-type If = util.If
+type If = lang.If
 
 var fileLines = util.FileLinesSkipEmpty
 var AllDirections = util.AllDirections

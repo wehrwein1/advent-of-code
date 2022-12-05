@@ -1,29 +1,27 @@
 package ds
 
-// TODO FIXME this likely goes away once generics arrives
-
-type RuneStack struct {
-	data []rune
+type Stack[T any] struct {
+	data []T
 }
 
-func NewRuneStack() *RuneStack {
-	return &RuneStack{data: []rune{}}
+func NewStack[T any]() *Stack[T] {
+	return &Stack[T]{data: []T{}}
 }
 
-func (s *RuneStack) Push(item rune) {
+func (s *Stack[T]) Push(item T) {
 	s.data = append(s.data, item)
 }
 
-func (s *RuneStack) Peek() rune {
+func (s *Stack[T]) Peek() T {
 	return s.data[len(s.data)-1]
 }
 
-func (s *RuneStack) Pop() (val rune) {
+func (s *Stack[T]) Pop() (val T) {
 	val = s.data[len(s.data)-1]
 	s.data = s.data[:len(s.data)-1] // Pop
 	return
 }
 
-func (s *RuneStack) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return len(s.data) == 0
 }

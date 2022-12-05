@@ -5,13 +5,14 @@ import (
 	"fmt"
 
 	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 // var check = util.Check
 // var product = util.ProductInts
 var binToDec = util.BinaryStringToDecimal
 
-type If = util.If
+type If = lang.If
 
 func computePowerConsumption(diagnostics []string) (gamma, epsilon string, product int64) {
 	bits := len(diagnostics[0]) // max # bits

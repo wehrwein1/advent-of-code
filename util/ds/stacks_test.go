@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRuneStack(t *testing.T) {
-	s := NewRuneStack()
+func TestStack(t *testing.T) {
+	s := NewStack[rune]()
 	assert.Equal(t, true, s.IsEmpty())
 	s.Push('a')
 	assert.Equal(t, false, s.IsEmpty())

@@ -23,7 +23,9 @@ func StringSplitToIntsWhitespace(text string) []int {
 func StringSplitToIntsFunc(text string, splitFn func(string) []string) (ret []int) {
 	for _, dim := range splitFn(text) {
 		val, err := strconv.Atoi(dim)
-		Check(err)
+		if err != nil {
+			panic(err)
+		}
 		ret = append(ret, val)
 	}
 	return
@@ -45,7 +47,9 @@ func StringsToInt2dArray(digitStrings []string) (intGrid [][]int) {
 
 func StringToInt(value string) int {
 	intval, err := strconv.Atoi(value)
-	Check(err)
+	if err != nil {
+		panic(err)
+	}
 	return intval
 }
 

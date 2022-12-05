@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
-type If = util.If
+type If = lang.If
 
 var min = util.MinInt
 var indexOf = util.IntSliceIndexOf

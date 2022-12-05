@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 type ProblemPart int
@@ -15,7 +16,7 @@ const (
 	Part2
 )
 
-type If = util.If
+type If = lang.If
 
 var fileLines = util.FileLinesSkipEmpty
 

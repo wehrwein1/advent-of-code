@@ -8,6 +8,7 @@ import (
 
 	"github.com/wehrwein1/advent-of-code/util"
 	"github.com/wehrwein1/advent-of-code/util/ds"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 var fileLines = util.FileLinesSkipEmpty
@@ -157,7 +158,7 @@ func PrettyPrintRuneSlice(runes []rune, delim string, printBrackets bool) string
 	for _, r := range runes {
 		chars = append(chars, fmt.Sprintf("%c", r))
 	}
-	formatString := util.If(printBrackets).String("[%s]", "%s")
+	formatString := lang.If(printBrackets).String("[%s]", "%s")
 	return fmt.Sprintf(formatString, strings.Join(chars, delim))
 }
 
