@@ -3,9 +3,7 @@ package util
 import "github.com/wehrwein1/advent-of-code/util/ds"
 
 func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
-	rowOk := (0 <= rowIndex) && (rowIndex < RowCount(rowsAndCols))
-	colOk := (0 <= colIndex) && (colIndex < ColCount(rowsAndCols))
-	if rowOk && colOk {
+	if isValidPoint(rowsAndCols, rowIndex, colIndex) {
 		return rowsAndCols[rowIndex][colIndex], true
 	}
 	return 0 /* arbitrary not found value*/, false
@@ -20,6 +18,19 @@ func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int, di
 		}
 	}
 	return
+}
+
+func Int2dArrayWalk(rowsAndCols [][]int, startRowIndex int, startColIndex int, direction Direction) (walkedValues []int) {
+	rowIndex := startRowIndex
+	colIndex := startColIndex
+	for {
+		rowIndex, colIndex = direction.Translate(rowIndex, colIndex)
+		if !isValidPoint(rowsAndCols, rowIndex, colIndex) {
+			break
+		}
+		walkedValues = append(walkedValues, rowsAndCols[rowIndex][colIndex])
+	}
+	return walkedValues
 }
 
 func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse func(grid [][]int, point Point) bool, searchDirections []Direction) []Point {
@@ -83,4 +94,10 @@ func RowCount(grid [][]int) int {
 
 func ColCount(grid [][]int) int {
 	return len(grid[0])
+}
+
+func isValidPoint(grid [][]int, rowIndex int, colIndex int) bool {
+	rowOk := (0 <= rowIndex) && (rowIndex < RowCount(grid))
+	colOk := (0 <= colIndex) && (colIndex < ColCount(grid))
+	return rowOk && colOk
 }
