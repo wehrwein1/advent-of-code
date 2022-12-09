@@ -2,6 +2,7 @@ package util
 
 import "github.com/wehrwein1/advent-of-code/util/ds"
 
+// read a grid cell value in a bounds-safe way.
 func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (foundValue int, isFound bool) {
 	if isValidPoint(rowsAndCols, rowIndex, colIndex) {
 		return rowsAndCols[rowIndex][colIndex], true
@@ -9,6 +10,7 @@ func Int2dArrayHasValueAtPos(rowsAndCols [][]int, rowIndex int, colIndex int) (f
 	return 0 /* arbitrary not found value*/, false
 }
 
+// find neighbor points (and their values) from a given starting point.
 func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int, directions []Direction) (neighbors []Int2dArrayNeighbor) {
 	for _, direction := range directions {
 		row, col := direction.Translate(rowIndex, colIndex)
@@ -20,6 +22,7 @@ func Int2dArrayFindNeighbors(rowsAndCols [][]int, rowIndex int, colIndex int, di
 	return
 }
 
+// collect all value along a path from a starting point to the edge.
 func Int2dArrayWalk(rowsAndCols [][]int, startRowIndex int, startColIndex int, direction Direction) (walkedValues []int) {
 	rowIndex := startRowIndex
 	colIndex := startColIndex
@@ -33,6 +36,7 @@ func Int2dArrayWalk(rowsAndCols [][]int, startRowIndex int, startColIndex int, d
 	return walkedValues
 }
 
+// find points from a given start point by DFS and a 'can traverse' predicate.
 func Int2dArrayDepthFirstSearch(rowsAndCols [][]int, startAt Point, canTraverse func(grid [][]int, point Point) bool, searchDirections []Direction) []Point {
 	visited := ds.NewSet[Point]()
 	reachablePoints := ds.NewSet[Point]()
