@@ -75,6 +75,18 @@ func TestRowCountAndColCount(t *testing.T) {
 	assert.Equal(t, 3, ColCount(grid))
 }
 
+func TestIsValidPoint(t *testing.T) {
+	grid := [][]int{
+		{1, 2, 3},
+		{4, 5, 6}}
+	assert.Equal(t, false, isValidPoint(grid, -1, 5))
+	assert.Equal(t, false, isValidPoint(grid, 0, 5))
+	assert.Equal(t, true, isValidPoint(grid, 0, 0))
+	assert.Equal(t, true, isValidPoint(grid, 1, 2))
+	assert.Equal(t, true, isValidPoint(grid, 1, 0))
+	assert.Equal(t, true, isValidPoint(grid, 1, 2))
+}
+
 func TestInt2dArrayMap(t *testing.T) {
 	grid := [][]int{
 		{1, 2, 3},
@@ -98,4 +110,13 @@ func TestInt2dArrayFindPoints(t *testing.T) {
 		*NewPoint(1, 2),
 		*NewPoint(2, 1),
 	}, Int2dArrayFindPoints(grid, func(g [][]int, cellValue int, p Point) bool { return cellValue%2 == 0 }))
+}
+
+func TestInt2dArrayWalk(t *testing.T) {
+	grid := [][]int{
+		{0, 1, 2, 3},
+		{4, 5, 6, 7},
+		{8, 9, 10, 11}}
+	assert.ElementsMatch(t, []int{5, 6, 7}, Int2dArrayWalk(grid, 1, 0, East))
+	assert.ElementsMatch(t, []int{6, 2}, Int2dArrayWalk(grid, 2, 2, North))
 }
