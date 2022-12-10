@@ -20,21 +20,18 @@ const (
 var fileLines = util.FileLinesIncludeEmpty
 
 func main() {
-	println(fmt.Sprintf("part 1: %s", computeDay(fileLines("../input/05_TEST.txt"), Part1)))
-	// println(fmt.Sprintf("part 2: %d", computeDay(fileLines("../input/05_INPUT.txt"), Part2)))
+	println(fmt.Sprintf("part 1: %s", computeDay(fileLines("../input/05_INPUT.txt"), 9, Part1)))
+	println(fmt.Sprintf("part 2: %s", computeDay(fileLines("../input/05_INPUT.txt"), 9, Part2)))
 }
 
-func computeDay(lines []string, part ProblemPart) string {
+func computeDay(lines []string, stacksCount int, part ProblemPart) string {
 	for _, line := range lines {
 		println(line)
 	}
 	// set state
-	stacks, moves := parseInput(lines)
+	stacks, moves := parseInitialState(lines, stacksCount)
 	// moves
 	for _, move := range moves {
-		
-		
-		
 		// parse move line
 		tokens := strings.Split(move, " ")
 		moveCount := parseInt(tokens[1])
@@ -44,22 +41,30 @@ func computeDay(lines []string, part ProblemPart) string {
 		sourceStack := stacks[sourceStackNumber-1]
 		targetStack := stacks[targetStackNumber-1]
 		i := 0
-		println(fmt.Sprintf("%s/before lengths: sourceStack %d targetStack %d", move, sourceStack.Size(), targetStack.Size()))
-		for i < moveCount {
-			targetStack.Push(sourceStack.Pop())
-			i++
+		if part == Part1 || moveCount == 1 {
+			for i < moveCount {
+				targetStack.Push(sourceStack.Pop())
+				i++
+			}
+		} else if part == Part2 {
+			tempStack := ds.NewStack[rune]()
+			for i < moveCount {
+				tempStack.Push(sourceStack.Pop())
+				i++
+			}
+			for !tempStack.IsEmpty() {
+				targetStack.Push(tempStack.Pop())
+			}
 		}
-		println(fmt.Sprintf("%s/after  lengths: sourceStack %d targetStack %d", move, sourceStack.Size(), targetStack.Size()))
 	}
 	return string(getTopItems(stacks))
 }
 
-func parseInput(lines []string) (stacks []ds.Stack[rune], moves []string) {
-	stacksCount := 3 // TODO FIXME derive
+func parseInitialState(lines []string, stacksCount int) (stacks []*ds.Stack[rune], moves []string) {
 	// state
-	tempQueues := []ds.Queue[rune]{}
+	tempStacks := []*ds.Stack[rune]{}
 	for i := 0; i < stacksCount; i++ {
-		tempQueues = append(tempQueues, *ds.NewQueue[rune](100))
+		tempStacks = append(tempStacks, ds.NewStack[rune]())
 	}
 	// populate state
 	lineIndex := 0
@@ -72,7 +77,7 @@ func parseInput(lines []string) (stacks []ds.Stack[rune], moves []string) {
 		for charIndex := 1; charIndex < len(line)-1; charIndex += cratePadding {
 			crate := string(line[charIndex])
 			if crate != " " {
-				tempQueues[crateIndex].Enqueue(rune(crate[0]))
+				tempStacks[crateIndex].Push(rune(crate[0]))
 			}
 			crateIndex += 1
 		}
@@ -88,12 +93,12 @@ func parseInput(lines []string) (stacks []ds.Stack[rune], moves []string) {
 
 	// unpack state / build stacks
 	for i := 0; i < stacksCount; i++ {
-		stacks = append(stacks, *ds.NewStack[rune]())
+		stacks = append(stacks, ds.NewStack[rune]())
 	}
 	// populate stacks
 	for i := 0; i < stacksCount; i++ {
-		for !tempQueues[i].IsEmpty() {
-			stacks[i].Push(tempQueues[i].Dequeue())
+		for !tempStacks[i].IsEmpty() {
+			stacks[i].Push(tempStacks[i].Pop())
 		}
 	}
 	return stacks, moves
@@ -105,7 +110,7 @@ func isCrateDisplayRow(line string) bool {
 	return is_number
 }
 
-func getTopItems(stacks []ds.Stack[rune]) []rune {
+func getTopItems(stacks []*ds.Stack[rune]) []rune {
 	topItems := []rune{}
 	for _, stack := range stacks {
 		topItems = append(topItems, stack.Peek())

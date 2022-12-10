@@ -7,9 +7,9 @@ import (
 )
 
 func TestDayPart1(t *testing.T) {
-	assert.Equal(t, "CMZ", computeDay(fileLines("../input/05_TEST.txt"), Part1))
+	assert.Equal(t, "CMZ", computeDay(fileLines("../input/05_TEST.txt"), 3, Part1))
 }
 
 func TestDayPart2(t *testing.T) {
-	assert.Equal(t, -1, computeDay(fileLines("../input/05_TEST.txt"), Part2))
+	assert.Equal(t, "MCD", computeDay(fileLines("../input/05_TEST.txt"), 3, Part2))
 }
