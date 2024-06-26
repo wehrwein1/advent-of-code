@@ -10,9 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3 # https://github.com/actions/checkout
+    - uses: actions/checkout@v4 # https://github.com/actions/checkout
     - name: Set up Go
-      uses: actions/setup-go@v3 # https://github.com/actions/setup-go
+      uses: actions/setup-go@v5 # https://github.com/actions/setup-go
       with:
         go-version-file: './go.mod' # use mod file go version explicitly, supported versions: https://github.com/actions/go-versions
         check-latest: false 
