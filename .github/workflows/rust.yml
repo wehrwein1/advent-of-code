@@ -4,6 +4,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch: # add capability to manually run this action, see https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow
+
 env:
   CARGO_TERM_COLOR: always
 jobs:
