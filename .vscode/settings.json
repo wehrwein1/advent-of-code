@@ -11,6 +11,10 @@
   "python.testing.pytestArgs": [ "."],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
   "[rust]": {
     "editor.formatOnSave": false // disabled until I figure out prettier-ignore for targeted code blocks
   },

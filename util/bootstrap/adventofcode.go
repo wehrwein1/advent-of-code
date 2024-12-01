@@ -74,7 +74,10 @@ func readFileContent(filename string) (filecontent string) {
 
 func extractTestcaseExamples(dayHtmlFile, destFile string) {
 	html := util.FileContent(dayHtmlFile)
-	testcase := findTestcase(html)
+	testcase, warning := findTestcase(html)
+	if warning != nil {
+		println(fmt.Sprintf("warn: %s", warning))
+	}
 	if err := os.WriteFile(destFile, []byte(testcase), util.FileModeUserReadWrite); err != nil {
 		log.Fatalf("error writing file: %s", err.Error())
 	}
@@ -134,7 +137,7 @@ type TemplateData struct {
 	Day1 string // not padded
 }
 
-func findTestcase(html string) string {
+func findTestcase(html string) (string, error) {
 	regex := regexp.MustCompile("<pre><code>(?P<code>(.*|\n|\r)+)+</code></pre>")
 	match := regex.FindStringSubmatch(html)
 	paramsMap := make(map[string]string)
@@ -146,6 +149,10 @@ func findTestcase(html string) string {
 			}
 		}
 	}
-	// println(fmt.Sprintf("%v", paramsMap))
-	return paramsMap["code"]
+	testcase := paramsMap["code"]
+	var err error
+	if len(testcase) == 0 {
+		err = fmt.Errorf("failed extracting testcase code from html, skipping.. ")
+	}
+	return testcase, err
 }
