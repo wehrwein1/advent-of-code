@@ -1,4 +1,5 @@
-from typing import Counter, List
+from collections import Counter
+from typing import List
 
 
 class Solution:
@@ -27,12 +28,8 @@ class Solution:
 
 # bootstrap
 def main():
-    print(
-        f"part 1: {Solution().computeDay(list(map(str.rstrip, open('input/01_INPUT.txt'))), 1)}"
-    )
-    print(
-        f"part 2: {Solution().computeDay(list(map(str.rstrip, open('input/01_INPUT.txt'))), 2)}"
-    )
+    print(f"part 1: {Solution().computeDay(open('input/01_INPUT.txt').readlines(), 1)}")
+    print(f"part 2: {Solution().computeDay(open('input/01_INPUT.txt').readlines(), 2)}")
 
 
 if __name__ == "__main__":

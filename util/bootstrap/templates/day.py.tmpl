@@ -1,14 +1,17 @@
 from typing import List
 
+
 class Solution:
   def computeDay(self, lines: List[str], part: int):
     print(lines)
     pass
 
+
 # bootstrap
 def main():
-  print(f"part 1: {Solution().computeDay(list(map(str.rstrip, open('input/{{ .Day2}}_INPUT.txt'))), 1)}")
-  print(f"part 2: {Solution().computeDay(list(map(str.rstrip, open('input/{{ .Day2}}_INPUT.txt'))), 2)}")
+  print(f"part 1: {Solution().computeDay(open('input/{{ .Day2}}_INPUT.txt').readlines(), 1)}")
+  print(f"part 2: {Solution().computeDay(open('input/{{ .Day2}}_INPUT.txt').readlines(), 2)}")
+
 
 if __name__=="__main__":
   main()
