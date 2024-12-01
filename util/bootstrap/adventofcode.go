@@ -50,8 +50,12 @@ func Bootstrap() {
 	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%02d_TEST.txt", day)))
 	mkdir(daydir)
 	templates := map[string]string{
-		"day.tmpl":      fmt.Sprintf("%02d.go", day),
-		"day_test.tmpl": fmt.Sprintf("%02d_test.go", day),
+		// go
+		"day.go.tmpl":      fmt.Sprintf("%02d.go", day),
+		"day_test.go.tmpl": fmt.Sprintf("%02d_test.go", day),
+		// python
+		"day.py.tmpl":      fmt.Sprintf("day%02d.py", day),
+		"day_test.py.tmpl": fmt.Sprintf("day%02d_test.py", day),
 	}
 	data := TemplateData{Year: str(year), Day1: str(day), Day2: fmt.Sprintf("%02d", day)}
 	for template, destfile := range templates {
