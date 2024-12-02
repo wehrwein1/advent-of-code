@@ -49,6 +49,13 @@ func Bootstrap() {
 	downloadFileWithSessionCookie(dayUrl, dayHtmlFile, session, emailAddress)     // download day HTML file
 	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%02d_TEST.txt", day)))
 	mkdir(daydir)
+	defaultCodingLanguage := readFileContent(path.Join(bootstrapdir, ".settings.txt")) // implied: default coding language (file extension), e.g. "py"
+	var excludedLanguage string
+	if defaultCodingLanguage == "py" {
+		excludedLanguage = "go"
+	} else {
+		excludedLanguage = "py"
+	}
 	templates := map[string]string{
 		// go
 		"day.go.tmpl":      fmt.Sprintf("%02d.go", day),
@@ -57,6 +64,13 @@ func Bootstrap() {
 		"day.py.tmpl":      fmt.Sprintf("day%02d.py", day),
 		"day_test.py.tmpl": fmt.Sprintf("day%02d_test.py", day),
 	}
+	// disable templates per config
+	for key := range templates {
+		if strings.Contains(key, excludedLanguage) {
+			delete(templates, key)
+		}
+	}
+
 	data := TemplateData{Year: str(year), Day1: str(day), Day2: fmt.Sprintf("%02d", day)}
 	for template, destfile := range templates {
 		applyTemplate(path.Join(templatedir, template), path.Join(daydir, destfile), data)
