@@ -1,9 +1,10 @@
-from day{{ .Day2 }} import Solution, readlines
+from day{{.Day2}}_{{.Year}} import Solution
+from pyutil.fileio import file_lines
 
 
 def test_part1():
-  assert Solution().computeDay(readlines('{{.Year}}/input/{{ .Day2}}_TEST.txt'), 1) == -1
+  assert Solution().computeDay(file_lines('{{.Year}}/input/{{.Day2}}_TEST.txt'), 1) == -1
 
 
 def test_part2():
-  assert Solution().computeDay(readlines('{{.Year}}/input/{{ .Day2}}_TEST.txt'), 2) == -1
+  assert Solution().computeDay(file_lines('{{.Year}}/input/{{.Day2}}_TEST.txt'), 2) == -1

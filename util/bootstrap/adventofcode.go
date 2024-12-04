@@ -61,8 +61,8 @@ func Bootstrap() {
 		"day.go.tmpl":      fmt.Sprintf("%02d.go", day),
 		"day_test.go.tmpl": fmt.Sprintf("%02d_test.go", day),
 		// python
-		"day.py.tmpl":      fmt.Sprintf("day%02d.py", day),
-		"day_test.py.tmpl": fmt.Sprintf("day%02d_test.py", day),
+		"day.py.tmpl":      fmt.Sprintf("day%02d_%d.py", day, year),
+		"day_test.py.tmpl": fmt.Sprintf("day%02d_%d_test.py", day, year),
 	}
 	// disable templates per config
 	for key := range templates {
