@@ -2,8 +2,6 @@ package ds
 
 import "github.com/wehrwein1/advent-of-code/util/lang"
 
-type If = lang.If
-
 // Set
 type Set[T comparable] struct {
 	data map[T]bool
@@ -55,8 +53,8 @@ func (s Set[T]) IsEmpty() bool {
 }
 
 func (s1 Set[T]) Intersection(s2 Set[T]) *Set[T] { // TODO FIXME clarity memory behavior, return value as convenience
-	smaller := If(s1.Len() <= s2.Len()).Interface(s1, s2).(Set[T])
-	larger := If(s1.Len() > s2.Len()).Interface(s1, s2).(Set[T])
+	smaller := lang.If(s1.Len() <= s2.Len(), s1, s2)
+	larger := lang.If(s1.Len() > s2.Len(), s1, s2)
 	union := NewSet[T]()
 	for _, k := range smaller.Keys() {
 		if larger.Has(k) {

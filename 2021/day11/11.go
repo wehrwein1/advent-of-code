@@ -11,13 +11,12 @@ import (
 // var sum = util.SumInts
 // var product = util.ProductInts
 // var all = util.AllTrue
-type If = lang.If
 
 var fileLines = util.FileLinesSkipEmpty
 var AllDirections = util.AllDirections
 var parseIntGrid = util.StringsToInt2dArray
 var findZeroCellValue = func(g [][]int, cellValue int, p util.Point) bool { return cellValue == 0 }
-var incrementCellValue = func(g [][]int, cellValue int, point util.Point) int { return If(cellValue < 9).Int(cellValue+1, 0) }
+var incrementCellValue = func(g [][]int, cellValue int, point util.Point) int { return lang.If(cellValue < 9, cellValue+1, 0) }
 
 func main() {
 	println(fmt.Sprintf("part 1: count of flashes %d", simulate(parseIntGrid(fileLines("../input/11_INPUT.txt")), 100)))

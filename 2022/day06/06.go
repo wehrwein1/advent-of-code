@@ -16,8 +16,6 @@ const (
 	Part2
 )
 
-type If = lang.If
-
 var fileLines = util.FileLinesSkipEmpty
 
 func main() {
@@ -28,7 +26,7 @@ func main() {
 func computeDay(lines []string, part ProblemPart) (startOfPacketMarker int) {
 	signal := lines[0]
 	println(signal)
-	markerLength := If(part == Part1).Int(4, 14)
+	markerLength := lang.If(part == Part1, 4, 14)
 	for i := 0; i < len(signal)-markerLength+1; i++ {
 		buffer := signal[i : i+markerLength]
 		isMarker := isMarker(buffer)

@@ -16,8 +16,6 @@ const (
 	Part2
 )
 
-type If = lang.If
-
 var fileLines = util.FileLinesSkipEmpty
 
 func main() {
@@ -28,7 +26,7 @@ func main() {
 func computeDay(lines []string, part ProblemPart) (count int) {
 	for _, line := range lines {
 		sections := strings.Split(line, ",")
-		is_overlap := If(part == Part1).Bool(sectionContainsOther(sections), sectionsOverlapAtAll(sections))
+		is_overlap := lang.If(part == Part1, sectionContainsOther(sections), sectionsOverlapAtAll(sections))
 		println(fmt.Sprintf("%s -> %v --> %t", line, sections, is_overlap))
 		if is_overlap {
 			count += 1

@@ -158,7 +158,7 @@ func PrettyPrintRuneSlice(runes []rune, delim string, printBrackets bool) string
 	for _, r := range runes {
 		chars = append(chars, fmt.Sprintf("%c", r))
 	}
-	formatString := lang.If(printBrackets).String("[%s]", "%s")
+	formatString := lang.If(printBrackets, "[%s]", "%s")
 	return fmt.Sprintf(formatString, strings.Join(chars, delim))
 }
 
