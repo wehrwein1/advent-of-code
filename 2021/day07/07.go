@@ -8,8 +8,6 @@ import (
 	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
-type If = lang.If
-
 var min = util.MinInt
 var indexOf = util.IntSliceIndexOf
 
@@ -23,7 +21,7 @@ func main() {
 	println(fmt.Sprintf("part 2: sum fuel %d", sumFuelPart2))
 }
 
-var constantFuelUse = func(crabPos int, pos int) int { return If(crabPos > pos).Int(crabPos-pos, pos-crabPos) }
+var constantFuelUse = func(crabPos int, pos int) int { return lang.If(crabPos > pos, crabPos-pos, pos-crabPos) }
 
 func linearIncreaseFuelUse(crabPos int, pos int) (total int) {
 	distance := constantFuelUse(crabPos, pos)

@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/wehrwein1/advent-of-code/util"
+	"github.com/wehrwein1/advent-of-code/util/lang"
 )
 
 var str = strconv.Itoa
@@ -50,12 +51,7 @@ func Bootstrap() {
 	extractTestcaseExamples(dayHtmlFile, path.Join(inputdir, fmt.Sprintf("%02d_TEST.txt", day)))
 	mkdir(daydir)
 	defaultCodingLanguage := readFileContent(path.Join(bootstrapdir, ".settings.txt")) // implied: default coding language (file extension), e.g. "py"
-	var excludedLanguage string
-	if defaultCodingLanguage == "py" {
-		excludedLanguage = "go"
-	} else {
-		excludedLanguage = "py"
-	}
+	excludedLanguage := lang.If(defaultCodingLanguage == "py", "go", "py")
 	templates := map[string]string{
 		// go
 		"day.go.tmpl":      fmt.Sprintf("%02d.go", day),

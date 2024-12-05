@@ -12,8 +12,6 @@ import (
 // var product = util.ProductInts
 var binToDec = util.BinaryStringToDecimal
 
-type If = lang.If
-
 func computePowerConsumption(diagnostics []string) (gamma, epsilon string, product int64) {
 	bits := len(diagnostics[0]) // max # bits
 	println(fmt.Sprintf("#bits %d", bits))
@@ -22,16 +20,16 @@ func computePowerConsumption(diagnostics []string) (gamma, epsilon string, produ
 	for i := 0; i < bits; i++ {
 		countOnes, countZeroes := countOnesAndZeroes(diagnostics, i)
 		moreOnes := countOnes > countZeroes
-		gamma += If(moreOnes).String("1", "0")
-		epsilon += If(moreOnes).String("0", "1")
+		gamma += lang.If(moreOnes, "1", "0")
+		epsilon += lang.If(moreOnes, "0", "1")
 		println(fmt.Sprintf("i=%d ones=%d zeroes=%d, gamma=%s, epsison=%s", i, countOnes, countZeroes, gamma, epsilon))
 	}
 	product = binToDec(gamma, 32) * binToDec(epsilon, 32)
 	return
 }
 
-var oxygenSelector = func(countOnes, countZeroes int) rune { return If(countOnes >= countZeroes).Rune('1', '0') }
-var co2Selector = func(countOnes, countZeroes int) rune { return If(countOnes >= countZeroes).Rune('0', '1') }
+var oxygenSelector = func(countOnes, countZeroes int) rune { return lang.If(countOnes >= countZeroes, '1', '0') }
+var co2Selector = func(countOnes, countZeroes int) rune { return lang.If(countOnes >= countZeroes, '0', '1') }
 
 func computeRatings(diagnostics []string) (oxygen, co2 string, product int64) {
 	bits := len(diagnostics[0]) // max # bits
