@@ -34,5 +34,5 @@ def walk(
     while can_walk(grid, r, c):
         value = collect_value_function(grid, r, c)
         walked_values.append(value)
-        r, c = direction.forward(r, c)
+        r, c = direction.walk_forward(r, c)
     return (walked_values, (r, c))
