@@ -13,7 +13,7 @@ class Direction(Enum):
     West = auto()
     NorthWest = auto()
 
-    def forward(self, row: int, col: int) -> Tuple[int, int]:
+    def walk_forward(self, row: int, col: int) -> Tuple[int, int]:
         # 4 main directions
         if self == Direction.North:
             return row - 1, col
@@ -34,6 +34,12 @@ class Direction(Enum):
             return row - 1, col - 1
         else:
             raise SystemError(f"unknown direction case: {self}")
+
+    def walk_backward(self, row: int, col: int) -> Tuple[int, int]:
+        return self.turn_back().walk_forward(row, col)
+
+    def turn_back(self):
+        return AllDirections[(AllDirections.index(self) + 4) % 8]
 
     def turn_left(self):
         return PrimaryFourDirections[(PrimaryFourDirections.index(self) - 1) % 4]
