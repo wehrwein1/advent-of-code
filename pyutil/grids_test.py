@@ -24,7 +24,21 @@ def test_is_valid_coord():
 
 
 def test_walk():
-    assert walk(grid, 0, 0, Direction.North) == [1]
-    assert walk(grid, 0, 0, Direction.West) == [1]
-    assert walk(grid, 0, 0, Direction.South) == [1, 4, 7, 10]
-    assert walk(grid, 0, 0, Direction.SouthEast) == [1, 5, 9]
+    assert walk(grid, 0, 0, Direction.North) == ([1], (-1, 0))
+    assert walk(grid, 0, 0, Direction.West) == ([1], (0, -1))
+    assert walk(grid, 0, 0, Direction.South) == ([1, 4, 7, 10], (4, 0))
+    assert walk(grid, 0, 0, Direction.SouthEast) == ([1, 5, 9], (3, 3))
+
+
+def test_walk_custom_canwalk():
+    walk_until_9 = lambda grid, r, c: grid[r][c] != 9
+    # fmt:off
+    assert walk(grid, 0, 0, Direction.SouthEast, can_walk=walk_until_9) == ([1, 5], (2,2))
+    # fmt:on
+
+
+def test_walk_custom_collectvalue():
+    extract_coord = lambda _, r, c: (r, c)
+    # fmt:off
+    assert walk(grid, 0, 0, Direction.SouthEast, collect_value_function=extract_coord) == ([(0, 0), (1, 1), (2, 2)], (3,3))
+    # fmt:on
