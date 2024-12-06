@@ -1,4 +1,4 @@
-from typing import List, Callable, Any
+from typing import List, Callable, Any, Tuple
 from pyutil.cardinal_direction import Direction
 
 
@@ -27,7 +27,7 @@ def walk(
     direction: Direction,
     can_walk: Callable[[List[List], int, int], bool] = is_valid_coord,
     collect_value_function: Callable[[List[List], int, int], Any] = __extract_value,
-) -> List:
+) -> Tuple[List[List], Tuple[int, int]]:
     r: int = start_row_index
     c: int = start_col_index
     walked_values = []
@@ -35,4 +35,4 @@ def walk(
         value = collect_value_function(grid, r, c)
         walked_values.append(value)
         r, c = direction.translate(r, c)
-    return walked_values
+    return (walked_values, (r, c))
