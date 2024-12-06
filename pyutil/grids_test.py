@@ -28,3 +28,8 @@ def test_walk():
     assert walk(grid, 0, 0, Direction.West) == [1]
     assert walk(grid, 0, 0, Direction.South) == [1, 4, 7, 10]
     assert walk(grid, 0, 0, Direction.SouthEast) == [1, 5, 9]
+
+
+def test_walk_custom():
+    walk_until_9 = lambda grid, r, c: grid[r][c] != 9
+    assert walk(grid, 0, 0, Direction.SouthEast, can_walk=walk_until_9) == [1, 5]

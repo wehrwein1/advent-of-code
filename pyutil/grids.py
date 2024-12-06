@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Callable
 from pyutil.cardinal_direction import Direction
 
 
@@ -17,12 +17,16 @@ def is_valid_coord(grid, rowIndex: int, colIndex: int) -> bool:
 
 
 def walk(
-    grid, start_row_index: int, start_col_index: int, direction: Direction
+    grid: List[List],
+    start_row_index: int,
+    start_col_index: int,
+    direction: Direction,
+    can_walk: Callable[[List[List], int, int], bool] = is_valid_coord,
 ) -> List:
     r: int = start_row_index
     c: int = start_col_index
     walked_values = []
-    while is_valid_coord(grid, r, c):
+    while can_walk(grid, r, c):
         walked_values.append(grid[r][c])
         r, c = direction.translate(r, c)
     return walked_values
