@@ -7,6 +7,11 @@ def test_translate():
     assert Direction.NorthWest.translate(0, 0) == (-1, -1)
 
 
+def test_turn():
+    assert Direction.North.turn_left() == Direction.West
+    assert Direction.North.turn_right() == Direction.East
+
+
 def test_all_directions():
     assert PrimaryFourDirections == [
         Direction.North,

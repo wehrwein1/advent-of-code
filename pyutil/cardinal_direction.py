@@ -35,6 +35,12 @@ class Direction(Enum):
         else:
             raise SystemError(f"unknown direction case: {self}")
 
+    def turn_left(self):
+        return PrimaryFourDirections[(PrimaryFourDirections.index(self) - 1) % 4]
+
+    def turn_right(self):
+        return PrimaryFourDirections[(PrimaryFourDirections.index(self) + 1) % 4]
+
 
 PrimaryFourDirections = [
     Direction.North,
