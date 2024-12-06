@@ -13,7 +13,7 @@ class Direction(Enum):
     West = auto()
     NorthWest = auto()
 
-    def translate(self, row: int, col: int) -> Tuple[int, int]:
+    def forward(self, row: int, col: int) -> Tuple[int, int]:
         # 4 main directions
         if self == Direction.North:
             return row - 1, col
