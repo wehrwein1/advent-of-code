@@ -30,6 +30,13 @@ def test_walk():
     assert walk(grid, 0, 0, Direction.SouthEast) == [1, 5, 9]
 
 
-def test_walk_custom():
+def test_walk_custom_canwalk():
     walk_until_9 = lambda grid, r, c: grid[r][c] != 9
     assert walk(grid, 0, 0, Direction.SouthEast, can_walk=walk_until_9) == [1, 5]
+
+
+def test_walk_custom_collectvalue():
+    extract_coord = lambda grid, r, c: (r, c)
+    assert walk(
+        grid, 0, 0, Direction.SouthEast, collect_value_function=extract_coord
+    ) == [(0, 0), (1, 1), (2, 2)]
