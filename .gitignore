@@ -6,3 +6,5 @@ __pycache__
 
 util/bootstrap/**/.*.txt
 **/input/html
+
+**/.venv
