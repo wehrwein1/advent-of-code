@@ -15,20 +15,19 @@ class Solution:
             if DEBUG:
                 print(f"range={[low, high]}")
             for product_id in range(low, high + 1):
-                match: re.Match = re.search(r"(\d{1,})\1+", str(product_id))
+                match: re.Match = re.fullmatch(r"(\d{1,})\1+", str(product_id))
                 if match:
                     matched_text = match.group(0)
                     match_len = len(matched_text)
                     is_invalid = (
                         match_len == len(str(product_id))
-                        and match_len % 2 == 0
                         and matched_text[0 : match_len // 2]
                         == matched_text[match_len // 2 :]
                     )
                     if is_invalid:
                         if DEBUG:
                             print(
-                                f" invalid product_id: {product_id} with match={matched_text} len_={match_len}"
+                                f" invalid product_id: '{product_id}' with match='{matched_text}' len_={match_len}"
                             )
                         invalid_ids.append(product_id)
 
