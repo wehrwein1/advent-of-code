@@ -148,18 +148,23 @@ type TemplateData struct {
 }
 
 func findTestcase(html string) (string, error) {
-	regex := regexp.MustCompile("<pre><code>(?P<code>(.*|\n|\r)+)+</code></pre>")
+	regex := regexp.MustCompile("<pre><code>(?P<testcase>(.*|\n|\r)+)+</code></pre>")
 	match := regex.FindStringSubmatch(html)
 	paramsMap := make(map[string]string)
 	for i, name := range regex.SubexpNames() {
 		if i > 0 && i <= len(match) {
-			if strings.Contains(match[i], "</code></pre>") {
-				// println(fmt.Sprintf("match[%d] \"%s\" '%s'", i, name, match[1]))
-				paramsMap[name] = strings.Split(match[i], "</code></pre>")[0]
+			text := match[i]
+			if len(name) == 0 { // ignore unnamed groups
+				continue
 			}
+			// if strings.Contains(text, "</code></pre>") {
+			// 	// println(fmt.Sprintf("match[%d] \"%s\" '%s'", i, name, match[1]))
+			// 	text = strings.Split(match[i], "</code></pre>")[0]
+			// }
+			paramsMap[name] = text
 		}
 	}
-	testcase := paramsMap["code"]
+	testcase := paramsMap["testcase"]
 	var err error
 	if len(testcase) == 0 {
 		err = fmt.Errorf("failed extracting testcase code from html, skipping.. ")
