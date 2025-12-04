@@ -9,13 +9,27 @@ class Solution:
         for rating in lines:
             numbers = list(rating)
             if part == 1:
-                max_ = -1
+                result = -1
                 for combo in itertools.combinations(numbers, 2):
-                    max_ = max(max_, int("".join(combo)))
-                print(f"{rating} -> {max_}")
-                joltages.append(max_)
+                    result = max(result, int("".join(combo)))
             elif part == 2:
-                pass
+                batteries = list(map(int, rating))
+                # adapted from https://www.reddit.com/r/adventofcode/comments/1pd0pmt/comment/ns2juje
+                # intuition: repeatedly scan for largest digit, each iteration time O(n)
+                start = 0
+                result_digits = []
+                length = len(batteries)
+                max_batteries = 12
+                for digit_pos in range(max_batteries):
+                    end = length - (max_batteries - digit_pos) + 1
+                    max_digit = max(batteries[start:end])
+                    result_digits.append(
+                        max_digit
+                    )  # better: build final number inline: `result = result * 10 + max_digit`
+                    start = batteries.index(max_digit, start, end) + 1
+                result = int("".join(map(str, result_digits)))
+            # print(f"{rating} -> {result}")
+            joltages.append(result)
         return sum(joltages)
 
 
