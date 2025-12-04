@@ -54,4 +54,4 @@ PrimaryFourDirections = [
     Direction.South,
     Direction.West,
 ]
-AllDirections = [d for d in Direction]
+AllDirections = list(Direction)

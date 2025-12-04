@@ -1,4 +1,4 @@
-from pyutil.cardinal_direction import Direction, PrimaryFourDirections
+from pyutil.cardinal_direction import AllDirections, Direction, PrimaryFourDirections
 
 
 def test_walk_forward():
@@ -18,10 +18,20 @@ def test_turn():
     assert Direction.North.turn_right() == Direction.East
 
 
-def test_all_directions():
+def test_directions():
     assert PrimaryFourDirections == [
         Direction.North,
         Direction.East,
         Direction.South,
         Direction.West,
+    ]
+    assert AllDirections == [
+        Direction.North,
+        Direction.NorthEast,
+        Direction.East,
+        Direction.SouthEast,
+        Direction.South,
+        Direction.SouthWest,
+        Direction.West,
+        Direction.NorthWest,
     ]

@@ -1,4 +1,13 @@
-from pyutil.grids import walk, row_count, col_count, is_valid_coord
+from typing import Tuple
+from pyutil.grids import (
+    __extract_value,
+    find_neighbors,
+    search,
+    walk,
+    row_count,
+    col_count,
+    is_valid_coord,
+)
 from pyutil.cardinal_direction import Direction
 
 
@@ -42,3 +51,30 @@ def test_walk_custom_collectvalue():
     # fmt:off
     assert walk(grid, 0, 0, Direction.SouthEast, collect_value_function=extract_coord) == ([(0, 0), (1, 1), (2, 2)], (3,3))
     # fmt:on
+
+
+def tests_find_neighbors():
+    # fmt:off
+    assert find_neighbors(grid, 1, 1) == [(0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0), (1, 0), (0, 0)]
+    assert find_neighbors(grid, 0, 0) == [(0, 1), (1, 1), (1, 0)]
+    # fmt:on
+
+
+def test_search():
+
+    def is_neighbors_sum_even(grid, originPoint, neighborPoints):
+        total = 0
+        for neighborPoint in neighborPoints:
+            total += __extract_value(grid, neighborPoint[0], neighborPoint[1])
+        is_even = total % 2 == 0
+        return is_even
+
+    assert search(grid, query=is_neighbors_sum_even) == [
+        (1, 1),  # 40
+        (2, 2),  # 42
+        (2, 1),  # 64
+        (2, 0),  # 38
+        (3, 2),  # 28
+        (3, 1),  # 46
+        (3, 0),  # 26
+    ]

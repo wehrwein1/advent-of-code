@@ -1,4 +1,5 @@
-from typing import List, Callable, Any, Tuple
+from collections import deque
+from typing import Deque, List, Callable, Any, Set, Tuple
 from pyutil.cardinal_direction import Direction
 
 
@@ -28,6 +29,9 @@ def walk(
     can_walk: Callable[[List[List], int, int], bool] = is_valid_coord,
     collect_value_function: Callable[[List[List], int, int], Any] = __extract_value,
 ) -> Tuple[List[List], Tuple[int, int]]:
+    """
+    Traverse grid in a specified direction, collecting values.
+    """
     r: int = start_row_index
     c: int = start_col_index
     walked_values = []
@@ -36,3 +40,48 @@ def walk(
         walked_values.append(value)
         r, c = direction.walk_forward(r, c)
     return (walked_values, (r, c))
+
+
+def find_neighbors(
+    grid: List[List],
+    r: int,
+    c: int,
+    searchDirections: List[Direction] = list(Direction),
+) -> List[Tuple[int, int]]:
+    neighbors: List[Tuple[int, int]] = []
+    for direction in searchDirections:
+        row, col = direction.walk_forward(r, c)
+        if is_valid_coord(grid, row, col):
+            neighbors.append((row, col))
+    return neighbors
+
+
+def search(
+    grid: List[List],
+    query: Callable[
+        [List[List], Tuple[int, int], List[Tuple[int, int]]], bool
+    ],  # grid, originPoint, neighborPoints
+    searchDirections: List[Direction] = list(Direction),
+    # collect_value_function: Callable[[List[List], int, int], Any] = __extract_value,
+) -> List[Tuple[int, int]]:
+    """
+    Search a grid, return coordinates that match a predicate
+    """
+    matches = []
+    visited: Set[Tuple[int, int]] = set()
+    # reachablePoints: Set[Tuple[int, int]] = set()
+    queue: Deque[Tuple[int, int]] = deque()
+    queue.append((0, 0))  # start at top-left corner
+    while queue:
+        r, c = queue.popleft()
+        originPoint = (r, c)
+        if originPoint in visited:
+            continue
+        neighbors: List[Tuple[int, int]] = find_neighbors(grid, r, c, searchDirections)
+        for neighbor in neighbors:
+            if not neighbor in visited:
+                queue.append(neighbor)
+        if query(grid, originPoint, neighbors):
+            matches.append(originPoint)
+        visited.add(originPoint)
+    return matches
