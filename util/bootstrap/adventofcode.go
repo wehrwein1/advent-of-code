@@ -157,10 +157,10 @@ func findTestcase(html string) (string, error) {
 			if len(name) == 0 { // ignore unnamed groups
 				continue
 			}
-			// if strings.Contains(text, "</code></pre>") {
-			// 	// println(fmt.Sprintf("match[%d] \"%s\" '%s'", i, name, match[1]))
-			// 	text = strings.Split(match[i], "</code></pre>")[0]
-			// }
+			hasMultipleCodeBlocks := strings.Contains(text, "</code></pre>")
+			if hasMultipleCodeBlocks {
+				text = strings.Split(text, "</code></pre>")[0] // take first
+			}
 			paramsMap[name] = text
 		}
 	}
