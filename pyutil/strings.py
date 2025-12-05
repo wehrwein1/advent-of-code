@@ -1,12 +1,12 @@
 from typing import List
 
 
-def partition(lines: List[str], sep="", ignore="//") -> List[str]:
+def partition(lines: List[str], sep="", ignore="//") -> List[List[str]]:
     """
     Partition a set of lines onto 2 sublists based on a separator line.
     """
     active_lines = list(filter(lambda line: not line.startswith(ignore), lines))
-    partitions = []
+    partitions: List[List[str]] = []
     for line in active_lines:
         if line == sep or not partitions:
             partitions.append([])
