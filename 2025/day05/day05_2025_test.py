@@ -17,8 +17,18 @@ def test_part2():
 
 
 def test_part2_alt1():
-    assert Solution().computeDay(file_lines("2025/input/05_TEST1.txt"), 2) == 14
+    assert Solution().computeDay(["3-5", "10-14", "19-20", "12-18", ""], 2) == 14
 
 
 def test_part2_alt2():
-    assert Solution().computeDay(file_lines("2025/input/05_TEST2.txt"), 2) == 18
+    # fmt:off
+    assert Solution().computeDay(["3-5", "10-14", "19-20", "12-18", "17-19", ""], 2) == 14
+    # fmt:on
+
+
+def test_part2_alt3():
+    assert Solution().computeDay(["3-11", "10-14", "19-20", "12-18", ""], 2) == 18
+
+
+def test_part2_alt4():
+    assert Solution().computeDay(["3-5", "8-12", "9-11", ""], 2) == 3 + 5

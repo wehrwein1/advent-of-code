@@ -23,10 +23,10 @@ class Solution:
 
         ranges_, ingredient_ids_ = partition(lines)
         ranges = sorted(map(parse_int_range, ranges_))
-        ingredient_ids = [int(x) for x in ingredient_ids_]
         count_fresh = 0
         # print(f"ingredient ranges: {ranges}")
         if part == 1:
+            ingredient_ids = [int(x) for x in ingredient_ids_]
             print(f"ingredient_ids: {ingredient_ids}")
             for ingredient_id in ingredient_ids:
                 for range_ in ranges:
