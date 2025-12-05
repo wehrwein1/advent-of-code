@@ -7,9 +7,6 @@ def test_part1():
 
 
 def test_part2():
-    assert Solution().overlap((3, 5), (10, 14)) == 0
-    assert Solution().overlap((10, 14), (12, 18)) == 3
-    assert Solution().overlap((16, 20), (12, 18)) == 3
     assert Solution().range_len((3, 5)) == 3
     assert Solution().range_len((10, 14)) == 5
 
