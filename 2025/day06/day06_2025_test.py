@@ -1,5 +1,4 @@
-from day06_2025 import Solution
-from pyutil.fileio import file_lines
+from day06_2025 import Solution, file_lines
 
 
 def test_part1():
