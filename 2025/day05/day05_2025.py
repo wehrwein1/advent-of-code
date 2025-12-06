@@ -10,6 +10,8 @@ class Solution:
         end_a, end_b = a[1], b[1]
         start_a, start_b = a[0], b[0]
         # https://www.google.com/search?q=formula+for+boolean+overlapping+range
+        #     [----a----]
+        #           [----b----]
         has_overlap = start_a <= end_b and start_b <= end_a
         return has_overlap
 
