@@ -7,4 +7,8 @@ __pycache__
 util/bootstrap/**/.*.txt
 **/input/html
 
+# I learned late: do not check in your inputs (example inputs/tests are fine)
+# https://www.google.com/search?q=advent+of+code+inputs+check+in+to+github
+**/input/*_INPUT.txt
+
 **/.venv

@@ -3,12 +3,6 @@ from typing import List
 import re
 from pyutil.fileio import file_lines
 
-lines = file_lines('2020/input/04_INPUT.txt')
-# lines = [line for line in map(str.rstrip, open('input/04_TEST.txt'))]
-# lines = [line for line in map(str.rstrip, open('input/04_TEST_INVALID.txt'))]
-# lines = [line for line in map(str.rstrip, open('input/04_TEST_VALID.txt'))]
-print('input (len={}): {}'.format(len(lines), lines))
-
 required_fields = ['byr', 'iyr', 'eyr', 'hgt','hcl','ecl','pid']
 optional_fields = ['cid']
 
@@ -74,11 +68,21 @@ def parse_passports(lines : List[str]):
     i += 1
   return passports
 
-passports = parse_passports(lines)
-valid_passports_count : int = 0
-for passport in passports:
-  is_valid_passport = all_required_fields_present(passport, required_fields)
-  # is_valid_passport = all_required_fields_valid(passport, required_fields)
-  print('checking passport: {} -> {}'.format(passport, is_valid_passport))
-  if is_valid_passport: valid_passports_count += 1
-print('valid_passports_count:', valid_passports_count)
+def computeDay(self, lines: List[str], part: int) -> int:
+  passports = parse_passports(lines)
+  valid_passports_count : int = 0
+  for passport in passports:
+    is_valid_passport = all_required_fields_present(passport, required_fields)
+    # is_valid_passport = all_required_fields_valid(passport, required_fields)
+    print('checking passport: {} -> {}'.format(passport, is_valid_passport))
+    if is_valid_passport: valid_passports_count += 1
+  print('valid_passports_count:', valid_passports_count)
+  
+# bootstrap
+def main():
+    print(f"part 1: {computeDay(file_lines('2020/input/04_INPUT.txt'), 1)}")
+    print(f"part 2: {computeDay(file_lines('2020/input/04_INPUT.txt'), 2)}")
+
+
+if __name__ == "__main__":
+    main()

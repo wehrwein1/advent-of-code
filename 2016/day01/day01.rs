@@ -9,8 +9,8 @@ type Point = geometry::Point<i32>;
 type Vector = geometry::Vector;
 
 pub fn main() {
-  println!("part 1: blocks away: {}", blocks_away(include_str!("../input/01_INPUT.txt")).0);
-  println!("part 2: first location visited twice blocks away: {}", blocks_away(include_str!("../input/01_INPUT.txt")).1);
+  // println!("part 1: blocks away: {}", blocks_away(include_str!("../input/01_INPUT.txt")).0);
+  // println!("part 2: first location visited twice blocks away: {}", blocks_away(include_str!("../input/01_INPUT.txt")).1);
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
