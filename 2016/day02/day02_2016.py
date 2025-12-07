@@ -7,21 +7,21 @@ class Solution:
         bathroom_code = 0
         button = 5
         for line in lines:
-            print(f"start {button}")
+            # print(f"start {button}")
             for dir in line:
                 if dir == "U":
-                    if button > 3:  # higher row
+                    if button > 3:  # rows 2-3, can go up
                         button -= 3
                 elif dir == "D":
-                    if button < 7:  # lower row
+                    if button <= 6:  # rows 1-2, can go down
                         button += 3
                 elif dir == "L":
-                    if button > 1:
+                    if button % 3 != 1:  # not in column 1
                         button -= 1
                 elif dir == "R":
-                    if button < 9:
+                    if button % 3 != 0:  # not in column 3
                         button += 1
-                print(f" {dir} -> {button}")
+                # print(f" {dir} -> {button}")
             bathroom_code = (bathroom_code * 10) + button
             print(f"'{line}' -> {button}, code={bathroom_code}")
         return bathroom_code
