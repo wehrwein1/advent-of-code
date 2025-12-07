@@ -1,4 +1,5 @@
-from typing import List, Set, Tuple
+from functools import cache
+from typing import List
 from pyutil.cardinal_direction import Direction
 from pyutil.fileio import file_lines
 from pyutil.grids import dim, is_valid_coord
@@ -6,6 +7,10 @@ from pyutil.grids import dim, is_valid_coord
 
 class Solution:
     def computeDay(self, lines: List[str], part: int):
+        if part == 2:
+            return self.part2(lines)
+
+        # part 1
         can_walk = is_valid_coord
 
         def tachyon_beam(r: int, c: int, dir: Direction, count: int, indent=0):
@@ -35,11 +40,25 @@ class Solution:
             print(row)
         return split_count
 
+    def part2(self, lines: List[str]):
+        # so simple! wow. From https://www.reddit.com/r/adventofcode/comments/1pg9w66/comment/nsr76g5
+        grid = [list(line) for line in lines]
+
+        @cache
+        def dfs(i, j):
+            while grid[i][j] == ".":
+                i += 1
+                if i == len(grid):
+                    return 1
+            return dfs(i, j - 1) + dfs(i, j + 1)
+
+        return dfs(1, grid[0].index("S"))
+
 
 # bootstrap
 def main():
     print(f"part 1: {Solution().computeDay(file_lines('2025/input/07_INPUT.txt'), 1)}")
-    # print(f"part 2: {Solution().computeDay(file_lines('2025/input/07_INPUT.txt'), 2)}")
+    print(f"part 2: {Solution().computeDay(file_lines('2025/input/07_INPUT.txt'), 2)}")
 
 
 if __name__ == "__main__":
