@@ -11,6 +11,10 @@ def col_count(grid) -> int:
     return len(grid[0])
 
 
+def dim(grid: List[List]) -> Tuple[int, int]:
+    return (row_count(grid), col_count(grid))
+
+
 def is_valid_coord(grid, rowIndex: int, colIndex: int) -> bool:
     rowOk = (0 <= rowIndex) and (rowIndex < row_count(grid))
     colOk = (0 <= colIndex) and (colIndex < col_count(grid))
@@ -30,7 +34,8 @@ def walk(
     collect_value_function: Callable[[List[List], int, int], Any] = __extract_value,
 ) -> Tuple[List[List], Tuple[int, int]]:
     """
-    Traverse grid in a specified direction, collecting values.
+    Traverse grid in a specified direction.
+    Return colected values and end position (tuple)
     """
     r: int = start_row_index
     c: int = start_col_index
