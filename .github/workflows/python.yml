@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
           python --version
           pytest --version
-          echo "PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH" >> $GITHUB_ENV
+          # echo "PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH" >> $GITHUB_ENV
       - name: Run pytest
         run: | 
           echo "PYTHONPATH=$PYTHONPATH"
